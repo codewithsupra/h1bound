@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SiteFooter, SiteHeader } from "@/components/landing/site-chrome";
+import { SiteFooter, SiteHeader } from "@/app/sponsors/_components/site-chrome";
 
 export default function SponsorNotFound() {
   return (

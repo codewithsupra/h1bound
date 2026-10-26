@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteFooter, SiteHeader } from "@/components/landing/site-chrome";
+import { SiteFooter, SiteHeader } from "@/app/sponsors/_components/site-chrome";
 import { prettyCompany } from "@/lib/employer";
+import { SITE_URL } from "@/lib/site";
 import { topSponsors, type SponsorRow } from "@/lib/server/sponsors";
 import { topFamily } from "@/lib/sponsor";
 import { FAMILY_LABEL, TITLE_FAMILIES, type TitleFamily } from "@/lib/titles";
@@ -13,7 +14,7 @@ const TOP = 200;
 export const metadata: Metadata = {
   title: `Top ${TOP} H-1B sponsors in FY2026, by role · H1Bound`,
   description: `The ${TOP} employers with the most H-1B labor filings in fiscal year 2026, grouped by the roles they file for most. From US Dept. of Labor LCA data.`,
-  alternates: { canonical: "/sponsors" },
+  alternates: { canonical: `${SITE_URL}/sponsors` },
 };
 
 export default async function SponsorsIndex() {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-/** Public-site header and footer, shared by the landing page and the sponsor pages. */
+/** Header and footer for the sponsor pages (mirrors the landing page's). */
 
 export function SiteHeader() {
   return (

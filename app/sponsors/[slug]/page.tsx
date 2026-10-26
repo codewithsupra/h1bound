@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Stamp } from "@/components/chat/stamp";
-import { SiteFooter, SiteHeader } from "@/components/landing/site-chrome";
+import { SiteFooter, SiteHeader } from "@/app/sponsors/_components/site-chrome";
 import { prettyCompany } from "@/lib/employer";
+import { SITE_URL } from "@/lib/site";
 import { getSponsor, openUsJobCount, statsOf, topSponsors } from "@/lib/server/sponsors";
 import { familyBreakdown, sponsorBadge, topFamily } from "@/lib/sponsor";
 import { FAMILY_LABEL } from "@/lib/titles";
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: PageProps<"/sponsors/[slug]">
     `${name} filed ${filings(r.total_filings)} for H-1B workers in FY${r.fiscal_year}` +
     `${top ? `, most for ${FAMILY_LABEL[top.family].toLowerCase()}${top.medianWage ? ` at a median ${usd(top.medianWage)}` : ""}` : ""}. ` +
     `Roles, wages and states from US Dept. of Labor data.`;
-  return { title, description, alternates: { canonical: `/sponsors/${r.slug}` }, openGraph: { title, description, type: "website" } };
+  return { title, description, alternates: { canonical: `${SITE_URL}/sponsors/${r.slug}` }, openGraph: { title, description, type: "website" } };
 }
 
 export default async function SponsorPage({ params }: PageProps<"/sponsors/[slug]">) {
