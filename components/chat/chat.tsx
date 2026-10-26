@@ -51,7 +51,7 @@ function Upsell({ text }: { text: string }) {
 }
 
 function ToolView({ part, ask }: { part: ToolPart; ask: (t: string) => void }) {
-  if (part.state === "output-error") return <p className="text-sm text-red">That didn't work: {part.errorText}. Try again in a moment.</p>;
+  if (part.state === "output-error") return <p className="text-sm text-red">That didn&apos;t work: {part.errorText}. Try again in a moment.</p>;
   if (part.state !== "output-available") {
     return <p className="animate-pulse text-sm text-slate">{WORKING[part.type] ?? "Working on it…"}</p>;
   }
@@ -80,7 +80,7 @@ function ToolView({ part, ask }: { part: ToolPart; ask: (t: string) => void }) {
       return (
         <div className="space-y-2">
           <p className="text-sm text-slate">
-            {c ? <>Likely contact: <strong className="text-ink">{c.name}</strong>{c.title ? `, ${c.title}` : ""} · {c.email} ({c.confidence}% confidence)</> : <>I couldn't find a verified contact. <a className="underline" href={o.findContactYourself as string} target="_blank" rel="noopener noreferrer">Search LinkedIn for their engineering managers</a>.</>}
+            {c ? <>Likely contact: <strong className="text-ink">{c.name}</strong>{c.title ? `, ${c.title}` : ""} · {c.email} ({c.confidence}% confidence)</> : <>I couldn&apos;t find a verified contact. <a className="underline" href={o.findContactYourself as string} target="_blank" rel="noopener noreferrer">Search LinkedIn for their engineering managers</a>.</>}
           </p>
           <LongForm title={`Cold email: ${job?.company}`} body={o.email as string} copy />
         </div>
@@ -143,9 +143,9 @@ export function Chat({ initialMessages, firstName }: { initialMessages: UIMessag
       <div className="flex-1 space-y-5 py-6" aria-live="polite">
         {messages.length === 0 && (
           <div className="rounded-xl border border-line bg-card p-5">
-            <p className="font-display text-lg font-semibold">Hey{firstName ? ` ${firstName}` : ""}, I'm Maya.</p>
+            <p className="font-display text-lg font-semibold">Hey{firstName ? ` ${firstName}` : ""}, I&apos;m Maya.</p>
             <p className="mt-1 text-slate">
-              I'm an AI that finds US jobs at companies with a real record of filing H-1Bs, then helps you get noticed. Drop in your resume, CV, transcript or biodata to start.
+              I&apos;m an AI that finds US jobs at companies with a real record of filing H-1Bs, then helps you get noticed. Drop in your resume, CV, transcript or biodata to start.
             </p>
             <button onClick={() => fileRef.current?.click()} className="mt-4 rounded-lg bg-ink px-4 py-2 font-medium text-paper hover:opacity-90">
               Upload my resume
@@ -210,7 +210,7 @@ export function Chat({ initialMessages, firstName }: { initialMessages: UIMessag
             Send
           </button>
         </div>
-        <p className="mt-2 text-xs text-slate">Maya is an AI. Sponsorship info comes from public Dept. of Labor filings and can't guarantee a visa.</p>
+        <p className="mt-2 text-xs text-slate">Maya is an AI. Sponsorship info comes from public Dept. of Labor filings and can&apos;t guarantee a visa.</p>
       </form>
     </div>
   );

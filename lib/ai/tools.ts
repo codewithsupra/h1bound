@@ -71,6 +71,7 @@ export function buildTools(userId: string) {
         return {
           jobs: r.cards,
           freeJobsLeft: pro ? null : Math.max(0, FREE_LIMITS.jobs - usage.jobsShown - r.cards.length),
+          freeJobsTotal: pro ? null : FREE_LIMITS.jobs,
           limitReached: r.blocked > 0,
           upsell: r.blocked > 0 ? upsellLine("jobs") : null,
           note: r.cards.length ? null : "No new matches right now. Suggest widening roles/locations or checking back tomorrow (jobs refresh daily).",

@@ -54,6 +54,8 @@ export async function POST(req: Request) {
     stopWhen: stepCountIs(6),
     maxOutputTokens: 700,
   });
+  // Finish (and save) the reply even if the browser disconnects mid-stream.
+  result.consumeStream();
 
   return createUIMessageStreamResponse({
     stream: toUIMessageStream({

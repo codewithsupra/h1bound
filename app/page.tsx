@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Stamp } from "@/components/chat/stamp";
 import { SponsorLookup } from "@/components/landing/sponsor-lookup";
 import { createAdminInsForge } from "@/lib/insforge/admin";
@@ -41,7 +42,7 @@ export default async function Home() {
   return (
     <main className="flex-1">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
-        <a href="/" className="font-display text-xl font-bold">H1Bound</a>
+        <Link href="/" className="font-display text-xl font-bold">H1Bound</Link>
         <nav className="flex items-center gap-2 text-sm">
           <a href="/login" className="rounded-lg px-3 py-2 text-slate hover:text-ink">Sign in</a>
           <a href="/login?mode=signup" className="rounded-lg bg-ink px-3.5 py-2 font-medium text-paper hover:opacity-90">Start free</a>

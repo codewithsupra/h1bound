@@ -38,6 +38,17 @@ export async function companiesById(ids: string[]): Promise<Map<string, CompanyR
   return out;
 }
 
+const FILLER = new Set(["full", "time", "fulltime", "full-time", "part", "role", "roles", "job", "jobs", "position", "positions", "opening", "openings", "us", "usa", "remote", "new", "grad", "level", "entry"]);
+
+/** "backend full-time roles" → ["backend"]. Each remaining word must appear in the title. */
+export function keywordTerms(keyword: string | undefined): string[] {
+  return (keyword ?? "")
+    .toLowerCase()
+    .split(/[^a-z0-9+#.]+/)
+    .filter((w) => w.length >= 2 && !FILLER.has(w))
+    .slice(0, 3);
+}
+
 export type FindResult = { cards: JobCard[]; blocked: number; poolSize: number };
 
 /**
@@ -52,7 +63,7 @@ export async function findJobs(userId: string, row: ProfileRow, pro: boolean, us
   if (row.target_families.length) q = q.in("family", row.target_families);
   if (row.needs_sponsorship) q = q.or("jd_sponsorship.is.null,jd_sponsorship.eq.yes");
   if (opts.remoteOnly) q = q.eq("remote", true);
-  if (opts.keyword) q = q.ilike("title", `%${opts.keyword.replace(/[%_,()]/g, " ").trim()}%`);
+  for (const word of keywordTerms(opts.keyword)) q = q.ilike("title", `%${word}%`);
   const { data, error } = await q.order("posted_at", { ascending: false, nullsFirst: false }).limit(600);
   if (error) throw new Error(error.message);
   const student = row.visa_status === "f1_student";
@@ -64,13 +75,18 @@ export async function findJobs(userId: string, row: ProfileRow, pro: boolean, us
   // `company` carries the job id so the sponsor lookup can resolve through the job's company_id.
   const ranked: Scored[] = rankJobs(lite, toMatchProfile(row), (jobId) => statsOf(companies.get(byJob.get(jobId)?.company_id ?? "")));
 
-  // At most 2 jobs per company in one batch, so results aren't one employer's whole board.
+  // At most 2 jobs per company and one per (company, title) in a batch, so results aren't one
+  // employer's whole board or the same req listed in several cities.
   const perCo = new Map<string, number>();
+  const seenTitles = new Set<string>();
   const diverse = ranked.filter((s) => {
-    const co = byJob.get(s.job.id)!.company;
-    const n = perCo.get(co) ?? 0;
-    perCo.set(co, n + 1);
-    return n < 2;
+    const j = byJob.get(s.job.id)!;
+    const titleKey = `${j.company}|${j.title.toLowerCase()}`;
+    const n = perCo.get(j.company) ?? 0;
+    if (n >= 2 || seenTitles.has(titleKey)) return false;
+    perCo.set(j.company, n + 1);
+    seenTitles.add(titleKey);
+    return true;
   });
 
   const { show, blocked } = canShowJobs(usage, pro, Math.min(opts.count, diverse.length));

@@ -8,5 +8,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|icon|opengraph-image|api/cron|.*\\.(?:png|jpg|svg|webp|ico)$).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|icon|opengraph-image|api/cron|api/unsubscribe|.*\\.(?:png|jpg|svg|webp|ico)$).*)"],
 };
