@@ -5,7 +5,7 @@
  */
 import ExcelJS from "exceljs";
 import { mkdirSync, writeFileSync } from "node:fs";
-import { addRow, finalize, type EmployerAgg, type LcaRow } from "../lib/ingest/lca.ts";
+import { addRow, finalize, type EmployerAgg, type LcaRow } from "../lib/ingest/lca";
 
 const [file, fy] = process.argv.slice(2);
 if (!file || !fy) throw new Error("usage: import-lca.mts <xlsx> <fiscalYear>");
