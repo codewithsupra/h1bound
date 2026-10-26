@@ -27,6 +27,29 @@ export const TITLE_FAMILIES = [
 ] as const;
 export type TitleFamily = (typeof TITLE_FAMILIES)[number];
 
+/** Plural, human labels for public pages ("Software engineers"). */
+export const FAMILY_LABEL: Record<TitleFamily, string> = {
+  ml_engineer: "ML engineers",
+  data_scientist: "Data scientists",
+  data_engineer: "Data engineers",
+  data_analyst: "Data analysts",
+  devops: "DevOps and cloud engineers",
+  security: "Security engineers",
+  qa: "QA and test engineers",
+  mobile: "Mobile engineers",
+  frontend: "Frontend engineers",
+  software_engineer: "Software engineers",
+  hardware: "Hardware engineers",
+  product_manager: "Product and program managers",
+  designer: "Designers",
+  business_analyst: "Business analysts",
+  finance: "Finance and accounting",
+  consulting: "Consultants",
+  research: "Researchers and academics",
+  healthcare: "Healthcare",
+  other: "Other roles",
+};
+
 const RULES: [TitleFamily, RegExp][] = [
   ["ml_engineer", /\b(machine learning|ml|ai|deep learning|computer vision|nlp|llm)\b.*\b(engineer|developer|scientist)\b|\bmle\b/],
   ["data_scientist", /\bdata scien|\bapplied scien|\bresearch scientist.*(data|ml)/],

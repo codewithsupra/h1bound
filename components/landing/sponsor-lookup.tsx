@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { SponsorBadge } from "@/lib/sponsor";
 import { Stamp } from "@/components/chat/stamp";
 
-type Result = { name: string; legalName: string; states: string[]; badge: SponsorBadge };
+type Result = { name: string; slug: string | null; legalName: string; states: string[]; badge: SponsorBadge };
 
 const ROLES = ["Software engineer", "Data scientist", "Data analyst", "ML engineer", "Product manager", "Hardware engineer"];
 
@@ -47,7 +48,7 @@ export function SponsorLookup() {
           <div key={r.legalName} className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line pt-3 first:border-t-0 first:pt-0">
             <Stamp badge={r.badge} />
             <div className="min-w-0 flex-1">
-              <p className="font-display font-semibold">{r.name}</p>
+              <p className="font-display font-semibold">{r.slug ? <Link href={`/sponsors/${r.slug}`} className="underline decoration-line underline-offset-4 hover:decoration-ink">{r.name}</Link> : r.name}</p>
               <p className="text-sm text-slate">{r.badge.detail.replace(" Source: US Dept. of Labor LCA data.", "")}{r.states.length ? ` Mostly in ${r.states.slice(0, 3).join(", ")}.` : ""}</p>
             </div>
           </div>
