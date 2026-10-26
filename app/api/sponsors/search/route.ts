@@ -25,6 +25,9 @@ export async function GET(req: NextRequest) {
     name: r.display_name ?? r.name,
     legalName: r.name,
     states: r.top_states,
+    total: r.total_filings,
+    roleCount: r.by_family[fam]?.count ?? 0,
+    roleMedian: r.by_family[fam]?.medianWage ?? null,
     badge: sponsorBadge({ fiscalYear: r.fiscal_year, total: r.total_filings, byFamily: r.by_family, lastFiled: r.last_filed }, fam),
   }));
   return NextResponse.json({ results }, { headers: { "Cache-Control": "public, s-maxage=3600" } });
