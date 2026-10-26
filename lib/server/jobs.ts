@@ -2,6 +2,7 @@ import "server-only";
 import { createAdminInsForge } from "@/lib/insforge/admin";
 import { rankJobs, type JobLite, type Scored } from "@/lib/match";
 import { canShowJobs } from "@/lib/quota";
+import { isInternTitle } from "@/lib/titles";
 import { jobBadge, type SponsorBadge, type SponsorStats } from "@/lib/sponsor";
 import type { JdSponsorship } from "@/lib/jd-signals";
 import { toMatchProfile, type ProfileRow } from "./profile";
@@ -54,7 +55,8 @@ export async function findJobs(userId: string, row: ProfileRow, pro: boolean, us
   if (opts.keyword) q = q.ilike("title", `%${opts.keyword.replace(/[%_,()]/g, " ").trim()}%`);
   const { data, error } = await q.order("posted_at", { ascending: false, nullsFirst: false }).limit(600);
   if (error) throw new Error(error.message);
-  const pool = ((data ?? []) as JobRow[]).filter((j) => !seenIds.has(j.id));
+  const student = row.visa_status === "f1_student";
+  const pool = ((data ?? []) as JobRow[]).filter((j) => !seenIds.has(j.id) && (student || !isInternTitle(j.title)));
 
   const companies = await companiesById(pool.map((j) => j.company_id ?? ""));
   const byJob = new Map(pool.map((j) => [j.id, j]));

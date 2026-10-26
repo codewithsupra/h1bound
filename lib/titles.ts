@@ -62,3 +62,7 @@ export function isSeniorTitle(title: string): boolean {
 export function isEntryTitle(title: string): boolean {
   return /\b(new grad|graduate|entry|junior|jr\.?|associate|intern|early career|university|campus|i|1)\b/i.test(title) && !isSeniorTitle(title);
 }
+
+export function isInternTitle(title: string): boolean {
+  return /\b(intern|internship|co-?op|apprentice)\b/i.test(title);
+}

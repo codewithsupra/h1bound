@@ -30,3 +30,12 @@ describe("seniority", () => {
     expect(isEntryTitle("Senior Associate")).toBe(false);
   });
 });
+
+import { isInternTitle } from "@/lib/titles";
+describe("isInternTitle", () => {
+  it("detects internships and co-ops", () => {
+    expect(isInternTitle("Backend Software Engineering Intern 2027")).toBe(true);
+    expect(isInternTitle("Software Engineer Co-op")).toBe(true);
+    expect(isInternTitle("Internal Tools Engineer")).toBe(false);
+  });
+});

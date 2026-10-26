@@ -1,26 +1,86 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --paper: #f6f7f9;
+  --card: #ffffff;
+  --ink: #14213d;
+  --slate: #5b6578;
+  --line: #dce1e8;
+  --green: #1f7a5a;
+  --amber: #a86a12;
+  --red: #b42318;
+  --focus: #3355cc;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #0f1626;
+    --card: #162036;
+    --ink: #e8ecf4;
+    --slate: #9aa5bb;
+    --line: #2a3650;
+    --green: #4cc095;
+    --amber: #e3a948;
+    --red: #f07167;
+    --focus: #8aa4ff;
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-slate: var(--slate);
+  --color-line: var(--line);
+  --color-green: var(--green);
+  --color-amber: var(--amber);
+  --color-red: var(--red);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* The visa stamp: the one bold element. Slight rotation + ink texture, like a real entry stamp. */
+.stamp {
+  --c: var(--green);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 5px 10px 6px;
+  border: 2px solid var(--c);
+  border-radius: 6px;
+  color: var(--c);
+  transform: rotate(-2.5deg);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--c) 35%, transparent);
+  background: color-mix(in oklab, var(--c) 10%, transparent);
+  font-family: var(--font-display), sans-serif;
+  line-height: 1.1;
+  mask-image: radial-gradient(circle at 30% 40%, #000 70%, rgb(0 0 0 / 0.9) 100%);
+}
+.stamp[data-level="some"] { --c: var(--amber); }
+.stamp[data-level="rare"],
+.stamp[data-level="unknown"] { --c: var(--slate); }
+.stamp[data-level="none"] { --c: var(--red); transform: rotate(2deg); }
+.stamp-title { font-weight: 800; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; font-stretch: 85%; }
+.stamp-sub { font-weight: 500; font-size: 0.72rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .stamp-in { animation: stamp-in 380ms cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+  @keyframes stamp-in {
+    from { opacity: 0; transform: rotate(-8deg) scale(1.35); }
+    to { opacity: 1; }
+  }
 }

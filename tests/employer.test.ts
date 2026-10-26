@@ -32,3 +32,13 @@ describe("matchEmployer", () => {
     expect(matchEmployer("", idx)).toBeNull();
   });
 });
+
+import { prettyCompany } from "@/lib/employer";
+describe("prettyCompany", () => {
+  it("title-cases all-caps legal names and drops suffixes", () => {
+    expect(prettyCompany("PALANTIR TECHNOLOGIES INC.")).toBe("Palantir Technologies");
+    expect(prettyCompany("Stripe, Inc.")).toBe("Stripe");
+    expect(prettyCompany("SCALE AI, INC.")).toBe("Scale AI");
+    expect(prettyCompany("Databricks")).toBe("Databricks");
+  });
+});

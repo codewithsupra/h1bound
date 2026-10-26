@@ -23,11 +23,11 @@ const parsedSchema = z.object({
   phone: z.string().nullable(),
   headline: z.string().nullable().describe("One line, e.g. 'MS CS @ ASU · backend + ML'"),
   education: z.array(z.object({ school: z.string(), degree: z.string(), field: z.string().nullable(), year: z.number().nullable(), gpa: z.string().nullable() })),
-  experience: z.array(z.object({ company: z.string(), title: z.string(), start: z.string().nullable(), end: z.string().nullable(), highlights: z.array(z.string()).max(4) })),
-  projects: z.array(z.object({ name: z.string(), summary: z.string() })).max(6),
-  skills: z.array(z.string()).max(40).describe("Concrete tools, languages, frameworks; canonical names like 'Python', 'React', 'AWS'"),
+  experience: z.array(z.object({ company: z.string(), title: z.string(), start: z.string().nullable(), end: z.string().nullable(), highlights: z.array(z.string()).describe("Up to 4") })),
+  projects: z.array(z.object({ name: z.string(), summary: z.string() })).describe("Up to 6"),
+  skills: z.array(z.string()).describe("Up to 40. Concrete tools, languages, frameworks; canonical names like 'Python', 'React', 'AWS'"),
   yearsExperience: z.number().describe("Full-time professional years only; internships count as 0.25 each; round down"),
-  targetFamilies: z.array(z.enum(TITLE_FAMILIES)).max(3).describe("Best-fit role families for this person"),
+  targetFamilies: z.array(z.enum(TITLE_FAMILIES)).describe("1-3 best-fit role families for this person"),
   usEducated: z.boolean().describe("Has or is pursuing a US degree"),
 });
 
@@ -41,7 +41,14 @@ export async function parseResume(text: string): Promise<ParsedResume> {
       "You extract structured data from resumes, CVs, transcripts and biodata. Only use what the document says; never invent employers, dates or skills. If the document is a transcript, infer skills from courses.",
     prompt: text.slice(0, 30_000),
   });
-  return output;
+  // Anthropic structured output rejects maxItems, so limits are enforced here instead of in the schema.
+  return {
+    ...output,
+    experience: output.experience.map((e) => ({ ...e, highlights: e.highlights.slice(0, 4) })),
+    projects: output.projects.slice(0, 6),
+    skills: output.skills.slice(0, 40),
+    targetFamilies: output.targetFamilies.slice(0, 3),
+  };
 }
 
 export function toDetails(p: ParsedResume, resumeText: string, prev?: ProfileDetails | null): ProfileDetails {

@@ -1,5 +1,6 @@
 import { fetchBoard, type AtsKind, type NormalizedJob } from "./ats";
 import { titleFamily } from "../titles";
+import { prettyCompany } from "../employer";
 
 /**
  * Pulls every resolved board, upserts US jobs, and deactivates postings that disappeared.
@@ -11,7 +12,7 @@ type Board = { id: string; board_kind: AtsKind; board_slug: string; display_name
 
 export function toRow(j: NormalizedJob, companyId: string, now: string) {
   return {
-    source: j.source, source_id: j.sourceId, company_id: companyId, company: j.company, title: j.title, family: titleFamily(j.title),
+    source: j.source, source_id: j.sourceId, company_id: companyId, company: prettyCompany(j.company), title: j.title, family: titleFamily(j.title),
     location: j.location, remote: j.remote, is_us: j.isUs, url: j.url, description: j.description, posted_at: j.postedAt,
     jd_sponsorship: j.jdSponsorship, active: true, last_seen: now,
   };

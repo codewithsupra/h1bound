@@ -13,6 +13,11 @@ const NO = [
   /\bnot\s+(eligible|available)\s+for\s+(visa\s+|immigration\s+)?sponsorship/,
   /\bmust\s+be\s+(a\s+)?(us|u\.s\.)\s+citizen/,
   /\b(requires?|required)\b.{0,40}\bclearance\b/,
+  /\b(eligib\w*|ability|able)\s+(to\s+obtain|for|to\s+get)\s+(and\s+maintain\s+)?(an?\s+)?(active\s+)?(u\.?s\.?\s+)?(government\s+)?(security\s+)?clearance/,
+  /\b(must\s+be\s+an?\s+)?u\.?s\.?\s+persons?\b.{0,60}\b(itar|export)/,
+  /\b(itar|ear)\b.{0,80}\bu\.?s\.?\s+(person|citizen)/,
+  /\bexport (control )?regulations?\b.{0,120}\b(citizen|permanent resident|u\.?s\.? person)/,
+  /\bmust\s+be\s+an?\s+(\(i\)\s*)?u\.?s\.?\s+citizen/,
   /\bmust\s+(be\s+)?(legally\s+)?authorized\s+to\s+work\s+in\s+the\s+(us|u\.s\.|united states)\s+without\s+(the\s+need\s+for\s+)?(current\s+or\s+future\s+)?(employer\s+)?sponsorship/,
 ];
 

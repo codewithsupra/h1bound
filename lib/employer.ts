@@ -78,3 +78,15 @@ export function matchEmployer(name: string, idx: EmployerIndex): string | null {
   }
   return best;
 }
+
+const LEGAL_SUFFIX = /[,\s]+(inc\.?|incorporated|llc|l\.l\.c\.|llp|corp\.?|corporation|co\.?|ltd\.?|limited|plc|pllc|lp|l\.p\.)$/i;
+
+/** "PALANTIR TECHNOLOGIES INC." → "Palantir Technologies"; mixed-case brand names are kept as written. */
+export function prettyCompany(name: string): string {
+  let n = name.trim();
+  for (let i = 0; i < 3 && LEGAL_SUFFIX.test(n); i++) n = n.replace(LEGAL_SUFFIX, "").trim();
+  if (n === n.toUpperCase() && /[A-Z]{3,}/.test(n)) {
+    n = n.toLowerCase().replace(/\b([a-z])/g, (c) => c.toUpperCase()).replace(/\b(Ai|Ml|Usa|Us|Ibm|Aws|Sap|Hp)\b/g, (w) => w.toUpperCase());
+  }
+  return n.replace(/,$/, "");
+}
