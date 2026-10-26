@@ -26,3 +26,12 @@ describe("free limits", () => {
     expect(upsellLine("jobs")).toMatch(/10/);
   });
 });
+
+import { GUEST_LIMITS } from "@/lib/quota";
+describe("guest limits", () => {
+  it("caps guests at 5 jobs", () => {
+    expect(GUEST_LIMITS.jobs).toBe(5);
+    expect(canShowJobs({ jobsShown: 3, reviewedJobIds: [], reviewRounds: 0 }, false, 5, GUEST_LIMITS.jobs)).toEqual({ show: 2, blocked: 3 });
+    expect(upsellLine("guest_jobs")).toMatch(/free account/);
+  });
+});

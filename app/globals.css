@@ -1,86 +1,134 @@
 @import "tailwindcss";
 
+/* Night landing: the US at night from a plane window. One theme, by design. */
 :root {
-  --paper: #f6f7f9;
-  --card: #ffffff;
-  --ink: #14213d;
-  --slate: #5b6578;
-  --line: #dce1e8;
-  --green: #1f7a5a;
-  --amber: #a86a12;
-  --red: #b42318;
-  --focus: #3355cc;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #0f1626;
-    --card: #162036;
-    --ink: #e8ecf4;
-    --slate: #9aa5bb;
-    --line: #2a3650;
-    --green: #4cc095;
-    --amber: #e3a948;
-    --red: #f07167;
-    --focus: #8aa4ff;
-  }
+  --night: #0d1330;      /* deep indigo sky, not black */
+  --night-2: #141b40;    /* raised surfaces */
+  --night-3: #1c2550;
+  --moon: #edf0fb;       /* primary text */
+  --mist: #98a1c8;       /* secondary text */
+  --haze: rgb(237 240 251 / 0.09); /* hairlines */
+  --sodium: #ffb547;     /* city lights + the one accent */
+  --sodium-soft: rgb(255 181 71 / 0.14);
+  --runway: #8fb0ff;     /* focus + links */
+  --green: #66d9a6;
+  --amber: #ffb547;
+  --red: #ff8070;
+  --slate-stamp: #98a1c8;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-paper: var(--paper);
-  --color-card: var(--card);
-  --color-ink: var(--ink);
-  --color-slate: var(--slate);
-  --color-line: var(--line);
+  --color-night: var(--night);
+  --color-night-2: var(--night-2);
+  --color-night-3: var(--night-3);
+  --color-moon: var(--moon);
+  --color-mist: var(--mist);
+  --color-haze: var(--haze);
+  --color-sodium: var(--sodium);
+  --color-runway: var(--runway);
   --color-green: var(--green);
   --color-amber: var(--amber);
   --color-red: var(--red);
+  /* Semantic aliases used across the app (and by the sponsor pages). */
+  --color-paper: var(--night);
+  --color-card: var(--night-2);
+  --color-ink: var(--moon);
+  --color-slate: var(--mist);
+  --color-line: var(--haze);
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
+  --font-flap: var(--font-flap);
 }
 
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
 body {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--night);
+  color: var(--moon);
   font-family: var(--font-body), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
+::selection { background: var(--sodium); color: var(--night); }
+
 :focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: 2px solid var(--runway);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
-/* The visa stamp: the one bold element. Slight rotation + ink texture, like a real entry stamp. */
+/* Primary action: a lit runway light. */
+.btn-light {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  border-radius: 999px; padding: 0.8rem 1.4rem;
+  background: var(--sodium); color: #1a1205; font-weight: 600;
+  box-shadow: 0 0 0 0 rgb(255 181 71 / 0.5), 0 10px 40px -10px rgb(255 181 71 / 0.55);
+  transition: transform 160ms ease, box-shadow 300ms ease;
+}
+.btn-light:hover { transform: translateY(-1px); box-shadow: 0 0 0 6px rgb(255 181 71 / 0.12), 0 14px 50px -10px rgb(255 181 71 / 0.7); }
+.btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px; padding: 0.75rem 1.3rem; border: 1px solid var(--haze);
+  color: var(--moon); transition: border-color 200ms ease, background 200ms ease;
+}
+.btn-ghost:hover { border-color: rgb(237 240 251 / 0.3); background: rgb(237 240 251 / 0.04); }
+
+/* Glass surface for chat, cards and the board frame. */
+.glass {
+  background: linear-gradient(180deg, rgb(28 37 80 / 0.72), rgb(20 27 64 / 0.72));
+  border: 1px solid var(--haze);
+  backdrop-filter: blur(14px);
+}
+
+/* The visa stamp. */
 .stamp {
   --c: var(--green);
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1px;
-  padding: 5px 10px 6px;
-  border: 2px solid var(--c);
-  border-radius: 6px;
-  color: var(--c);
+  display: inline-flex; flex-direction: column; align-items: flex-start; gap: 1px;
+  padding: 5px 10px 6px; border: 2px solid var(--c); border-radius: 6px; color: var(--c);
   transform: rotate(-2.5deg);
-  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--c) 35%, transparent);
-  background: color-mix(in oklab, var(--c) 10%, transparent);
-  font-family: var(--font-display), sans-serif;
-  line-height: 1.1;
-  mask-image: radial-gradient(circle at 30% 40%, #000 70%, rgb(0 0 0 / 0.9) 100%);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--c) 35%, transparent), 0 0 24px -6px color-mix(in oklab, var(--c) 45%, transparent);
+  background: color-mix(in oklab, var(--c) 9%, transparent);
+  font-family: var(--font-display), sans-serif; line-height: 1.1; white-space: nowrap;
 }
 .stamp[data-level="some"] { --c: var(--amber); }
-.stamp[data-level="rare"],
-.stamp[data-level="unknown"] { --c: var(--slate); }
+.stamp[data-level="rare"], .stamp[data-level="unknown"] { --c: var(--slate-stamp); }
 .stamp[data-level="none"] { --c: var(--red); transform: rotate(2deg); }
-.stamp-title { font-weight: 800; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; font-stretch: 85%; }
-.stamp-sub { font-weight: 500; font-size: 0.72rem; }
+.stamp-title { font-weight: 800; font-size: 0.74rem; letter-spacing: 0.07em; text-transform: uppercase; }
+.stamp-sub { font-weight: 500; font-size: 0.7rem; opacity: 0.9; }
+
+/* Split-flap cell. */
+.flap {
+  position: relative; display: inline-grid; place-items: center;
+  width: var(--cw, 1.15em); height: 1.55em; margin: 0 1px;
+  font-family: var(--font-flap), ui-monospace, monospace; font-weight: 500; text-transform: uppercase;
+  color: var(--moon); background: linear-gradient(180deg, #232c5c 0 49%, #1b2350 51% 100%);
+  border-radius: 3px; box-shadow: inset 0 -1px 0 rgb(0 0 0 / 0.35), 0 1px 0 rgb(255 255 255 / 0.03);
+  overflow: hidden;
+}
+.flap::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgb(6 9 26 / 0.85); }
+.flap[data-tone="sodium"] { color: var(--sodium); }
+.flap[data-tone="green"] { color: var(--green); }
+.flap[data-tone="red"] { color: var(--red); }
+.flap[data-tone="mist"] { color: var(--mist); }
 
 @media (prefers-reduced-motion: no-preference) {
-  .stamp-in { animation: stamp-in 380ms cubic-bezier(0.2, 1.4, 0.4, 1) both; }
-  @keyframes stamp-in {
-    from { opacity: 0; transform: rotate(-8deg) scale(1.35); }
-    to { opacity: 1; }
-  }
+  .flap-tick { animation: flap-tick 70ms ease-in; }
+  @keyframes flap-tick { from { transform: rotateX(-70deg); filter: brightness(1.6); } to { transform: none; } }
+
+  .stamp-in { animation: stamp-in 420ms cubic-bezier(0.2, 1.5, 0.4, 1) both; }
+  @keyframes stamp-in { from { opacity: 0; transform: rotate(-9deg) scale(1.5); } to { opacity: 1; } }
+
+  .rise { animation: rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+
+  .dot-typing span { animation: blink 1.2s infinite ease-in-out; }
+  .dot-typing span:nth-child(2) { animation-delay: 0.15s; }
+  .dot-typing span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes blink { 0%, 80%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
 }
+
+/* Tailwind v4 dropped pointer cursors on buttons; anything clickable gets one back. */
+button:not(:disabled), [role="button"], select, summary, label[for], input[type="checkbox"], input[type="file"] { cursor: pointer; }
+button:disabled { cursor: not-allowed; }

@@ -8,20 +8,23 @@
 
 export const FREE_LIMITS = { jobs: 10, reviewedJobs: 5, reviewRounds: 15 } as const;
 
+/** Try-before-signup: guests see 5 jobs; reviews and everything else need a free account. */
+export const GUEST_LIMITS = { jobs: 5 } as const;
+
 export const PRO_FEATURES = ["cold_email", "interview_plan", "tailoring", "unlimited_jobs", "follow_ups"] as const;
 export type ProFeature = (typeof PRO_FEATURES)[number];
 
 export type Usage = { jobsShown: number; reviewedJobIds: string[]; reviewRounds: number };
 
-export type Decision = { ok: true; remaining: number | null } | { ok: false; reason: "jobs" | "reviewed_jobs" | "review_rounds" | "pro_only" };
+export type Decision = { ok: true; remaining: number | null } | { ok: false; reason: "jobs" | "reviewed_jobs" | "review_rounds" | "pro_only" | "guest_jobs" | "guest_only" };
 
 /** How many more jobs a user may be shown right now (null = unlimited). */
-export function jobsAllowance(usage: Usage, isPro: boolean): number | null {
-  return isPro ? null : Math.max(0, FREE_LIMITS.jobs - usage.jobsShown);
+export function jobsAllowance(usage: Usage, isPro: boolean, limit: number = FREE_LIMITS.jobs): number | null {
+  return isPro ? null : Math.max(0, limit - usage.jobsShown);
 }
 
-export function canShowJobs(usage: Usage, isPro: boolean, wanted: number): { show: number; blocked: number } {
-  const allow = jobsAllowance(usage, isPro);
+export function canShowJobs(usage: Usage, isPro: boolean, wanted: number, limit: number = FREE_LIMITS.jobs): { show: number; blocked: number } {
+  const allow = jobsAllowance(usage, isPro, limit);
   const show = allow === null ? wanted : Math.min(wanted, allow);
   return { show, blocked: wanted - show };
 }
@@ -49,5 +52,9 @@ export function upsellLine(reason: Exclude<Decision, { ok: true }>["reason"]): s
       return "That was your 15th free review round. Pro keeps the reviews coming, with no cap.";
     case "pro_only":
       return "That one's a Pro feature: I'd find the hiring manager, draft the cold email, and build your interview plan.";
+    case "guest_jobs":
+      return "That's your 5 preview matches. Create a free account (takes 10 seconds) to see 5 more, and I'll keep everything we've done so far.";
+    case "guest_only":
+      return "Resume reviews need a free account, so I can save them for you. Sign up and I'll start right where we left off.";
   }
 }

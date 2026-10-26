@@ -4,11 +4,11 @@ import { z } from "zod";
 import { createAdminInsForge } from "@/lib/insforge/admin";
 import { encrypt } from "@/lib/crypto";
 import { buildEmployerIndex, matchEmployer, normalizeEmployer } from "@/lib/employer";
-import { canReview, canUse, FREE_LIMITS, upsellLine } from "@/lib/quota";
+import { canReview, canUse, upsellLine } from "@/lib/quota";
 import { sponsorBadge } from "@/lib/sponsor";
 import { TITLE_FAMILIES, titleFamily } from "@/lib/titles";
-import { findJobs, loadJob, statsOf, companiesById, userHasJob } from "@/lib/server/jobs";
-import { isPro, loadProfile, loadUsage, saveProfile } from "@/lib/server/profile";
+import { findJobs, loadJob, statsOf, companiesById } from "@/lib/server/jobs";
+import type { ProfilePatch, Store } from "@/lib/server/store";
 import { coldEmail, interviewPlan, reviewResume, tailorResume } from "@/lib/server/coach";
 import { findContact, linkedInSearch } from "@/lib/server/hunter";
 
@@ -17,16 +17,22 @@ const NO_SPONSOR_NEEDED = new Set(["citizen_or_gc", "h4_ead"]);
 
 const db = () => createAdminInsForge().database;
 
-/** Tools close over the authenticated user id; the model can never act for someone else. */
-export function buildTools(userId: string) {
+/**
+ * Tools close over the caller's Store (a signed-in user or a verified guest); the model can never
+ * act for someone else. Guests get onboarding, jobs and sponsor lookups; the rest asks them to sign up.
+ */
+export function buildTools(store: Store) {
+  const userId = store.id;
+  const guest = store.kind === "guest";
+  const signUpFirst = { signUpRequired: true, upsell: upsellLine("guest_only") };
   const needProfile = async () => {
-    const p = await loadProfile(userId);
+    const p = await store.loadProfile();
     if (!p?.details) return { error: "no_resume" as const, message: "No resume yet. Ask them to upload one with the 📎 button." };
     return { row: p.row, details: p.details };
   };
 
   const shownJob = async (jobId: string) => {
-    if (!(await userHasJob(userId, jobId))) return null;
+    if (!(await store.hasJob(jobId))) return null;
     return loadJob(jobId);
   };
 
@@ -42,15 +48,15 @@ export function buildTools(userId: string) {
         onboardingComplete: z.boolean().optional().describe("true once visa status and target roles are known"),
       }),
       execute: async (i) => {
-        const p = await loadProfile(userId);
-        const patch: Parameters<typeof saveProfile>[1] = {};
+        const p = await store.loadProfile();
+        const patch: ProfilePatch = {};
         if (i.visaStatus) { patch.visa_status = i.visaStatus; patch.needs_sponsorship = !NO_SPONSOR_NEEDED.has(i.visaStatus); }
         if (i.targetFamilies?.length) patch.target_families = i.targetFamilies;
         if (i.wantsRemote) patch.wants_remote = i.wantsRemote;
         if (i.locations) patch.locations = i.locations;
         if (i.onboardingComplete) patch.onboarded = true;
         if (i.optEndDate && p?.details) patch.details = { ...p.details, optEndDate: i.optEndDate };
-        await saveProfile(userId, patch);
+        await store.saveProfile(patch);
         return { saved: Object.keys(i) };
       },
     }),
@@ -65,15 +71,18 @@ export function buildTools(userId: string) {
       execute: async ({ count, remoteOnly, keyword }) => {
         const p = await needProfile();
         if ("error" in p) return p;
-        const [pro, usage] = await Promise.all([isPro(userId), loadUsage(userId)]);
-        if (!pro && usage.jobsShown >= FREE_LIMITS.jobs) return { jobs: [], limitReached: true, upsell: upsellLine("jobs") };
-        const r = await findJobs(userId, p.row, pro, usage, { count, remoteOnly, keyword });
+        const [pro, usage] = await Promise.all([store.isPro(), store.usage()]);
+        const limitLine = upsellLine(guest ? "guest_jobs" : "jobs");
+        if (!pro && usage.jobsShown >= store.jobLimit) return { jobs: [], limitReached: true, signUpRequired: guest, upsell: limitLine };
+        const r = await findJobs(store, p.row, pro, usage, { count, remoteOnly, keyword });
         return {
           jobs: r.cards,
-          freeJobsLeft: pro ? null : Math.max(0, FREE_LIMITS.jobs - usage.jobsShown - r.cards.length),
-          freeJobsTotal: pro ? null : FREE_LIMITS.jobs,
+          freeJobsLeft: pro ? null : Math.max(0, store.jobLimit - usage.jobsShown - r.cards.length),
+          freeJobsTotal: pro ? null : store.jobLimit,
+          guest,
           limitReached: r.blocked > 0,
-          upsell: r.blocked > 0 ? upsellLine("jobs") : null,
+          signUpRequired: guest && r.blocked > 0,
+          upsell: r.blocked > 0 ? limitLine : null,
           note: r.cards.length ? null : "No new matches right now. Suggest widening roles/locations or checking back tomorrow (jobs refresh daily).",
         };
       },
@@ -99,11 +108,12 @@ export function buildTools(userId: string) {
       description: "Review the user's resume against one job they've been shown. Free: 5 jobs, 15 rounds total.",
       inputSchema: z.object({ jobId: z.string().uuid() }),
       execute: async ({ jobId }) => {
+        if (guest) return signUpFirst;
         const p = await needProfile();
         if ("error" in p) return p;
         const job = await shownJob(jobId);
         if (!job) return { error: "unknown_job", message: "Only jobs I've shown them can be reviewed." };
-        const [pro, usage] = await Promise.all([isPro(userId), loadUsage(userId)]);
+        const [pro, usage] = await Promise.all([store.isPro(), store.usage()]);
         const ok = canReview(usage, pro, jobId);
         if (!ok.ok) return { limitReached: true, upsell: upsellLine(ok.reason) };
         const round = usage.reviewRounds + 1;
@@ -117,7 +127,8 @@ export function buildTools(userId: string) {
       description: "PRO: find the likely hiring manager / CTO for a shown job and draft a cold email + follow-up.",
       inputSchema: z.object({ jobId: z.string().uuid() }),
       execute: async ({ jobId }) => {
-        if (!canUse("cold_email", await isPro(userId)).ok) return { proOnly: true, upsell: upsellLine("pro_only") };
+        if (guest) return signUpFirst;
+        if (!canUse("cold_email", await store.isPro()).ok) return { proOnly: true, upsell: upsellLine("pro_only") };
         const p = await needProfile();
         if ("error" in p) return p;
         const job = await shownJob(jobId);
@@ -139,7 +150,8 @@ export function buildTools(userId: string) {
       description: "PRO: a 7-day interview prep plan for a shown job.",
       inputSchema: z.object({ jobId: z.string().uuid() }),
       execute: async ({ jobId }) => {
-        if (!canUse("interview_plan", await isPro(userId)).ok) return { proOnly: true, upsell: upsellLine("pro_only") };
+        if (guest) return signUpFirst;
+        if (!canUse("interview_plan", await store.isPro()).ok) return { proOnly: true, upsell: upsellLine("pro_only") };
         const p = await needProfile();
         if ("error" in p) return p;
         const job = await shownJob(jobId);
@@ -154,7 +166,8 @@ export function buildTools(userId: string) {
       description: "PRO: resume tailoring tips for a shown job.",
       inputSchema: z.object({ jobId: z.string().uuid() }),
       execute: async ({ jobId }) => {
-        if (!canUse("tailoring", await isPro(userId)).ok) return { proOnly: true, upsell: upsellLine("pro_only") };
+        if (guest) return signUpFirst;
+        if (!canUse("tailoring", await store.isPro()).ok) return { proOnly: true, upsell: upsellLine("pro_only") };
         const p = await needProfile();
         if ("error" in p) return p;
         const job = await shownJob(jobId);
@@ -169,6 +182,7 @@ export function buildTools(userId: string) {
       description: "Track progress on a shown job (applied, emailed, replied, interview, offer, rejected, dismissed, saved).",
       inputSchema: z.object({ jobId: z.string().uuid(), status: z.enum(["saved", "applied", "emailed", "replied", "interview", "offer", "rejected", "dismissed"]) }),
       execute: async ({ jobId, status }) => {
+        if (guest) return signUpFirst;
         const { error } = await db().from("matches").update({ status, status_at: new Date().toISOString() }).eq("user_id", userId).eq("job_id", jobId);
         return error ? { error: "update_failed" } : { ok: true, status };
       },

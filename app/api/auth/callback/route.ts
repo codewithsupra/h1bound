@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 import { createAuthActions } from "@insforge/sdk/ssr";
+import { GUEST_COOKIE } from "@/lib/server/guest-cookie";
+import { claimGuest } from "@/lib/server/store";
 
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("insforge_code");
@@ -13,5 +15,7 @@ export async function GET(request: NextRequest) {
   const { data, error } = await auth.exchangeOAuthCode(code, codeVerifier);
   if (error || !data?.user) return NextResponse.redirect(new URL("/login?error=exchange_failed", request.url));
   response.cookies.delete("insforge_code_verifier");
+  await claimGuest(data.user.id);
+  response.cookies.delete(GUEST_COOKIE);
   return response;
 }

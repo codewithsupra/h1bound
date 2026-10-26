@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Public_Sans } from "next/font/google";
+import { IBM_Plex_Mono, Public_Sans, Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const display = Bricolage_Grotesque({ variable: "--font-display", subsets: ["latin"], axes: ["wdth", "opsz"] });
+const display = Schibsted_Grotesk({ variable: "--font-display", subsets: ["latin"] });
+const flap = IBM_Plex_Mono({ variable: "--font-flap", subsets: ["latin"], weight: ["500"] });
 const body = Public_Sans({ variable: "--font-body", subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} h-full`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${flap.variable} h-full`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

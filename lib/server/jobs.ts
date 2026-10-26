@@ -1,7 +1,8 @@
 import "server-only";
 import { createAdminInsForge } from "@/lib/insforge/admin";
 import { rankJobs, type JobLite, type Scored } from "@/lib/match";
-import { canShowJobs } from "@/lib/quota";
+import { canShowJobs, type Usage } from "@/lib/quota";
+import type { Store } from "./store";
 import { isInternTitle } from "@/lib/titles";
 import { jobBadge, type SponsorBadge, type SponsorStats } from "@/lib/sponsor";
 import type { JdSponsorship } from "@/lib/jd-signals";
@@ -52,12 +53,11 @@ export function keywordTerms(keyword: string | undefined): string[] {
 export type FindResult = { cards: JobCard[]; blocked: number; poolSize: number };
 
 /**
- * Ranks fresh, unseen US jobs for this user and records the ones shown (which is what counts
- * against the free quota). Free users never get more than their remaining allowance.
+ * Ranks fresh, unseen US jobs for this user or guest and records the ones shown (which is what
+ * counts against the free quota). Nobody gets more than their remaining allowance.
  */
-export async function findJobs(userId: string, row: ProfileRow, pro: boolean, usage: { jobsShown: number; reviewedJobIds: string[]; reviewRounds: number }, opts: { count: number; remoteOnly?: boolean; keyword?: string }): Promise<FindResult> {
-  const { data: seen } = await db().from("matches").select("job_id").eq("user_id", userId);
-  const seenIds = new Set(((seen ?? []) as { job_id: string }[]).map((s) => s.job_id));
+export async function findJobs(store: Store, row: ProfileRow, pro: boolean, usage: Usage, opts: { count: number; remoteOnly?: boolean; keyword?: string }): Promise<FindResult> {
+  const seenIds = await store.seenJobIds();
 
   let q = db().from("jobs").select("id,title,company,company_id,location,remote,url,description,posted_at,jd_sponsorship,family").eq("active", true).eq("is_us", true);
   if (row.target_families.length) q = q.in("family", row.target_families);
@@ -89,15 +89,9 @@ export async function findJobs(userId: string, row: ProfileRow, pro: boolean, us
     return true;
   });
 
-  const { show, blocked } = canShowJobs(usage, pro, Math.min(opts.count, diverse.length));
+  const { show, blocked } = canShowJobs(usage, pro, Math.min(opts.count, diverse.length), store.jobLimit);
   const picked = diverse.slice(0, show);
-  if (picked.length) {
-    const { error: e } = await db().from("matches").upsert(
-      picked.map((s) => ({ user_id: userId, job_id: s.job.id, score: s.score, reasons: s.reasons })),
-      { onConflict: "user_id,job_id", ignoreDuplicates: true },
-    );
-    if (e) throw new Error(e.message);
-  }
+  await store.recordShown(picked.map((s) => ({ jobId: s.job.id, score: s.score, reasons: s.reasons })));
   const cards = picked.map((s) => {
     const j = byJob.get(s.job.id)!;
     return {
@@ -111,10 +105,4 @@ export async function findJobs(userId: string, row: ProfileRow, pro: boolean, us
 export async function loadJob(jobId: string) {
   const { data } = await db().from("jobs").select("id,title,company,company_id,location,remote,url,description,posted_at,jd_sponsorship,family").eq("id", jobId).maybeSingle();
   return data as JobRow | null;
-}
-
-/** Jobs the user has actually been shown (only those can be reviewed / emailed about). */
-export async function userHasJob(userId: string, jobId: string) {
-  const { data } = await db().from("matches").select("job_id").eq("user_id", userId).eq("job_id", jobId).maybeSingle();
-  return Boolean(data);
 }

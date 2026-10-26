@@ -13,7 +13,7 @@ export function CheckoutButton({ label }: { label: string }) {
   }
   return (
     <div className="mt-8">
-      <button onClick={go} disabled={state.busy} className="h-12 w-full rounded-xl bg-ink font-medium text-paper disabled:opacity-50">
+      <button onClick={go} disabled={state.busy} className="btn-light w-full !py-3.5 disabled:opacity-50">
         {state.busy ? "Opening checkout…" : label}
       </button>
       {state.error && <p className="mt-2 text-sm text-red" role="alert">{state.error}</p>}

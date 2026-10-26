@@ -1,132 +1,136 @@
 import Link from "next/link";
-import { Stamp } from "@/components/chat/stamp";
-import { SponsorLookup } from "@/components/landing/sponsor-lookup";
+import { FlightPath } from "@/components/landing/flight-path";
+import { HeroAndBoard } from "@/components/landing/hero-board";
+import { MayaDemo } from "@/components/landing/maya-demo";
+import { AskMayaBar, MayaPanel } from "@/components/landing/try-maya";
+import { SiteHeader } from "@/components/site/site-header";
+import type { BoardRow } from "@/components/landing/flap-board";
+import type { Light } from "@/components/landing/night-map";
+import { prettyCompany } from "@/lib/employer";
 import { createAdminInsForge } from "@/lib/insforge/admin";
-import { sponsorBadge, type SponsorStats } from "@/lib/sponsor";
+import { sponsorBadge, sponsorLevel, type SponsorStats } from "@/lib/sponsor";
 
 export const revalidate = 86400;
 
-type Row = { name: string; display_name: string | null; fiscal_year: number; total_filings: number; by_family: SponsorStats["byFamily"]; last_filed: string | null };
+type Row = { name: string; display_name: string | null; top_states: string[]; fiscal_year: number; total_filings: number; by_family: SponsorStats["byFamily"]; last_filed: string | null; board_slug: string | null };
 
-async function heroExample() {
-  const { data } = await createAdminInsForge()
-    .database.from("companies")
-    .select("name,display_name,fiscal_year,total_filings,by_family,last_filed")
-    .eq("board_slug", "stripe")
-    .maybeSingle();
-  const r = data as Row | null;
-  if (!r) return null;
-  return { company: r.display_name ?? "Stripe", badge: sponsorBadge({ fiscalYear: r.fiscal_year, total: r.total_filings, byFamily: r.by_family, lastFiled: r.last_filed }, "software_engineer") };
-}
+const stats = (r: Row): SponsorStats => ({ fiscalYear: r.fiscal_year, total: r.total_filings, byFamily: r.by_family, lastFiled: r.last_filed });
+const label = (r: Row) => r.display_name ?? prettyCompany(r.name);
 
-async function totals() {
+async function load() {
   const db = createAdminInsForge().database;
-  const [c, j] = await Promise.all([
+  const cols = "name,display_name,top_states,fiscal_year,total_filings,by_family,last_filed,board_slug";
+  const pages = await Promise.all([0, 1, 2].map((p) => db.from("companies").select(cols).order("total_filings", { ascending: false }).range(p * 1000, p * 1000 + 999)));
+  const top = pages.flatMap((p) => (p.data ?? []) as Row[]);
+  const [{ count: employers }, { count: jobs }] = await Promise.all([
     db.from("companies").select("id", { count: "exact", head: true }),
     db.from("jobs").select("id", { count: "exact", head: true }).eq("active", true).eq("is_us", true),
   ]);
-  return { companies: c.count ?? 0, jobs: j.count ?? 0 };
+
+  const lights: Light[] = top.filter((r) => r.top_states[0]).map((r) => ({ n: label(r), f: r.total_filings, s: r.top_states[0] }));
+  const idle: BoardRow[] = top
+    .filter((r) => r.board_slug)
+    .slice(0, 40)
+    .map((r) => ({
+      name: label(r),
+      total: r.total_filings,
+      roleCount: r.by_family.software_engineer?.count ?? 0,
+      median: r.by_family.software_engineer?.medianWage ?? null,
+      level: sponsorLevel(stats(r), "software_engineer"),
+    }));
+  const stripe = top.find((r) => r.board_slug === "stripe");
+  const demo = stripe ? { company: label(stripe), badge: sponsorBadge(stats(stripe), "software_engineer") } : null;
+  return { lights, idle, demo, employers: employers ?? 0, jobs: jobs ?? 0, filings: top.reduce((a, r) => a + r.total_filings, 0) };
 }
 
-const PRO = [
-  "Unlimited matches, with new sponsor jobs every morning",
-  "Cold emails: Maya finds the hiring manager or CTO and drafts the email",
-  "A 7-day interview plan for each job",
-  "Resume tailoring for each job",
-  "Follow-up reminders by email",
-];
-
 export default async function Home() {
-  const [ex, t] = await Promise.all([heroExample(), totals()]);
+  const d = await load();
+  const fmt = (n: number) => n.toLocaleString("en-US");
 
   return (
-    <main className="flex-1">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
-        <Link href="/" className="font-display text-xl font-bold">H1Bound</Link>
-        <nav className="flex items-center gap-2 text-sm">
-          <a href="/login" className="rounded-lg px-3 py-2 text-slate hover:text-ink">Sign in</a>
-          <a href="/login?mode=signup" className="rounded-lg bg-ink px-3.5 py-2 font-medium text-paper hover:opacity-90">Start free</a>
-        </nav>
-      </header>
+    <main className="flex-1 overflow-x-clip">
+      <SiteHeader fixed>
+        <Link href="/login" className="rounded-full px-3 py-2 text-mist transition-colors hover:text-moon">Sign in</Link>
+        <Link href="/login?mode=signup" className="btn-ghost !px-4 !py-2 text-sm">Create account</Link>
+      </SiteHeader>
+      <MayaPanel />
 
-      <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-8 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:pt-16">
-        <div>
-          <h1 className="font-display text-[clamp(2.4rem,5.5vw,4.2rem)] font-extrabold leading-[1.02] tracking-[-0.02em]">
-            Stop applying to companies that were never going to sponsor you.
+      <HeroAndBoard lights={d.lights} idle={d.idle}>
+        <div className="pointer-events-none relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-4 pb-16 pt-28 sm:px-6 sm:pb-20 lg:justify-center lg:pb-10">
+          <p className="rise text-sm text-mist" style={{ animationDelay: "2.2s" }}>
+            Every light is a real company that filed H-1Bs this year. Hover one.
+          </p>
+          <h1 className="rise mt-4 max-w-[13ch] font-display text-[clamp(2.6rem,5.6vw,4.2rem)] font-semibold leading-[0.98] tracking-[-0.035em]" style={{ animationDelay: "2.5s" }}>
+            Apply where you can actually stay.
           </h1>
-          <p className="mt-6 max-w-[34rem] text-lg leading-relaxed text-slate">
-            Maya is an AI job buddy for international students. Upload your resume and she matches you to US jobs at employers with a real H-1B filing record, then helps you reach the person who decides.
+          <p className="rise mt-6 max-w-[32rem] text-lg leading-relaxed text-mist" style={{ animationDelay: "2.8s" }}>
+            Maya is an AI job buddy for international students. She matches your resume to open US jobs at employers with a real H-1B record, then helps you reach the person who decides.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a href="/login?mode=signup" className="rounded-xl bg-ink px-5 py-3 font-medium text-paper hover:opacity-90">Upload your resume, free</a>
-            <a href="#lookup" className="font-medium underline underline-offset-4">Check a company first</a>
+          <div className="rise mt-9" style={{ animationDelay: "3.1s" }}>
+            <AskMayaBar />
+            <p className="pointer-events-auto mt-4 text-sm text-mist">
+              No account needed: try it on your resume and see 5 matches.{" "}
+              <a href="#board" className="text-moon underline decoration-haze underline-offset-4 transition-colors hover:decoration-sodium">Or check a company first</a>
+            </p>
           </div>
-          <p className="mt-6 text-sm text-slate">
-            {t.companies.toLocaleString("en-US")} sponsoring employers from FY2026 Dept. of Labor filings{t.jobs ? `, ${t.jobs.toLocaleString("en-US")} open US jobs today` : ""}.
+          <dl className="rise mt-12 flex flex-wrap gap-x-10 gap-y-3 text-sm" style={{ animationDelay: "3.4s" }}>
+            <div><dt className="text-mist">Sponsoring employers</dt><dd className="font-flap text-xl text-moon">{fmt(d.employers)}</dd></div>
+            <div><dt className="text-mist">Open US jobs today</dt><dd className="font-flap text-xl text-moon">{fmt(d.jobs)}</dd></div>
+            <div><dt className="text-mist">Lights on this map</dt><dd className="font-flap text-xl text-sodium">{fmt(d.lights.length)}</dd></div>
+          </dl>
+        </div>
+      </HeroAndBoard>
+
+      <section className="mx-auto grid max-w-6xl items-center gap-14 px-4 py-28 sm:px-6 lg:grid-cols-[1fr_1.05fr]">
+        <div>
+          <h2 className="font-display text-[clamp(1.9rem,4vw,3rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
+            Talks like a friend in recruiting. Never pretends to be one.
+          </h2>
+          <p className="mt-5 max-w-[34rem] text-lg leading-relaxed text-mist">
+            Maya asks one thing at a time, remembers your OPT clock, and only cites numbers from public filings. She&apos;s an AI, and says so.
           </p>
         </div>
-
-        <div className="rounded-2xl border border-line bg-card p-5 shadow-[0_1px_0_var(--line)] sm:p-6" aria-label="Example conversation with Maya">
-          <p className="ml-auto max-w-[80%] rounded-2xl rounded-br-md bg-ink px-4 py-2.5 text-paper">I&apos;m on STEM OPT, backend + Python. Who&apos;s actually hiring people like me?</p>
-          <p className="mt-4 max-w-[92%] leading-relaxed">Found a few good ones. This one&apos;s the strongest on sponsorship:</p>
-          {ex && (
-            <div className="mt-3 rounded-xl border border-line p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-display font-semibold">Software Engineer, Backend</p>
-                  <p className="text-sm text-slate">{ex.company} · New York, NY</p>
-                </div>
-                <Stamp badge={ex.badge} animate />
-              </div>
-              <p className="mt-3 text-sm text-slate">{ex.badge.detail}</p>
-            </div>
-          )}
-          <p className="mt-4 max-w-[92%] leading-relaxed">Want me to find their backend eng manager and draft a cold email?</p>
-          <p className="mt-5 text-xs text-slate">Maya is an AI. Example job for illustration; filing numbers are real.</p>
-        </div>
+        {d.demo && <MayaDemo company={d.demo.company} badge={d.demo.badge} />}
       </section>
 
-      <section id="lookup" className="border-y border-line py-20">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6">
-          <h2 className="font-display text-3xl font-bold tracking-[-0.01em] sm:text-4xl">Does this company sponsor?</h2>
-          <p className="mt-3 max-w-[38rem] text-slate">
-            Every H-1B starts with a labor filing to the US Dept. of Labor. We count them per company and role, so you can see who sponsors people like you, before you apply. No signup.
-          </p>
-          <div className="mt-8">
-            <SponsorLookup />
-          </div>
-        </div>
+      <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <h2 className="mb-14 font-display text-[clamp(1.9rem,4vw,3rem)] font-semibold tracking-[-0.02em]">Your route</h2>
+        <FlightPath />
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <h2 className="font-display text-3xl font-bold tracking-[-0.01em] sm:text-4xl">Free to start. Pro when you&apos;re ready to push.</h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <div className="rounded-2xl border border-line bg-card p-6">
-            <p className="font-display text-xl font-semibold">Free</p>
-            <p className="mt-1 text-3xl font-bold">$0</p>
-            <ul className="mt-5 space-y-2.5 text-[0.97rem]">
+      <section className="mx-auto max-w-6xl px-4 py-28 sm:px-6">
+        <h2 className="font-display text-[clamp(1.9rem,4vw,3rem)] font-semibold tracking-[-0.02em]">Free to start.</h2>
+        <div className="mt-12 grid gap-5 md:grid-cols-2">
+          <div className="glass rounded-3xl p-7">
+            <p className="font-display text-lg font-semibold">Free</p>
+            <p className="mt-2 font-display text-5xl font-semibold tracking-tight">$0</p>
+            <ul className="mt-7 space-y-3 text-mist">
               <li>10 matched jobs, each with its sponsorship record</li>
-              <li>Resume reviews on 5 of those jobs (15 rounds in total)</li>
-              <li>Chat with Maya about your search, any time</li>
+              <li>Resume reviews on 5 of them (15 rounds in total)</li>
+              <li>Chat with Maya about your search</li>
             </ul>
-            <a href="/login?mode=signup" className="mt-6 inline-block rounded-xl border border-line px-4 py-2.5 font-medium hover:bg-paper">Start free</a>
+            <Link href="/login?mode=signup" className="btn-ghost mt-8">Start free</Link>
           </div>
-          <div className="rounded-2xl border-2 border-ink bg-card p-6">
-            <p className="font-display text-xl font-semibold">Pro</p>
-            <p className="mt-1 text-3xl font-bold">$12<span className="text-base font-medium text-slate">/month</span></p>
-            <p className="text-sm text-slate">₹399/month in India. Cancel anytime.</p>
-            <ul className="mt-5 space-y-2.5 text-[0.97rem]">
-              {PRO.map((p) => <li key={p}>{p}</li>)}
+          <div className="glass relative overflow-hidden rounded-3xl p-7 ring-1 ring-sodium/40">
+            <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-sodium/20 blur-3xl" />
+            <p className="font-display text-lg font-semibold">Pro</p>
+            <p className="mt-2 font-display text-5xl font-semibold tracking-tight">$12<span className="text-lg font-normal text-mist">/month</span></p>
+            <p className="mt-1 text-sm text-mist">₹399/month in India. Cancel anytime.</p>
+            <ul className="mt-7 space-y-3 text-mist">
+              <li><span className="text-moon">Unlimited matches</span>, new sponsor jobs every morning</li>
+              <li><span className="text-moon">Cold emails</span>: Maya finds the hiring manager or CTO and drafts it</li>
+              <li><span className="text-moon">Interview plans</span> and <span className="text-moon">resume tailoring</span> per job</li>
+              <li>Follow-up reminders by email</li>
             </ul>
-            <a href="/login?mode=signup" className="mt-6 inline-block rounded-xl bg-ink px-4 py-2.5 font-medium text-paper hover:opacity-90">Start free, upgrade in chat</a>
+            <Link href="/login?mode=signup" className="btn-light mt-8">Start free, upgrade in chat</Link>
           </div>
         </div>
       </section>
 
-      <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-slate sm:flex-row sm:justify-between sm:px-6">
-          <p>Sponsorship data: US Dept. of Labor LCA disclosures, FY2026 Q3. A filing isn&apos;t a visa guarantee.</p>
-          <p>Your resume is read once and stored encrypted. Delete everything anytime from your account.</p>
+      <footer className="border-t border-haze">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-10 text-sm text-mist sm:flex-row sm:justify-between sm:px-6">
+          <p>Data: US Dept. of Labor LCA disclosures, FY2026 Q3 ({fmt(d.filings)} filings among the top 3,000 employers). A filing isn&apos;t a visa guarantee.</p>
+          <p>Your resume is read once and stored encrypted. Delete everything anytime.</p>
         </div>
       </footer>
     </main>

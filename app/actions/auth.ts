@@ -3,6 +3,7 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createAuthActions } from "@insforge/sdk/ssr";
+import { claimGuest } from "@/lib/server/store";
 
 export type AuthState = { error: string | null };
 
@@ -22,6 +23,7 @@ export async function signIn(_prev: AuthState, formData: FormData): Promise<Auth
   const auth = createAuthActions({ cookies: await cookies() });
   const { data, error } = await auth.signInWithPassword({ email: field(formData, "email"), password: String(formData.get("password") ?? "") });
   if (error || !data?.user) return { error: error?.message ?? "Sign in failed. Check your email and password." };
+  await claimGuest(data.user.id);
   redirect(AFTER_SIGN_IN);
 }
 
@@ -37,6 +39,7 @@ export async function signUp(_prev: AuthState, formData: FormData): Promise<Auth
   });
   if (error) return { error: error.message ?? "Could not create your account." };
   if (data?.requireEmailVerification) return { error: "Check your inbox to verify your email, then sign in." };
+  if (data?.user) await claimGuest(data.user.id);
   redirect(AFTER_SIGN_IN);
 }
 

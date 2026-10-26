@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/insforge/server";
 import { ACCEPTED, fileToText, MAX_UPLOAD_BYTES, parseResume, toDetails } from "@/lib/server/resume";
-import { loadProfile, saveProfile } from "@/lib/server/profile";
+import { getStore } from "@/lib/server/store";
 
 export const maxDuration = 60;
 
@@ -10,8 +9,8 @@ export const maxDuration = 60;
  * only the encrypted structured profile is stored.
  */
 export async function POST(req: Request) {
-  const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const store = await getStore();
+  if (!store) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
   const form = await req.formData();
   const file = form.get("file");
@@ -26,8 +25,8 @@ export async function POST(req: Request) {
   }
 
   const parsed = await parseResume(text);
-  const prev = await loadProfile(user.id);
-  await saveProfile(user.id, {
+  const prev = await store.loadProfile();
+  await store.saveProfile({
     details: toDetails(parsed, text, prev?.details),
     skills: parsed.skills.slice(0, 40),
     years_experience: Math.max(0, Math.min(60, Math.floor(parsed.yearsExperience))),

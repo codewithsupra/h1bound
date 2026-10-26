@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
   if (req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const db = createAdminInsForge().database;
   const app = process.env.NEXT_PUBLIC_APP_URL ?? req.nextUrl.origin;
+  await db.rpc("expire_guest_sessions"); // housekeeping: guest previews live 7 days
   const { data, error } = await db.rpc("nudge_candidates");
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
