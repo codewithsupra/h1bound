@@ -1,0 +1,44 @@
+/**
+ * Reads what a job description itself says about sponsorship and location. A posting that says
+ * "we cannot sponsor" beats any company-level filing history, so this overrides the badge.
+ * Pure and client-safe.
+ */
+
+export type JdSponsorship = "no" | "yes" | null;
+
+const NO = [
+  /\b(unable|not able|cannot|can ?not|can't|won't|will not|do(es)? not|are not able to|is not able to)\s+(to\s+)?(provide\s+|offer\s+)?(visa\s+|immigration\s+|employment\s+visa\s+)?sponsor/,
+  /\b(no|without)\s+(visa\s+|immigration\s+)?sponsorship\b/,
+  /\bsponsorship\s+(is\s+)?(not\s+(available|offered|provided)|unavailable)/,
+  /\bnot\s+(eligible|available)\s+for\s+(visa\s+|immigration\s+)?sponsorship/,
+  /\bmust\s+be\s+(a\s+)?(us|u\.s\.)\s+citizen/,
+  /\b(requires?|required)\b.{0,40}\bclearance\b/,
+  /\bmust\s+(be\s+)?(legally\s+)?authorized\s+to\s+work\s+in\s+the\s+(us|u\.s\.|united states)\s+without\s+(the\s+need\s+for\s+)?(current\s+or\s+future\s+)?(employer\s+)?sponsorship/,
+];
+
+const YES = [
+  /\b(visa|h-?1b|immigration)\s+sponsorship\s+(is\s+)?(available|offered|provided|possible)/,
+  /\b(we|will|can|able to)\s+(provide\s+|offer\s+)?sponsor\s+(visas?|h-?1b|work\s+authorization)/,
+  /\bopen\s+to\s+sponsor/,
+  /\bsponsorship\s+available\b/,
+];
+
+export function jdSponsorship(text: string): JdSponsorship {
+  const t = text.toLowerCase().replace(/\s+/g, " ");
+  if (NO.some((r) => r.test(t))) return "no";
+  if (YES.some((r) => r.test(t))) return "yes";
+  return null;
+}
+
+const US_STATES =
+  "AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|DC";
+const US_RE = new RegExp(
+  `\\b(united states|usa|u\\.s\\.|us-?remote|remote.{0,4}us\\b|new york|san francisco|seattle|boston|austin|chicago|los angeles|bay area|atlanta|denver|dallas|houston|miami|washington|philadelphia|pittsburgh|san jose|mountain view|palo alto|menlo park|sunnyvale)\\b|,\\s*(${US_STATES})\\b`,
+  "i",
+);
+
+/** True when the location string points at the US (or is a bare "Remote" with no country). */
+export function isUsLocation(location: string): boolean {
+  if (US_RE.test(location)) return true;
+  return /^\s*remote\s*$/i.test(location);
+}
