@@ -21,6 +21,9 @@ async function load() {
   const db = createAdminInsForge().database;
   const cols = "slug,name,display_name,top_states,fiscal_year,total_filings,by_family,last_filed,board_slug";
   const pages = await Promise.all([0, 1, 2].map((p) => db.from("companies").select(cols).order("total_filings", { ascending: false }).range(p * 1000, p * 1000 + 999)));
+  // Throw instead of rendering an empty sky: with ISR, a failed regeneration keeps the last good page.
+  const failed = pages.find((p) => p.error);
+  if (failed) throw new Error(`landing data: ${failed.error!.message}`);
   const top = pages.flatMap((p) => (p.data ?? []) as Row[]);
   const [{ count: employers }, { count: jobs }] = await Promise.all([
     db.from("companies").select("id", { count: "exact", head: true }),
@@ -57,9 +60,9 @@ export default async function Home() {
       <MayaPanel />
 
       <HeroAndBoard lights={d.lights} idle={d.idle}>
-        <div className="pointer-events-none relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-4 pb-16 pt-28 sm:px-6 sm:pb-20 lg:justify-center lg:pb-10">
+        <div className="pointer-events-none relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-start px-4 pb-14 pt-[17rem] sm:px-6 sm:pb-20 lg:justify-center lg:pb-10 lg:pt-28">
           <p className="rise text-sm text-mist" style={{ animationDelay: "2.2s" }}>
-            Every light is a real company that filed H-1Bs this year. Hover one.
+            Every light is a real company that filed H-1Bs this year. <span className="hidden sm:inline">Hover</span><span className="sm:hidden">Tap</span> one.
           </p>
           <h1 className="rise mt-4 max-w-[13ch] font-display text-[clamp(2.6rem,5.6vw,4.2rem)] font-semibold leading-[0.98] tracking-[-0.035em]" style={{ animationDelay: "2.5s" }}>
             Apply where you can actually stay.
@@ -74,7 +77,7 @@ export default async function Home() {
               <a href="#board" className="text-moon underline decoration-haze underline-offset-4 transition-colors hover:decoration-sodium">Or check a company first</a>
             </p>
           </div>
-          <dl className="rise mt-12 flex flex-wrap gap-x-10 gap-y-3 text-sm" style={{ animationDelay: "3.4s" }}>
+          <dl className="rise mt-10 grid grid-cols-3 gap-x-4 text-sm sm:mt-12 sm:flex sm:gap-x-10" style={{ animationDelay: "3.4s" }}>
             <div><dt className="text-mist">Sponsoring employers</dt><dd className="font-flap text-xl text-moon">{fmt(d.employers)}</dd></div>
             <div><dt className="text-mist">Open US jobs today</dt><dd className="font-flap text-xl text-moon">{fmt(d.jobs)}</dd></div>
             <div><dt className="text-mist">Lights on this map</dt><dd className="font-flap text-xl text-sodium">{fmt(d.lights.length)}</dd></div>

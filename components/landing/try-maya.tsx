@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Chat } from "@/components/chat/chat";
+import { Chat, type Viewer } from "@/components/chat/chat";
 
 const EVENT = "h1b:maya";
 type OpenDetail = { x: number; y: number; prompt?: string };
@@ -74,6 +74,7 @@ export function MayaPanel() {
   const [revealed, setRevealed] = useState(false);
   const [prefill, setPrefill] = useState<string | undefined>();
   const [launcher, setLauncher] = useState(false);
+  const [viewer, setViewer] = useState<Viewer>(null);
   const returnFocus = useRef<Element | null>(null);
   const panel = useRef<HTMLDivElement>(null);
 
@@ -86,8 +87,11 @@ export function MayaPanel() {
       setMounted(true);
     };
     window.addEventListener(EVENT, onOpen);
-    const t = setTimeout(() => setLauncher(true), 3600);
-    return () => { window.removeEventListener(EVENT, onOpen); clearTimeout(t); };
+    // The hero has its own Try Maya bar; the floating launcher appears once you scroll past it.
+    const onScroll = () => setLauncher(window.scrollY > window.innerHeight * 0.75);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { window.removeEventListener(EVENT, onOpen); window.removeEventListener("scroll", onScroll); };
   }, []);
 
   // Once the panel exists, measure where the click was relative to it, then start the reveal.
@@ -147,7 +151,7 @@ export function MayaPanel() {
             role="dialog"
             aria-modal="true"
             aria-label="Chat with Maya"
-            className="glass absolute inset-0 flex flex-col overflow-hidden shadow-2xl sm:inset-auto sm:bottom-5 sm:right-5 sm:h-[min(720px,calc(100svh-2.5rem))] sm:w-[440px] sm:rounded-3xl"
+            className="glass absolute inset-0 flex flex-col overflow-hidden !bg-night-2 shadow-2xl sm:!bg-night-2/95 sm:inset-auto sm:bottom-5 sm:right-5 sm:h-[min(720px,calc(100svh-2.5rem))] sm:w-[440px] sm:rounded-3xl"
             onTransitionEnd={(e) => e.propertyName === "clip-path" && open && setRevealed(true)}
             style={{
               // Once revealed the clip is removed, so nothing inside can stay clipped or unclickable.
@@ -160,13 +164,13 @@ export function MayaPanel() {
                 <span className="grid h-8 w-8 place-items-center rounded-full bg-sodium font-display text-sm font-bold text-night">M</span>
                 <div className="leading-tight">
                   <p className="font-display text-sm font-semibold">Maya <span className="ml-1 rounded border border-haze px-1 text-[0.62rem] text-mist">AI</span></p>
-                  <p className="text-[11px] text-mist">Free preview · no account needed</p>
+                  <p className="text-[11px] text-mist">{viewer === "user" ? "Your saved chat" : "Free preview · no account needed"}</p>
                 </div>
               </div>
               <button onClick={close} aria-label="Close chat" className="grid h-8 w-8 place-items-center rounded-full text-mist transition-colors hover:bg-moon/5 hover:text-moon">✕</button>
             </div>
             <div className="min-h-0 flex-1">
-              <Chat viewer={null} variant="panel" autoFocus={open} prefill={prefill} />
+              <Chat viewer={null} variant="panel" autoFocus={open} prefill={prefill} onViewer={setViewer} />
             </div>
           </div>
         </div>

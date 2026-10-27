@@ -126,6 +126,7 @@ export function Chat({
   variant = "page",
   autoFocus = false,
   prefill,
+  onViewer,
 }: {
   initialMessages?: UIMessage[];
   firstName?: string | null;
@@ -133,6 +134,7 @@ export function Chat({
   variant?: "page" | "panel";
   autoFocus?: boolean;
   prefill?: string;
+  onViewer?: (v: Viewer) => void;
 }) {
   const { messages, sendMessage, setMessages, status, error } = useChat({
     messages: initialMessages,
@@ -148,6 +150,10 @@ export function Chat({
   const inputRef = useRef<HTMLInputElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const busy = status === "submitted" || status === "streaming";
+
+  useEffect(() => {
+    onViewer?.(viewer);
+  }, [viewer, onViewer]);
 
   // A panel opened on the landing page learns who's here (and restores a guest's chat).
   useEffect(() => {

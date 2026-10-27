@@ -53,3 +53,18 @@ describe("companyLabel", () => {
     expect(companyLabel(null, "PALANTIR TECHNOLOGIES INC.")).toBe("Palantir Technologies");
   });
 });
+
+import { sameCompany } from "@/lib/employer";
+describe("sameCompany", () => {
+  it("accepts brand ≈ legal names", () => {
+    expect(sameCompany("Stripe", "Stripe, LLC")).toBe(true);
+    expect(sameCompany("Scale AI", "Scale Inc.")).toBe(true);
+    expect(sameCompany("Handshake", "Stryder Corporation", "Handshake")).toBe(true);
+    expect(sameCompany("Waymo", "Waymo LLC")).toBe(true);
+  });
+  it("rejects a shared first word", () => {
+    expect(sameCompany("Public", "PUBLIC HEALTH TRUST OF DADE COUNTY, FLORIDA")).toBe(false);
+    expect(sameCompany("Genesis", "Genesis Healthcare Systems Inc")).toBe(false);
+    expect(sameCompany("Apple", "Applebee's Services")).toBe(false);
+  });
+});

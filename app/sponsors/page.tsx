@@ -45,7 +45,7 @@ export default async function SponsorsIndex() {
           {ordered.map((f) => (
             <section key={f} id={f} className="scroll-mt-6">
               <h2 className="font-display text-2xl font-bold">{FAMILY_LABEL[f]}</h2>
-              <ol className="mt-4 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
+              <ol className="mt-4 grid grid-cols-1 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
                 {groups.get(f)!.map((r) => (
                   <li key={r.id} className="border-b border-line">
                     <Link href={`/sponsors/${r.slug}`} className="flex items-baseline justify-between gap-3 py-2.5 hover:underline">

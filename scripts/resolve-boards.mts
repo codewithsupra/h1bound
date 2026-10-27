@@ -6,7 +6,7 @@
  */
 import { createAdminClient } from "@insforge/sdk";
 import { boardSlugs, BOARD_URL, type AtsKind } from "../lib/ingest/ats";
-import { coreEmployer, normalizeEmployer } from "../lib/employer";
+import { coreEmployer, sameCompany } from "../lib/employer";
 
 const N = Number(process.argv[2] ?? 3000);
 const db = createAdminClient({ baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL!, apiKey: process.env.INSFORGE_API_KEY! }).database;
@@ -44,10 +44,7 @@ async function resolve(c: Co) {
         if (slug.length < 3) continue;
         const hit = await probe(kind, slug);
         if (!hit) continue;
-        if (kind === "greenhouse" && hit.companyName) {
-          const a = coreEmployer(hit.companyName), b = coreEmployer(c.name);
-          if (!(a === b || a.startsWith(b) || b.startsWith(a) || normalizeEmployer(hit.companyName) === normalizeEmployer(c.dba ?? ""))) continue;
-        }
+        if (kind === "greenhouse" && hit.companyName && !sameCompany(hit.companyName, c.name, c.dba)) continue;
         return { kind, slug, display: hit.companyName ?? null, count: hit.count };
       }
     }
@@ -57,7 +54,7 @@ async function resolve(c: Co) {
 
 let done = 0, found = 0;
 const queue = [...companies];
-await Promise.all(Array.from({ length: 12 }, async () => {
+await Promise.all(Array.from({ length: 6 }, async () => { // gentle on the small DB instance
   for (let c = queue.shift(); c; c = queue.shift()) {
     const r = await resolve(c);
     const patch = r

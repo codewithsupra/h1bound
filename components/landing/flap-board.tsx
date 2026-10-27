@@ -22,8 +22,10 @@ function FlapText({ text, width, tone = "moon", delay = 0 }: { text: string; wid
       const id = setTimeout(() => setShown(target), 0);
       return () => clearTimeout(id);
     }
-    const remaining = target.split("").map((c, i) => (c === shown[i] ? 0 : 3 + Math.floor(Math.random() * 6) + Math.floor(i / 3)));
-    let current = shown.split("");
+    // Normalize to the current width first: a width change (desktop → phone) must not leave stale cells.
+    const from = shown.padEnd(width, " ").slice(0, width);
+    const remaining = target.split("").map((c, i) => (c === from[i] ? 0 : 3 + Math.floor(Math.random() * 6) + Math.floor(i / 3)));
+    let current = from.split("");
     let timer: ReturnType<typeof setInterval> | undefined;
     const startId = setTimeout(() => {
       timer = setInterval(() => {
@@ -39,11 +41,11 @@ function FlapText({ text, width, tone = "moon", delay = 0 }: { text: string; wid
     }, delay);
     return () => { clearTimeout(startId); if (timer) clearInterval(timer); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [target, delay]);
+  }, [target, delay, width]);
 
   return (
     <span className="inline-flex" aria-hidden>
-      {shown.split("").map((c, i) => (
+      {shown.padEnd(width, " ").slice(0, width).split("").map((c, i) => (
         <span key={`${i}-${c}`} className="flap flap-tick" data-tone={tone}>{c === " " ? " " : c}</span>
       ))}
     </span>
@@ -117,7 +119,7 @@ export function FlapBoard({ idle, pick }: { idle: BoardRow[]; pick: { name: stri
     ? [...results, ...Array(Math.max(0, 5 - results.length)).fill(null)].slice(0, 5)
     : Array.from({ length: 5 }, (_, i) => idle[(offset + i) % Math.max(1, idle.length)] ?? null);
 
-  const nameW = narrow ? 11 : 16;
+  const nameW = narrow ? 9 : 16;
   const empty = results !== null && results.length === 0;
 
   return (
@@ -130,7 +132,7 @@ export function FlapBoard({ idle, pick }: { idle: BoardRow[]; pick: { name: stri
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search a company: Stripe, Databricks, Tesla…"
-          className="h-12 min-w-0 flex-1 rounded-full border border-haze bg-night/60 px-5 text-moon outline-none placeholder:text-mist/70 focus:border-sodium/60"
+          className="h-12 min-w-0 rounded-full border border-haze bg-night/60 px-5 sm:flex-1 text-moon outline-none placeholder:text-mist/70 focus:border-sodium/60"
         />
         <label className="sr-only" htmlFor="board-role">Role</label>
         <select id="board-role" value={role} onChange={(e) => setRole(e.target.value)} className="h-12 rounded-full border border-haze bg-night/60 px-4 text-moon outline-none focus:border-sodium/60">
@@ -138,13 +140,14 @@ export function FlapBoard({ idle, pick }: { idle: BoardRow[]; pick: { name: stri
         </select>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-2xl bg-[#0a0f28] p-3 text-[12px] shadow-[inset_0_2px_20px_rgb(0_0_0_/_0.5)] sm:p-5 sm:text-[15px] lg:text-[17px]" role="table" aria-label="H-1B sponsors">
-        <div className="mb-2 flex gap-3 px-1 text-[11px] text-mist sm:gap-5 sm:text-xs" role="row">
-          <span style={{ width: `${nameW * 1.2}em` }} role="columnheader">Company</span>
-          <span className="w-[6.2em]" role="columnheader">H-1Bs FY26</span>
-          {!narrow && <span className="w-[6.2em]" role="columnheader">Your role</span>}
-          {!narrow && <span className="w-[6.2em]" role="columnheader">Median</span>}
-          <span role="columnheader">Sponsors?</span>
+      <div className="mt-6 overflow-hidden rounded-2xl bg-[#0a0f28] p-3 text-[11px] shadow-[inset_0_2px_20px_rgb(0_0_0_/_0.5)] [--cw:1em] sm:p-5 sm:text-[15px] sm:[--cw:1.15em] lg:text-[17px]" role="table" aria-label="H-1B sponsors">
+        <div className="mb-2 flex gap-3 text-mist sm:gap-5" role="row">
+          {/* Header cells span exactly as many flaps as the column below them. */}
+          <span className="shrink-0" style={{ width: `calc(${nameW} * (var(--cw) + 2px))` }} role="columnheader"><span className="text-[10px] sm:text-xs">Company</span></span>
+          <span className="shrink-0" style={{ width: "calc(5 * (var(--cw) + 2px))" }} role="columnheader"><span className="text-[10px] sm:text-xs">{narrow ? "H-1Bs" : "H-1Bs FY26"}</span></span>
+          {!narrow && <span className="shrink-0" style={{ width: "calc(5 * (var(--cw) + 2px))" }} role="columnheader"><span className="text-[10px] sm:text-xs">Your role</span></span>}
+          {!narrow && <span className="shrink-0" style={{ width: "calc(5 * (var(--cw) + 2px))" }} role="columnheader"><span className="text-[10px] sm:text-xs">Median</span></span>}
+          <span role="columnheader"><span className="text-[10px] sm:text-xs">Sponsors?</span></span>
         </div>
         <div className="space-y-1.5">
           {rows.map((r, i) => {

@@ -103,3 +103,25 @@ export function companyLabel(display: string | null | undefined, legal: string):
   if (d && l.startsWith(d) && l.length > d.length) return prettyCompany(legal);
   return prettyCompany(display);
 }
+
+/**
+ * Does a job board's company name refer to this employer? Exact match on the core name (or DBA),
+ * or one name extends the other by a single generic suffix ("Scale" ~ "Scale AI"). A lone shared first
+ * word is not enough: "Public" is not "Public Health Trust of Dade County".
+ */
+const GENERIC_SUFFIX = new Set(["ai", "labs", "hq", "io", "app", "tech", "technologies", "technology", "software", "systems", "solutions", "services", "global", "international", "digital", "cloud", "platform", "platforms", "health"]);
+
+export function sameCompany(boardName: string, legal: string, dba: string | null = null): boolean {
+  const a = coreEmployer(boardName);
+  if (!a) return false;
+  for (const name of [legal, dba]) {
+    if (!name) continue;
+    const b = coreEmployer(name);
+    if (!b) continue;
+    if (a === b || normalizeEmployer(boardName) === normalizeEmployer(name)) return true;
+    const [short, long] = a.length <= b.length ? [a, b] : [b, a];
+    const extra = long.startsWith(`${short} `) ? long.slice(short.length + 1).split(" ") : [];
+    if (extra.length === 1 && GENERIC_SUFFIX.has(extra[0])) return true;
+  }
+  return false;
+}

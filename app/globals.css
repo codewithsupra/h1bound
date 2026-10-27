@@ -132,3 +132,6 @@ body {
 /* Tailwind v4 dropped pointer cursors on buttons; anything clickable gets one back. */
 button:not(:disabled), [role="button"], select, summary, label[for], input[type="checkbox"], input[type="file"] { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
+
+/* Text fields show focus with their own amber border; skip the extra outline ring. */
+input:not([type="checkbox"]):not([type="file"]):focus-visible, select:focus-visible { outline: none; }

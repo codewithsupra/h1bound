@@ -96,7 +96,7 @@ export function NightMap({ lights, onPick }: { lights: Light[]; onPick?: (name: 
       // Map plane, tilted away from the viewer like a window seat on descent.
       const aspect = 1.85;
       const wide = w >= 900;
-      const mapW = wide ? Math.min(w * 0.47, h * 1.2 * aspect) : Math.min(w * 1.05, h * 1.2 * aspect);
+      const mapW = wide ? Math.min(w * 0.47, h * 1.2 * aspect) : Math.min(w * 0.94, h * 1.2 * aspect);
       const mapH = mapW / aspect;
       const mx = (u - 0.5) * mapW;
       const my = (v - 0.5) * mapH;
@@ -109,7 +109,7 @@ export function NightMap({ lights, onPick }: { lights: Light[]; onPick?: (name: 
       const f = 900;
       const s = f / (f + Z);
       // Wide: the whole country sits right of the copy. Narrow: the sky fills the top, copy below.
-      return [(wide ? w * 0.735 : w / 2) + xr * s, h * (wide ? 0.46 : 0.3) + Y * s, s] as const;
+      return [(wide ? w * 0.735 : w / 2) + xr * s, (wide ? h * 0.46 : Math.min(h * 0.2, 150)) + Y * s, s] as const;
     }
 
     function draw(now: number) {
@@ -192,6 +192,7 @@ export function NightMap({ lights, onPick }: { lights: Light[]; onPick?: (name: 
     const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
     io.observe(box);
     box.addEventListener("pointermove", onMove);
+    box.addEventListener("pointerdown", onMove); // touch: a tap picks the nearest light
     box.addEventListener("pointerleave", onLeave);
     box.addEventListener("click", onClick);
     if (!reduce) raf = requestAnimationFrame(loop);
@@ -202,6 +203,7 @@ export function NightMap({ lights, onPick }: { lights: Light[]; onPick?: (name: 
       ro.disconnect();
       io.disconnect();
       box.removeEventListener("pointermove", onMove);
+      box.removeEventListener("pointerdown", onMove);
       box.removeEventListener("pointerleave", onLeave);
       box.removeEventListener("click", onClick);
     };
