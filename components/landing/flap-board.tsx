@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const CHARSET = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$.-&";
@@ -49,7 +50,7 @@ function FlapText({ text, width, tone = "moon", delay = 0 }: { text: string; wid
   );
 }
 
-export type BoardRow = { name: string; total: number; roleCount: number; median: number | null; level: string };
+export type BoardRow = { name: string; slug: string | null; total: number; roleCount: number; median: number | null; level: string };
 
 const STATUS: Record<string, { text: string; tone: Tone }> = {
   strong: { text: "OFTEN", tone: "green" },
@@ -61,7 +62,7 @@ const STATUS: Record<string, { text: string; tone: Tone }> = {
 
 const ROLES = ["Software engineer", "Data scientist", "Data analyst", "ML engineer", "Product manager", "Hardware engineer"];
 
-type ApiResult = { name: string; total: number; roleCount: number; roleMedian: number | null; badge: { level: string } };
+type ApiResult = { name: string; slug: string | null; total: number; roleCount: number; roleMedian: number | null; badge: { level: string } };
 
 const k = (n: number | null) => (n ? `$${Math.round(n / 1000)}K` : "--");
 
@@ -105,7 +106,7 @@ export function FlapBoard({ idle, pick }: { idle: BoardRow[]; pick: { name: stri
       fetch(`/api/sponsors/search?q=${encodeURIComponent(q)}&role=${encodeURIComponent(role)}`, { signal: ctrl.signal })
         .then((r) => r.json())
         .then((b: { results: ApiResult[] }) =>
-          setResults(b.results.map((r) => ({ name: r.name, total: r.total, roleCount: r.roleCount, median: r.roleMedian, level: r.badge.level }))),
+          setResults(b.results.map((r) => ({ name: r.name, slug: r.slug, total: r.total, roleCount: r.roleCount, median: r.roleMedian, level: r.badge.level }))),
         )
         .catch(() => {});
     }, 280);
@@ -148,15 +149,23 @@ export function FlapBoard({ idle, pick }: { idle: BoardRow[]; pick: { name: stri
         <div className="space-y-1.5">
           {rows.map((r, i) => {
             const st = r ? STATUS[r.level] ?? STATUS.unknown : null;
-            return (
-              <div key={i} className="flex items-center gap-3 sm:gap-5" role="row">
+            const cells = (
+              <>
                 <span className="sr-only" role="cell">{r ? `${r.name}: ${r.total} filings, ${st?.text}` : ""}</span>
                 <FlapText text={r?.name ?? ""} width={nameW} delay={i * 90} />
                 <FlapText text={r ? String(r.total) : ""} width={5} tone="sodium" delay={i * 90 + 120} />
                 {!narrow && <FlapText text={r ? String(r.roleCount || "--") : ""} width={5} delay={i * 90 + 160} />}
                 {!narrow && <FlapText text={r ? k(r.median) : ""} width={5} tone="mist" delay={i * 90 + 200} />}
                 <FlapText text={st?.text ?? ""} width={narrow ? 5 : 7} tone={st?.tone ?? "moon"} delay={i * 90 + 240} />
-              </div>
+              </>
+            );
+            // Each company row opens its full sponsor page.
+            return r?.slug ? (
+              <Link key={i} href={`/sponsors/${r.slug}`} role="row" aria-label={`${r.name} sponsor details`} className="-mx-2 flex items-center gap-3 rounded-lg px-2 transition-colors hover:bg-moon/[0.04] sm:gap-5">
+                {cells}
+              </Link>
+            ) : (
+              <div key={i} className="flex items-center gap-3 sm:gap-5" role="row">{cells}</div>
             );
           })}
         </div>
@@ -166,7 +175,7 @@ export function FlapBoard({ idle, pick }: { idle: BoardRow[]; pick: { name: stri
           ? "No FY2026 H-1B labor filings under that name. They may not sponsor, or file under a different legal name."
           : results
             ? "Counts are certified H-1B labor filings with the US Dept. of Labor, FY2026. A filing isn't a visa guarantee."
-            : "Live from FY2026 Dept. of Labor filings. Type any company, or click a light on the map."}
+            : "Live from FY2026 Dept. of Labor filings. Type any company, click a light on the map, or open a row for the full record."}
       </p>
     </div>
   );

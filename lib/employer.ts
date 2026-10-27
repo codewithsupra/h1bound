@@ -90,3 +90,16 @@ export function prettyCompany(name: string): string {
   }
   return n.replace(/,$/, "");
 }
+
+/**
+ * Name to show for an employer. Job boards' brand names win ("Handshake" for Stryder Corporation),
+ * unless the board name is just a truncated piece of the legal name ("charles" for Charles Schwab),
+ * in which case the cleaned legal name is clearer.
+ */
+export function companyLabel(display: string | null | undefined, legal: string): string {
+  if (!display?.trim()) return prettyCompany(legal);
+  const d = normalizeEmployer(display);
+  const l = normalizeEmployer(legal);
+  if (d && l.startsWith(d) && l.length > d.length) return prettyCompany(legal);
+  return prettyCompany(display);
+}

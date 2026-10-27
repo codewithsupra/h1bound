@@ -6,20 +6,20 @@ import { AskMayaBar, MayaPanel } from "@/components/landing/try-maya";
 import { SiteHeader } from "@/components/site/site-header";
 import type { BoardRow } from "@/components/landing/flap-board";
 import type { Light } from "@/components/landing/night-map";
-import { prettyCompany } from "@/lib/employer";
+import { companyLabel } from "@/lib/employer";
 import { createAdminInsForge } from "@/lib/insforge/admin";
 import { sponsorBadge, sponsorLevel, type SponsorStats } from "@/lib/sponsor";
 
 export const revalidate = 86400;
 
-type Row = { name: string; display_name: string | null; top_states: string[]; fiscal_year: number; total_filings: number; by_family: SponsorStats["byFamily"]; last_filed: string | null; board_slug: string | null };
+type Row = { slug: string | null; name: string; display_name: string | null; top_states: string[]; fiscal_year: number; total_filings: number; by_family: SponsorStats["byFamily"]; last_filed: string | null; board_slug: string | null };
 
 const stats = (r: Row): SponsorStats => ({ fiscalYear: r.fiscal_year, total: r.total_filings, byFamily: r.by_family, lastFiled: r.last_filed });
-const label = (r: Row) => r.display_name ?? prettyCompany(r.name);
+const label = (r: Row) => companyLabel(r.display_name, r.name);
 
 async function load() {
   const db = createAdminInsForge().database;
-  const cols = "name,display_name,top_states,fiscal_year,total_filings,by_family,last_filed,board_slug";
+  const cols = "slug,name,display_name,top_states,fiscal_year,total_filings,by_family,last_filed,board_slug";
   const pages = await Promise.all([0, 1, 2].map((p) => db.from("companies").select(cols).order("total_filings", { ascending: false }).range(p * 1000, p * 1000 + 999)));
   const top = pages.flatMap((p) => (p.data ?? []) as Row[]);
   const [{ count: employers }, { count: jobs }] = await Promise.all([
@@ -33,6 +33,7 @@ async function load() {
     .slice(0, 40)
     .map((r) => ({
       name: label(r),
+      slug: r.slug,
       total: r.total_filings,
       roleCount: r.by_family.software_engineer?.count ?? 0,
       median: r.by_family.software_engineer?.medianWage ?? null,

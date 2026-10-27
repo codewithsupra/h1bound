@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createAdminInsForge } from "@/lib/insforge/admin";
-import { coreEmployer, normalizeEmployer } from "@/lib/employer";
+import { coreEmployer, normalizeEmployer, companyLabel } from "@/lib/employer";
 import { sponsorBadge, type SponsorStats } from "@/lib/sponsor";
 import { titleFamily } from "@/lib/titles";
 
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
   type Row = { slug: string | null; name: string; display_name: string | null; top_states: string[]; fiscal_year: number; total_filings: number; by_family: SponsorStats["byFamily"]; last_filed: string | null };
   const fam = titleFamily(role);
   const results = ((data ?? []) as Row[]).map((r) => ({
-    name: r.display_name ?? r.name,
+    name: companyLabel(r.display_name, r.name),
     slug: r.slug,
     legalName: r.name,
     states: r.top_states,
