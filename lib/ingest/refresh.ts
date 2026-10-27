@@ -34,11 +34,16 @@ export async function withRetry<T>(fn: () => Promise<T>, tries = 3, sleep = (ms:
   throw last;
 }
 
-export async function refreshAll(db: Db, opts: { concurrency?: number; log?: (s: string) => void } = {}) {
+/** Stable bucket for a company id, so each cron shard always owns the same boards. */
+export function inShard(id: string, shard: number, of: number): boolean {
+  return of <= 1 || parseInt(id.replace(/-/g, "").slice(0, 8), 16) % of === shard;
+}
+
+export async function refreshAll(db: Db, opts: { concurrency?: number; shard?: number; of?: number; log?: (s: string) => void } = {}) {
   const log = opts.log ?? (() => {});
   const { data, error } = await db.from("companies").select("id,board_kind,board_slug,display_name,name").not("board_kind", "is", null);
   if (error) throw new Error(error.message);
-  const boards = data as Board[];
+  const boards = (data as Board[]).filter((b) => inShard(b.id, opts.shard ?? 0, opts.of ?? 1));
   const queue = [...boards];
   let jobs = 0, failed = 0;
 
