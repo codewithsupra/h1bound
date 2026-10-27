@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Stamp } from "@/components/chat/stamp";
 import { SiteFooter, SiteHeader } from "@/app/sponsors/_components/site-chrome";
-import { prettyCompany } from "@/lib/employer";
 import { SITE_URL } from "@/lib/site";
+import { sponsorName } from "@/lib/slug";
 import { getSponsor, openUsJobCount, statsOf, topSponsors } from "@/lib/server/sponsors";
 import { familyBreakdown, sponsorBadge, topFamily } from "@/lib/sponsor";
 import { FAMILY_LABEL } from "@/lib/titles";
@@ -20,16 +20,17 @@ export async function generateStaticParams() {
 const num = (n: number) => n.toLocaleString("en-US");
 const usd = (n: number | null) => (n ? `$${Math.round(n / 1000)}k` : "n/a");
 const filings = (n: number) => `${num(n)} filing${n === 1 ? "" : "s"}`;
+const applications = (n: number) => `${num(n)} labor application${n === 1 ? "" : "s"}`;
 const longDate = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 
 export async function generateMetadata({ params }: PageProps<"/sponsors/[slug]">): Promise<Metadata> {
   const r = await getSponsor((await params).slug);
   if (!r) return { title: "Sponsor not found · H1Bound" };
-  const name = prettyCompany(r.display_name ?? r.name);
+  const name = sponsorName(r.display_name ?? r.name);
   const top = familyBreakdown(r.by_family).find((f) => f.family !== "other");
   const title = `Does ${name} sponsor H-1B? ${filings(r.total_filings)} in FY${r.fiscal_year}`;
   const description =
-    `${name} filed ${filings(r.total_filings)} for H-1B workers in FY${r.fiscal_year}` +
+    `${name} filed ${applications(r.total_filings)} for H-1B workers in FY${r.fiscal_year}` +
     `${top ? `, most for ${FAMILY_LABEL[top.family].toLowerCase()}${top.medianWage ? ` at a median ${usd(top.medianWage)}` : ""}` : ""}. ` +
     `Roles, wages and states from US Dept. of Labor data.`;
   return { title, description, alternates: { canonical: `${SITE_URL}/sponsors/${r.slug}` }, openGraph: { title, description, type: "website" } };
@@ -40,7 +41,7 @@ export default async function SponsorPage({ params }: PageProps<"/sponsors/[slug
   if (!r) notFound();
   const jobs = await openUsJobCount(r);
 
-  const name = prettyCompany(r.display_name ?? r.name);
+  const name = sponsorName(r.display_name ?? r.name);
   const families = familyBreakdown(r.by_family);
   const badge = sponsorBadge(statsOf(r), topFamily(r.by_family));
   const lead = families.find((f) => f.family !== "other");
@@ -56,13 +57,13 @@ export default async function SponsorPage({ params }: PageProps<"/sponsors/[slug
         <div className="mt-6 flex flex-wrap items-start justify-between gap-6">
           <div className="min-w-0 flex-1">
             <h1 className="font-display text-[clamp(2rem,4.5vw,3rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">Does {name} sponsor H-1B visas?</h1>
-            {prettyCompany(r.name) !== name && <p className="mt-2 text-sm text-slate">Files with the Dept. of Labor as {r.name}.</p>}
+            {sponsorName(r.name) !== name && <p className="mt-2 text-sm text-slate">Files with the Dept. of Labor as {r.name}.</p>}
           </div>
           <div className="pt-2"><Stamp badge={badge} animate /></div>
         </div>
 
         <p className="mt-6 text-lg leading-relaxed">
-          {name} filed <strong>{filings(r.total_filings)}</strong> for H-1B workers in fiscal year {r.fiscal_year}
+          {name} filed <strong>{applications(r.total_filings)}</strong> for H-1B workers in fiscal year {r.fiscal_year}
           {lead ? <>, most for {FAMILY_LABEL[lead.family].toLowerCase()}</> : null}.
           {r.total_filings >= 10
             ? " That's a real track record of sponsoring people, though every filing is for one specific role and person."
@@ -71,8 +72,8 @@ export default async function SponsorPage({ params }: PageProps<"/sponsors/[slug
 
         <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
           <Fact label={`Filings in FY${r.fiscal_year}`} value={num(r.total_filings)} />
-          <Fact label="Most recent filing" value={r.last_filed ? longDate(r.last_filed) : "Unknown"} />
-          <Fact label="Top states" value={r.top_states.length ? r.top_states.slice(0, 3).join(", ") : "Unknown"} className="col-span-2 sm:col-span-1" />
+          {r.last_filed && <Fact label="Most recent filing" value={longDate(r.last_filed)} />}
+          {r.top_states.length > 0 && <Fact label="Top states" value={r.top_states.slice(0, 3).join(", ")} />}
         </dl>
 
         {jobs !== null && (

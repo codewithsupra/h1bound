@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { assignSlugs, companySlug, withTrustedDisplayNames } from "@/lib/slug";
+import { assignSlugs, companySlug, sponsorName, withTrustedDisplayNames } from "@/lib/slug";
+
+describe("sponsorName", () => {
+  it("drops the ampersand left behind by \"& Co.\"", () => {
+    expect(sponsorName("JPMORGAN CHASE & CO.")).toBe("Jpmorgan Chase");
+    expect(sponsorName("AT&T Corp")).toBe("AT&T");
+  });
+});
 
 describe("companySlug", () => {
   it("kebab-cases the pretty company name", () => {

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteFooter, SiteHeader } from "@/app/sponsors/_components/site-chrome";
-import { prettyCompany } from "@/lib/employer";
 import { SITE_URL } from "@/lib/site";
+import { sponsorName } from "@/lib/slug";
 import { topSponsors, type SponsorRow } from "@/lib/server/sponsors";
 import { topFamily } from "@/lib/sponsor";
 import { FAMILY_LABEL, TITLE_FAMILIES, type TitleFamily } from "@/lib/titles";
@@ -48,7 +48,7 @@ export default async function SponsorsIndex() {
                 {groups.get(f)!.map((r) => (
                   <li key={r.id} className="border-b border-line">
                     <Link href={`/sponsors/${r.slug}`} className="flex items-baseline justify-between gap-3 py-2.5 hover:underline">
-                      <span className="min-w-0 truncate font-medium">{prettyCompany(r.display_name ?? r.name)}</span>
+                      <span className="min-w-0 truncate font-medium">{sponsorName(r.display_name ?? r.name)}</span>
                       <span className="shrink-0 text-sm tabular-nums text-slate">{r.total_filings.toLocaleString("en-US")}</span>
                     </Link>
                   </li>

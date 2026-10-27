@@ -7,10 +7,14 @@ import { prettyCompany } from "./employer";
 
 const MAX_LEN = 80;
 
+/** Company name for public pages: prettyCompany, minus the "&" left over from "& Co." */
+export function sponsorName(name: string): string {
+  return prettyCompany(name).replace(/[\s,]*&$/, "");
+}
+
 /** "Amazon.com Services LLC" → "amazon-com-services"; "AT&T Corp" → "at-and-t"; "Ernst & Young U.S. LLP" → "ernst-and-young-us". */
 export function companySlug(name: string): string {
-  const s = prettyCompany(name)
-    .replace(/[\s,]*&$/, "") // "JPMorgan Chase & Co." → "JPMorgan Chase &" after suffix stripping
+  const s = sponsorName(name)
     .replace(/\b([a-z])\.(?=[a-z]\b)/gi, "$1") // "U.S." → "US."
     .normalize("NFKD")
     .replace(/[̀-ͯ]/g, "")
