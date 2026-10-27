@@ -14,15 +14,16 @@ export async function GET(req: NextRequest) {
 
   const { data } = await createAdminInsForge()
     .database.from("companies")
-    .select("name,display_name,top_states,fiscal_year,total_filings,by_family,last_filed")
+    .select("slug,name,display_name,top_states,fiscal_year,total_filings,by_family,last_filed")
     .like("key", `${core.replace(/[%_]/g, "")}%`)
     .order("total_filings", { ascending: false })
     .limit(5);
 
-  type Row = { name: string; display_name: string | null; top_states: string[]; fiscal_year: number; total_filings: number; by_family: SponsorStats["byFamily"]; last_filed: string | null };
+  type Row = { slug: string | null; name: string; display_name: string | null; top_states: string[]; fiscal_year: number; total_filings: number; by_family: SponsorStats["byFamily"]; last_filed: string | null };
   const fam = titleFamily(role);
   const results = ((data ?? []) as Row[]).map((r) => ({
     name: r.display_name ?? r.name,
+    slug: r.slug,
     legalName: r.name,
     states: r.top_states,
     total: r.total_filings,

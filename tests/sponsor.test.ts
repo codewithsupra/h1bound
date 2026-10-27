@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { annualWage, median, sponsorBadge, sponsorLevel, type SponsorStats } from "@/lib/sponsor";
+import { annualWage, familyBreakdown, median, sponsorBadge, sponsorLevel, topFamily, type SponsorStats } from "@/lib/sponsor";
 
 const big: SponsorStats = { fiscalYear: 2026, total: 1200, byFamily: { software_engineer: { count: 400, medianWage: 165000 } }, lastFiled: "2026-06-01" };
 const small: SponsorStats = { fiscalYear: 2026, total: 3, byFamily: { software_engineer: { count: 1, medianWage: 120000 } }, lastFiled: null };
@@ -40,5 +40,24 @@ describe("annualWage / median", () => {
     expect(median([3, 1, 2])).toBe(2);
     expect(median([1, 2, 3, 4])).toBe(3);
     expect(median([])).toBeNull();
+  });
+});
+
+describe("familyBreakdown / topFamily", () => {
+  const byFamily = {
+    other: { count: 90, medianWage: 80000 },
+    software_engineer: { count: 40, medianWage: 150000 },
+    data_scientist: { count: 40, medianWage: null },
+    qa: { count: 0, medianWage: null },
+  };
+
+  it("sorts by count, drops empty families, breaks ties by name", () => {
+    expect(familyBreakdown(byFamily).map((r) => r.family)).toEqual(["other", "data_scientist", "software_engineer"]);
+  });
+
+  it("prefers a named family over other", () => {
+    expect(topFamily(byFamily)).toBe("data_scientist");
+    expect(topFamily({ other: { count: 3, medianWage: null } })).toBe("other");
+    expect(topFamily({})).toBe("other");
   });
 });

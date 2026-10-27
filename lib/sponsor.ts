@@ -70,3 +70,17 @@ export function median(xs: number[]): number | null {
   const m = s.length >> 1;
   return s.length % 2 ? s[m] : Math.round((s[m - 1] + s[m]) / 2);
 }
+
+/** Role families by filing count, biggest first (ties by name, so the order is stable). */
+export function familyBreakdown(byFamily: SponsorStats["byFamily"]): { family: TitleFamily; count: number; medianWage: number | null }[] {
+  return (Object.entries(byFamily) as [TitleFamily, { count: number; medianWage: number | null }][])
+    .filter(([, v]) => v && v.count > 0)
+    .map(([family, v]) => ({ family, count: v.count, medianWage: v.medianWage ?? null }))
+    .sort((a, b) => b.count - a.count || a.family.localeCompare(b.family));
+}
+
+/** The family this employer files for most, preferring a named family over "other". */
+export function topFamily(byFamily: SponsorStats["byFamily"]): TitleFamily {
+  const rows = familyBreakdown(byFamily);
+  return (rows.find((r) => r.family !== "other") ?? rows[0])?.family ?? "other";
+}

@@ -5,6 +5,7 @@
 import { readFileSync } from "node:fs";
 import { createAdminClient } from "@insforge/sdk";
 import type { EmployerOut } from "../lib/ingest/lca";
+import { fillMissingSlugs } from "../lib/ingest/slugs";
 
 const fy = process.argv[2];
 if (!fy) throw new Error("usage: load-sponsors.mts <fiscalYear>");
@@ -28,4 +29,6 @@ for (let i = 0; i < rows.length; i += BATCH) {
   if (error) throw new Error(`batch ${i}: ${error.message}`);
   process.stdout.write(`\r${Math.min(i + BATCH, rows.length).toLocaleString()} / ${rows.length.toLocaleString()}`);
 }
-console.log("\ndone");
+console.log("");
+await fillMissingSlugs(db, console.log);
+console.log("done");
