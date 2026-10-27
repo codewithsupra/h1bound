@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Stamp } from "@/components/chat/stamp";
 import { SiteFooter, SiteHeader } from "@/app/sponsors/_components/site-chrome";
+import { companyLabel } from "@/lib/employer";
 import { SITE_URL } from "@/lib/site";
 import { sponsorName } from "@/lib/slug";
 import { getSponsor, openUsJobCount, statsOf, topSponsors } from "@/lib/server/sponsors";
@@ -26,7 +27,7 @@ const longDate = (iso: string) => new Date(iso).toLocaleDateString("en-US", { mo
 export async function generateMetadata({ params }: PageProps<"/sponsors/[slug]">): Promise<Metadata> {
   const r = await getSponsor((await params).slug);
   if (!r) return { title: "Sponsor not found · H1Bound" };
-  const name = sponsorName(r.display_name ?? r.name);
+  const name = sponsorName(companyLabel(r.display_name, r.name));
   const top = familyBreakdown(r.by_family).find((f) => f.family !== "other");
   const title = `Does ${name} sponsor H-1B? ${filings(r.total_filings)} in FY${r.fiscal_year}`;
   const description =
@@ -41,7 +42,7 @@ export default async function SponsorPage({ params }: PageProps<"/sponsors/[slug
   if (!r) notFound();
   const jobs = await openUsJobCount(r);
 
-  const name = sponsorName(r.display_name ?? r.name);
+  const name = sponsorName(companyLabel(r.display_name, r.name));
   const families = familyBreakdown(r.by_family);
   const badge = sponsorBadge(statsOf(r), topFamily(r.by_family));
   const lead = families.find((f) => f.family !== "other");
@@ -72,12 +73,12 @@ export default async function SponsorPage({ params }: PageProps<"/sponsors/[slug
 
         <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
           <Fact label={`Filings in FY${r.fiscal_year}`} value={num(r.total_filings)} />
-          {r.last_filed && <Fact label="Most recent filing" value={longDate(r.last_filed)} />}
+          {r.last_filed ? <Fact label="Most recent filing" value={longDate(r.last_filed)} /> : <Fact label="Data period" value={`FY${r.fiscal_year}, Oct–Jun`} />}
           {r.top_states.length > 0 && <Fact label="Top states" value={r.top_states.slice(0, 3).join(", ")} />}
         </dl>
 
         {jobs !== null && (
-          <section className="mt-10 rounded-2xl border-2 border-ink bg-card p-6">
+          <section className="glass relative mt-10 overflow-hidden rounded-3xl p-6 ring-1 ring-sodium/40">
             <h2 className="font-display text-2xl font-bold">
               {jobs > 0 ? `${num(jobs)} open US job${jobs === 1 ? "" : "s"} at ${name} right now` : `No open US jobs at ${name} today`}
             </h2>
@@ -86,7 +87,7 @@ export default async function SponsorPage({ params }: PageProps<"/sponsors/[slug
                 ? "Upload your resume and Maya ranks these against your skills, flags any posting that says it can't sponsor, and helps you reach the hiring manager."
                 : "We check their job board every day. Upload your resume and Maya matches you to open roles here and at other employers with a filing record."}
             </p>
-            <a href="/login?mode=signup" className="mt-5 inline-block rounded-xl bg-ink px-5 py-3 font-medium text-paper hover:opacity-90">Get matched to these jobs</a>
+            <a href="/chat" className="btn-light mt-5">Get matched to these jobs, no signup</a>
           </section>
         )}
 
@@ -125,7 +126,7 @@ export default async function SponsorPage({ params }: PageProps<"/sponsors/[slug
           <section className="mt-10 rounded-2xl border border-line bg-card p-6">
             <h2 className="font-display text-xl font-bold">Looking for roles that can sponsor you?</h2>
             <p className="mt-2 text-slate">Upload your resume and Maya matches you to open US jobs at employers with a real H-1B filing record.</p>
-            <a href="/login?mode=signup" className="mt-5 inline-block rounded-xl bg-ink px-5 py-3 font-medium text-paper hover:opacity-90">Start free</a>
+            <a href="/chat" className="btn-light mt-5">Try Maya free</a>
           </section>
         )}
       </article>
@@ -136,7 +137,7 @@ export default async function SponsorPage({ params }: PageProps<"/sponsors/[slug
 
 function Fact({ label, value, className = "" }: { label: string; value: string; className?: string }) {
   return (
-    <div className={`rounded-xl border border-line bg-card px-4 py-3 ${className}`}>
+    <div className={`glass rounded-2xl px-4 py-3 ${className}`}>
       <dt className="text-sm text-slate">{label}</dt>
       <dd className="mt-1 font-display text-xl font-semibold">{value}</dd>
     </div>

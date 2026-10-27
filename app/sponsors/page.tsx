@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteFooter, SiteHeader } from "@/app/sponsors/_components/site-chrome";
+import { companyLabel } from "@/lib/employer";
 import { SITE_URL } from "@/lib/site";
 import { sponsorName } from "@/lib/slug";
 import { topSponsors, type SponsorRow } from "@/lib/server/sponsors";
@@ -36,7 +37,7 @@ export default async function SponsorsIndex() {
         </p>
         <nav className="mt-6 flex flex-wrap gap-2 text-sm" aria-label="Role families">
           {ordered.map((f) => (
-            <a key={f} href={`#${f}`} className="rounded-full border border-line bg-card px-3 py-1.5 hover:border-ink">{FAMILY_LABEL[f]} <span className="text-slate">{groups.get(f)!.length}</span></a>
+            <a key={f} href={`#${f}`} className="rounded-full border border-line bg-card px-3 py-1.5 transition-colors hover:border-sodium/50">{FAMILY_LABEL[f]} <span className="text-slate">{groups.get(f)!.length}</span></a>
           ))}
         </nav>
 
@@ -48,7 +49,7 @@ export default async function SponsorsIndex() {
                 {groups.get(f)!.map((r) => (
                   <li key={r.id} className="border-b border-line">
                     <Link href={`/sponsors/${r.slug}`} className="flex items-baseline justify-between gap-3 py-2.5 hover:underline">
-                      <span className="min-w-0 truncate font-medium">{sponsorName(r.display_name ?? r.name)}</span>
+                      <span className="min-w-0 truncate font-medium">{sponsorName(companyLabel(r.display_name, r.name))}</span>
                       <span className="shrink-0 text-sm tabular-nums text-slate">{r.total_filings.toLocaleString("en-US")}</span>
                     </Link>
                   </li>

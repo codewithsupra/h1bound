@@ -42,3 +42,14 @@ describe("prettyCompany", () => {
     expect(prettyCompany("Databricks")).toBe("Databricks");
   });
 });
+
+import { companyLabel } from "@/lib/employer";
+describe("companyLabel", () => {
+  it("prefers brand names but not truncated ones", () => {
+    expect(companyLabel("Stripe", "Stripe, LLC")).toBe("Stripe");
+    expect(companyLabel("Handshake", "Stryder Corporation")).toBe("Handshake");
+    expect(companyLabel("charles", "Charles Schwab and Company, Inc.")).toBe("Charles Schwab and Company");
+    expect(companyLabel("Insight", "INSIGHT GLOBAL, LLC")).toBe("Insight Global");
+    expect(companyLabel(null, "PALANTIR TECHNOLOGIES INC.")).toBe("Palantir Technologies");
+  });
+});

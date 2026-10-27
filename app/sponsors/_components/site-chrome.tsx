@@ -1,17 +1,14 @@
 import Link from "next/link";
+import { SiteHeader as SharedHeader } from "@/components/site/site-header";
 
-/** Header and footer for the sponsor pages (mirrors the landing page's). */
-
+/** Sponsor pages use the shared header (logo → home) with sponsor-specific nav. */
 export function SiteHeader() {
   return (
-    <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
-      <Link href="/" className="font-display text-xl font-bold">H1Bound</Link>
-      <nav className="flex items-center gap-2 text-sm">
-        <Link href="/sponsors" className="hidden rounded-lg px-3 py-2 text-slate hover:text-ink sm:inline">Top sponsors</Link>
-        <a href="/login" className="rounded-lg px-3 py-2 text-slate hover:text-ink">Sign in</a>
-        <a href="/login?mode=signup" className="rounded-lg bg-ink px-3.5 py-2 font-medium text-paper hover:opacity-90">Start free</a>
-      </nav>
-    </header>
+    <SharedHeader>
+      <Link href="/sponsors" className="hidden rounded-full px-3 py-2 text-mist transition-colors hover:text-moon sm:inline">Top sponsors</Link>
+      <Link href="/login" className="rounded-full px-3 py-2 text-mist transition-colors hover:text-moon">Sign in</Link>
+      <Link href="/chat" className="btn-light !px-4 !py-2 text-sm">Try Maya</Link>
+    </SharedHeader>
   );
 }
 
