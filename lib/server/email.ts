@@ -3,7 +3,7 @@ import "server-only";
 /** Transactional email via Resend's REST API. No key → no-op, so dev and previews never email anyone. */
 export async function sendEmail(to: string, subject: string, text: string, unsubscribeUrl: string, oneClickUrl: string): Promise<boolean> {
   const key = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM; // e.g. "Maya at H1Bound <maya@h1bound.com>" on a verified domain
+  const from = process.env.EMAIL_FROM; // e.g. "Maya at Sponsorbound <maya@sponsorbound.app>" on a verified domain
   if (!key || !from) return false;
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",

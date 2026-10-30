@@ -2,36 +2,23 @@ import Link from "next/link";
 
 export type RecordData = {
   company: string;
-  slug: string | null;
-  fiscalYear: number;
-  total: number;
-  roleCount: number;
-  roleMedian: number | null;
-  lastFiled: string | null;
-  states: string[];
+  href: string | null;
+  register: string;
+  facts: [string, string][];
 };
 
-const usd = (n: number) => `$${Math.round(n / 1000)}K`;
-const day = (s: string) => new Date(`${s}T00:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
-
-/** Our signature: the generic "sponsors visas" badge next to the actual filing record. */
+/** Our signature: the generic "sponsors visas" badge next to the actual register entry. */
 export function Record({ r }: { r: RecordData }) {
-  const facts: [string, string][] = [
-    [`Certified H-1B filings, FY${r.fiscalYear}`, r.total.toLocaleString("en-US")],
-    ["For software engineers", r.roleCount.toLocaleString("en-US")],
-    ["Median software engineer wage on file", r.roleMedian ? usd(r.roleMedian) : "Not enough data"],
-    ["Most recent filing", r.lastFiled ? day(r.lastFiled) : "Not in this period"],
-    ["Where they file most", r.states.slice(0, 3).join(", ") || "Not listed"],
-  ];
+  const facts = r.facts;
   return (
     <section id="record" aria-labelledby="record-h" className="relative scroll-mt-16 overflow-hidden border-y border-haze bg-[#0a0f28] py-28 sm:py-36">
       <div className="pointer-events-none absolute left-1/2 top-0 h-[480px] w-[900px] -translate-x-1/2 rounded-full bg-sodium/[0.07] blur-3xl" />
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
         <h2 id="record-h" className="max-w-[15ch] font-display text-[clamp(2.2rem,5.5vw,4.5rem)] font-semibold leading-[1] tracking-[-0.035em]">
-          A badge says maybe. The record says how often.
+          A badge says maybe. The register says yes or no.
         </h2>
         <p className="mt-6 max-w-[38rem] text-lg leading-relaxed text-mist">
-          Most job sites stop at a checkmark. Every H-1B starts with a labor filing to the Dept. of Labor, so we show you the filings themselves: how many, for which roles, at what pay, and how recently.
+          Most job sites stop at a checkmark. In the UK and the Netherlands an employer can only sponsor if the government has licensed it, and Ireland publishes every permit it issues. So we show you the official entry itself, and hide jobs you couldn&apos;t legally take.
         </p>
 
         <div className="mt-16 grid items-center gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
@@ -45,13 +32,13 @@ export function Record({ r }: { r: RecordData }) {
                 <line x1="2" y1="36" x2="98" y2="4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
               </svg>
             </div>
-            <figcaption className="mt-4 text-sm text-mist">Since when? For which roles? Nobody says.</figcaption>
+            <figcaption className="mt-4 text-sm text-mist">Licensed by whom? For which visa? Nobody says.</figcaption>
           </figure>
 
           <figure className="glass rounded-[2rem] p-6 sm:p-9">
             <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-haze pb-5">
               <p className="font-display text-2xl font-semibold">{r.company}</p>
-              <p className="text-sm text-mist">US Dept. of Labor LCA disclosures</p>
+              <p className="text-sm text-mist">{r.register}</p>
             </div>
             <dl className="divide-y divide-haze">
               {facts.map(([k, v]) => (
@@ -62,8 +49,8 @@ export function Record({ r }: { r: RecordData }) {
               ))}
             </dl>
             <figcaption className="mt-5 flex flex-wrap items-center justify-between gap-3 text-sm text-mist">
-              <span>A certified filing isn&apos;t an approved visa, but it&apos;s the strongest public signal there is.</span>
-              {r.slug && <Link href={`/sponsors/${r.slug}`} className="text-moon underline decoration-haze underline-offset-4 hover:decoration-sodium">See the full record</Link>}
+              <span>A licence means they can sponsor, not that every role will. We check each posting too.</span>
+              {r.href && <Link href={r.href} className="text-moon underline decoration-haze underline-offset-4 hover:decoration-sodium">See the full record</Link>}
             </figcaption>
           </figure>
         </div>

@@ -1,6 +1,7 @@
 import { createAdminInsForge } from "@/lib/insforge/admin";
+import { SITE_NAME } from "@/lib/site";
 
-export const metadata = { title: "Unsubscribed · H1Bound", robots: { index: false } };
+export const metadata = { title: `Unsubscribed · ${SITE_NAME}`, robots: { index: false } };
 
 export default async function Unsubscribe({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;

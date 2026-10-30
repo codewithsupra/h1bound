@@ -16,6 +16,7 @@ export const TITLE_FAMILIES = [
   "frontend",
   "software_engineer",
   "hardware",
+  "engineering",
   "product_manager",
   "designer",
   "business_analyst",
@@ -40,6 +41,7 @@ export const FAMILY_LABEL: Record<TitleFamily, string> = {
   frontend: "Frontend engineers",
   software_engineer: "Software engineers",
   hardware: "Hardware engineers",
+  engineering: "Mechanical, civil and process engineers",
   product_manager: "Product and program managers",
   designer: "Designers",
   business_analyst: "Business analysts",
@@ -62,6 +64,7 @@ const RULES: [TitleFamily, RegExp][] = [
   ["frontend", /\b(front ?end|ui) (engineer|developer)|\breact (engineer|developer)|\bweb developer/],
   ["software_engineer", /\b(software|backend|back end|full ?stack|application|java|python|\.net|net|golang|c\+\+|programmer|sde|swe)\b|\b(developer|programmer analyst|computer programmer)\b|\bengineer (i|ii|iii|1|2|3)\b|\bmember of technical staff\b/],
   ["hardware", /\b(hardware|asic|fpga|rtl|vlsi|silicon|electrical|embedded|firmware|semiconductor|design verification)\b/],
+  ["engineering", /\b(mechanical|civil|chemical|structural|process|manufacturing|aerospace|biomedical|petroleum|environmental|industrial|mechatronics|materials|automotive|nuclear) (engineer|engineering)\b|\bgraduate engineer\b/],
   ["product_manager", /\bproduct (manager|owner|lead)|\bprogram manager|\btechnical program/],
   ["designer", /\b(designer|ux|ui\/ux|user experience)\b/],
   ["business_analyst", /\b(business|systems|it|functional|technical|operations) analyst\b|\banalyst\b/],
@@ -83,9 +86,20 @@ export function isSeniorTitle(title: string): boolean {
 }
 
 export function isEntryTitle(title: string): boolean {
-  return /\b(new grad|graduate|entry|junior|jr\.?|associate|intern|early career|university|campus|i|1)\b/i.test(title) && !isSeniorTitle(title);
+  return /\b(new grad|graduate|entry|junior|jr\.?|associate|intern|early careers?|university|campus|trainee|placement|apprentice|i|1)\b/i.test(title) && !isSeniorTitle(title);
 }
 
 export function isInternTitle(title: string): boolean {
   return /\b(intern|internship|co-?op|apprentice)\b/i.test(title);
+}
+
+export type Seniority = "intern" | "graduate" | "junior" | "mid" | "senior";
+
+/** Level from the title alone: UK "graduate scheme" and "placement" wording included. */
+export function seniority(title: string): Seniority {
+  if (isSeniorTitle(title)) return "senior";
+  if (/\b(intern|internship|placement|summer|co-?op|industrial year|year in industry)\b/i.test(title)) return "intern";
+  if (/\b(graduate|new grad|grad scheme|trainee|early careers?|campus|university hire|apprentice)\b/i.test(title)) return "graduate";
+  if (/\b(junior|jr\.?|entry|associate|i|1)\b/i.test(title)) return "junior";
+  return "mid";
 }

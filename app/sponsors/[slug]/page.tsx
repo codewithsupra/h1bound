@@ -4,13 +4,14 @@ import { notFound } from "next/navigation";
 import { Stamp } from "@/components/chat/stamp";
 import { SiteFooter, SiteHeader } from "@/app/sponsors/_components/site-chrome";
 import { companyLabel } from "@/lib/employer";
-import { SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { sponsorName } from "@/lib/slug";
 import { getSponsor, openUsJobCount, statsOf, topSponsors } from "@/lib/server/sponsors";
 import { familyBreakdown, sponsorBadge, topFamily } from "@/lib/sponsor";
 import { FAMILY_LABEL } from "@/lib/titles";
 
 // Daily ISR: the top sponsors are prerendered at build, the long tail renders on first visit.
+
 export const revalidate = 86400;
 export const dynamicParams = true;
 
@@ -26,7 +27,7 @@ const longDate = (iso: string) => new Date(iso).toLocaleDateString("en-US", { mo
 
 export async function generateMetadata({ params }: PageProps<"/sponsors/[slug]">): Promise<Metadata> {
   const r = await getSponsor((await params).slug);
-  if (!r) return { title: "Sponsor not found · H1Bound" };
+  if (!r) return { title: `Sponsor not found · ${SITE_NAME}` };
   const name = sponsorName(companyLabel(r.display_name, r.name));
   const top = familyBreakdown(r.by_family).find((f) => f.family !== "other");
   const title = `Does ${name} sponsor H-1B? ${filings(r.total_filings)} in FY${r.fiscal_year}`;
@@ -130,7 +131,7 @@ export default async function SponsorPage({ params }: PageProps<"/sponsors/[slug
           </section>
         )}
       </article>
-      <SiteFooter />
+      <SiteFooter us />
     </main>
   );
 }

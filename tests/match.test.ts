@@ -33,3 +33,39 @@ describe("rankJobs", () => {
     expect(rankJobs(jobs, { ...p, needsSponsorship: false }, sponsorOf, now)).toHaveLength(3);
   });
 });
+
+import { blendRerank, cleanRerank } from "@/lib/match";
+
+describe("rerank", () => {
+  it("cleans model output: bad numbers, duplicates and long text", () => {
+    const m = cleanRerank([
+      { n: 1, fit: 140, why: "a ".repeat(40), gap: "" },
+      { n: 1, fit: 10, why: "dup", gap: null },
+      { n: 9, fit: 50, why: "out of range", gap: null },
+      { n: 2, fit: NaN, why: "nan", gap: null },
+    ], ["a", "b"]);
+    expect([...m.keys()]).toEqual(["a"]);
+    expect(m.get("a")).toMatchObject({ fit: 100, gap: null });
+    expect(m.get("a")!.why.split(" ")).toHaveLength(24);
+  });
+  it("blends scores and reorders", () => {
+    const p = { skills: [], targetFamilies: [], yearsExperience: 0, needsSponsorship: false, wantsRemote: "any" as const, locations: [] };
+    const mk = (id: string) => scoreJob({ id, title: "Engineer", company: "c", location: "London", remote: false, description: "", postedAt: null }, p, null);
+    const [a, b] = [mk("a"), mk("b")];
+    const out = blendRerank([a, b], new Map([["b", { fit: 100, why: "Strong React work", gap: null }]]));
+    expect(out[0].job.id).toBe("b");
+    expect(out[0].why).toBe("Strong React work");
+  });
+});
+
+describe("visa scoring", () => {
+  const p = { skills: [], targetFamilies: [], yearsExperience: 0, needsSponsorship: true, wantsRemote: "any" as const, locations: [] };
+  const job = { id: "j", title: "Graduate Software Engineer", company: "c", location: "London", remote: false, description: "", postedAt: new Date(Date.now() - 2 * 86_400_000).toISOString() };
+  it("rewards licensed sponsors and fresh postings", () => {
+    const licensed = scoreJob(job, p, null, Date.now(), { fit: "ok_licensed", right: "sponsor", reason: "on the UK sponsor register" });
+    const risky = scoreJob(job, p, null, Date.now(), { fit: "risky", right: "sponsor", reason: null });
+    expect(licensed.score).toBeGreaterThan(risky.score);
+    expect(licensed.reasons).toContain("on the UK sponsor register");
+    expect(licensed.reasons).toContain("posted 2 days ago");
+  });
+});

@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { SITE_NAME } from "../site";
 
 export const OG_SIZE = { width: 1200, height: 630 };
 
@@ -8,7 +9,7 @@ export function ogCard({ kicker, title, sub }: { kicker: string; title: string; 
     (
       <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 72, background: "radial-gradient(120% 90% at 50% 100%, #1d2760 0%, #0d1330 60%)", color: "#edf0fb", fontFamily: "sans-serif" }}>
         <div style={{ display: "flex", fontSize: 34, fontWeight: 700 }}>
-          H1Bound<span style={{ color: "#ffb547" }}>.</span>
+          {SITE_NAME}<span style={{ color: "#ffb547" }}>.</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 30, color: "#ffb547" }}>{kicker}</div>

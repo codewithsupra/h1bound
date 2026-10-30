@@ -3,10 +3,10 @@ import Link from "next/link";
 import { SiteFooter, SiteHeader } from "@/app/sponsors/_components/site-chrome";
 import { MayaPanel } from "@/components/landing/try-maya";
 import { OptCalculator } from "@/components/landing/sections/opt-calculator";
-import { SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "OPT unemployment day calculator (90 / 150 days) · H1Bound",
+  title: `OPT unemployment day calculator (90 / 150 days) · ${SITE_NAME}`,
   description: "Free OPT clock: see how many of your 90 F-1 OPT or 150 STEM OPT unemployment days are left and your last day, then find employers that actually sponsor H-1Bs.",
   alternates: { canonical: `${SITE_URL}/opt-clock` },
 };

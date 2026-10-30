@@ -12,7 +12,7 @@ export function AccountControls({ emailUpdates }: { emailUpdates: boolean }) {
         <h2 className="font-display text-lg font-semibold">Updates from Maya</h2>
         <label className="mt-3 flex items-start gap-3">
           <input type="checkbox" defaultChecked={emailUpdates} disabled={pending} onChange={(e) => start(() => setEmailUpdates(e.target.checked))} className="mt-1 h-4 w-4 accent-[var(--sodium)]" />
-          <span>Email me new sponsor jobs that match me and reminders to follow up on applications. At most 3 a week, unsubscribe anytime.</span>
+          <span>Email me my daily picks (the best new matches, with sponsor proof) and reminders to follow up. Unsubscribe anytime.</span>
         </label>
       </section>
 

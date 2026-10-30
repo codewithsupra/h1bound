@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteFooter, SiteHeader } from "@/app/sponsors/_components/site-chrome";
 import { companyLabel } from "@/lib/employer";
-import { SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { sponsorName } from "@/lib/slug";
 import { topSponsors, type SponsorRow } from "@/lib/server/sponsors";
 import { topFamily } from "@/lib/sponsor";
@@ -13,7 +13,7 @@ export const revalidate = 86400;
 const TOP = 200;
 
 export const metadata: Metadata = {
-  title: `Top ${TOP} H-1B sponsors in FY2026, by role · H1Bound`,
+  title: `Top ${TOP} H-1B sponsors in FY2026, by role · ${SITE_NAME}`,
   description: `The ${TOP} employers with the most H-1B labor filings in fiscal year 2026, grouped by the roles they file for most. From US Dept. of Labor LCA data.`,
   alternates: { canonical: `${SITE_URL}/sponsors` },
 };
@@ -61,7 +61,7 @@ export default async function SponsorsIndex() {
 
         <p className="mt-14 text-sm text-slate">Source: US Dept. of Labor LCA disclosures, FY2026 Q3. Can&apos;t find a company? <Link href="/#lookup" className="underline underline-offset-4">Search all employers</Link>.</p>
       </div>
-      <SiteFooter />
+      <SiteFooter us />
     </main>
   );
 }

@@ -3,10 +3,20 @@ import { createAdminInsForge } from "@/lib/insforge/admin";
 import { coreEmployer, normalizeEmployer, companyLabel } from "@/lib/employer";
 import { sponsorBadge, type SponsorStats } from "@/lib/sponsor";
 import { titleFamily } from "@/lib/titles";
+import { searchLicences } from "@/lib/server/licences";
+import { MARKETS, type Market } from "@/lib/visa";
 
-/** Public, no-signup sponsor lookup (the landing page's free tool). Public DOL data only. */
+/**
+ * Public, no-signup sponsor lookup (the landing page's free tool). Public data only:
+ * `?market=eu` searches the UK, Dutch and Irish registers; otherwise US DOL filings.
+ */
 export async function GET(req: NextRequest) {
   const q = (req.nextUrl.searchParams.get("q") ?? "").slice(0, 60);
+  if (req.nextUrl.searchParams.get("market") === "eu") {
+    const c = req.nextUrl.searchParams.get("country");
+    const country = (MARKETS as string[]).includes(c ?? "") ? (c as Market) : undefined;
+    return NextResponse.json({ results: await searchLicences(q, country) }, { headers: { "Cache-Control": "public, s-maxage=3600" } });
+  }
   const role = req.nextUrl.searchParams.get("role") ?? "software engineer";
   const key = normalizeEmployer(q);
   if (key.length < 2) return NextResponse.json({ results: [] });

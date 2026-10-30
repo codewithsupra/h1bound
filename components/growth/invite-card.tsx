@@ -1,8 +1,9 @@
 "use client";
+import { SITE_NAME } from "@/lib/site";
 
 import { useState } from "react";
 
-const MESSAGE = "I'm using H1Bound to find US jobs at companies that actually sponsor H-1Bs (real Dept. of Labor data). Free to try:";
+const MESSAGE = `I'm using ${SITE_NAME} to find jobs in the UK, Netherlands and Ireland at companies on the official visa sponsor registers, plus remote roles. Free to try:`;
 
 /** The user's own invite link, with copy and share buttons they tap themselves. */
 export function InviteCard({ link, activated, maxFriends = 3, jobsPerFriend = 5, compact = false }: { link: string; activated?: number; maxFriends?: number; jobsPerFriend?: number; compact?: boolean }) {

@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BOUNDS, MAP_LABELS, STATE_METROS } from "@/lib/metros";
+import { EU_BOUNDS as BOUNDS, EU_LABELS as MAP_LABELS, OUTLINES } from "@/lib/eu-geo";
 
-export type Light = { n: string; f: number; s: string };
+/** One sponsor: name, coordinates, weight (sets the glow size) and the tooltip's evidence line. */
+export type Light = { n: string; lon: number; lat: number; w: number; tag: string };
 
-type Placed = { name: string; filings: number; u: number; v: number; size: number; appear: number; phase: number; speed: number };
+type Placed = { name: string; tag: string; u: number; v: number; size: number; appear: number; phase: number; speed: number };
+
+// Equirectangular with a cos(latitude) squeeze, so Britain isn't stretched sideways.
+const MID_LAT = ((BOUNDS.north + BOUNDS.south) / 2) * (Math.PI / 180);
+const ASPECT = ((BOUNDS.east - BOUNDS.west) * Math.cos(MID_LAT)) / (BOUNDS.north - BOUNDS.south);
 
 /** Small deterministic PRNG so every visitor sees the same sky. */
 function seeded(str: string) {
@@ -20,24 +25,21 @@ function seeded(str: string) {
 
 function place(lights: Light[]): Placed[] {
   const out: Placed[] = [];
+  // Bigger cities sprawl further, so London reads as a metro and small towns stay tight.
+  const perCity = new Map<string, number>();
+  for (const l of lights) perCity.set(`${l.lon},${l.lat}`, (perCity.get(`${l.lon},${l.lat}`) ?? 0) + 1);
   for (const l of lights) {
-    const metros = STATE_METROS[l.s];
-    if (!metros?.length) continue;
     const r = seeded(l.n);
-    const total = metros.reduce((a, m) => a + m[2], 0);
-    let pick = r() * total;
-    const m = metros.find((x) => (pick -= x[2]) < 0) ?? metros[0];
-    // Gaussian spread around the metro; big metros sprawl a little more.
     const g = () => Math.sqrt(-2 * Math.log(r() + 1e-9)) * Math.cos(2 * Math.PI * r());
-    const spread = 0.18 + m[2] * 0.035;
-    const lon = m[0] + g() * spread * 1.25;
-    const lat = m[1] + g() * spread;
+    const spread = 0.03 + 0.028 * Math.log2(perCity.get(`${l.lon},${l.lat}`) ?? 1);
+    const lon = l.lon + (g() * spread) / Math.cos(MID_LAT);
+    const lat = l.lat + g() * spread * 0.7;
     const u = (lon - BOUNDS.west) / (BOUNDS.east - BOUNDS.west);
     const v = (BOUNDS.north - lat) / (BOUNDS.north - BOUNDS.south);
     out.push({
-      name: l.n, filings: l.f, u, v,
-      size: 0.55 + Math.log10(l.f + 1) * 0.75,
-      appear: 250 + u * 1900 + r() * 450,
+      name: l.n, tag: l.tag, u, v,
+      size: 0.5 + Math.log10(l.w + 1) * 0.8,
+      appear: 250 + v * 1900 + r() * 450,
       phase: r() * Math.PI * 2,
       speed: 0.5 + r() * 1.3,
     });
@@ -62,7 +64,7 @@ function glowSprite(color: string) {
 export function NightMap({ lights, onPick }: { lights: Light[]; onPick?: (name: string) => void }) {
   const wrap = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
-  const [hover, setHover] = useState<{ x: number; y: number; name: string; filings: number } | null>(null);
+  const [hover, setHover] = useState<{ x: number; y: number; name: string; tag: string } | null>(null);
   const pickRef = useRef(onPick);
   useEffect(() => {
     pickRef.current = onPick;
@@ -94,9 +96,9 @@ export function NightMap({ lights, onPick }: { lights: Light[]; onPick?: (name: 
 
     function project(u: number, v: number, t: number) {
       // Map plane, tilted away from the viewer like a window seat on descent.
-      const aspect = 1.85;
+      const aspect = ASPECT;
       const wide = w >= 900;
-      const mapW = wide ? Math.min(w * 0.47, h * 1.2 * aspect) : Math.min(w * 0.94, h * 1.2 * aspect);
+      const mapW = wide ? Math.min(w * 0.5, h * 1.15 * aspect) : Math.min(w * 0.95, h * 0.62 * aspect);
       const mapH = mapW / aspect;
       const mx = (u - 0.5) * mapW;
       const my = (v - 0.5) * mapH;
@@ -108,8 +110,8 @@ export function NightMap({ lights, onPick }: { lights: Light[]; onPick?: (name: 
       const Z = my * Math.sin(tilt);
       const f = 900;
       const s = f / (f + Z);
-      // Wide: the whole country sits right of the copy. Narrow: the sky fills the top, copy below.
-      return [(wide ? w * 0.735 : w / 2) + xr * s, (wide ? h * 0.46 : Math.min(h * 0.2, 150)) + Y * s, s] as const;
+      // Wide: the islands and the Netherlands sit right of the copy. Narrow: the sky fills the top, copy below.
+      return [(wide ? w * 0.73 : w / 2) + xr * s, (wide ? h * 0.43 : Math.min(h * 0.22, 170)) + Y * s, s] as const;
     }
 
     function draw(now: number) {
@@ -118,6 +120,22 @@ export function NightMap({ lights, onPick }: { lights: Light[]; onPick?: (name: 
       mouse.y += (mouse.ty - mouse.y) * 0.05;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
+      // Faint dotted coastlines fade in first, so the lights land on recognisable land.
+      const coast = reduce ? 0.38 : Math.min(0.38, (t / 2200) * 0.38);
+      ctx.globalAlpha = coast;
+      ctx.strokeStyle = "#98a1c8";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2, 3]);
+      for (const shape of OUTLINES) {
+        ctx.beginPath();
+        shape.forEach(([lon, lat], k) => {
+          const [x, y] = project((lon - BOUNDS.west) / (BOUNDS.east - BOUNDS.west), (BOUNDS.north - lat) / (BOUNDS.north - BOUNDS.south), t);
+          if (k) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+        });
+        ctx.closePath();
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
       ctx.globalCompositeOperation = "lighter";
       for (let i = 0; i < placed.length; i++) {
         const p = placed[i];
@@ -143,7 +161,7 @@ export function NightMap({ lights, onPick }: { lights: Light[]; onPick?: (name: 
       for (const [label, lon, lat] of MAP_LABELS) {
         const u = (lon - BOUNDS.west) / (BOUNDS.east - BOUNDS.west);
         const v = (BOUNDS.north - lat) / (BOUNDS.north - BOUNDS.south);
-        const a = reduce ? 0.5 : Math.min(0.5, Math.max(0, (t - (900 + u * 1900)) / 1600));
+        const a = reduce ? 0.5 : Math.min(0.5, Math.max(0, (t - (900 + v * 1900)) / 1600));
         if (a <= 0) continue;
         const [x, y] = project(u, v, t);
         ctx.globalAlpha = a;
@@ -173,7 +191,7 @@ export function NightMap({ lights, onPick }: { lights: Light[]; onPick?: (name: 
       mouse.tx = (px / rect.width - 0.5) * 2;
       mouse.ty = (py / rect.height - 0.5) * 2;
       hovered = nearest(px, py);
-      setHover(hovered >= 0 ? { x: sx[hovered], y: sy[hovered], name: placed[hovered].name, filings: placed[hovered].filings } : null);
+      setHover(hovered >= 0 ? { x: sx[hovered], y: sy[hovered], name: placed[hovered].name, tag: placed[hovered].tag } : null);
       el.style.cursor = hovered >= 0 ? "pointer" : "default";
       if (reduce) draw(performance.now());
     }
@@ -218,8 +236,7 @@ export function NightMap({ lights, onPick }: { lights: Light[]; onPick?: (name: 
           style={{ left: hover.x, top: hover.y }}
         >
           <span className="font-display font-semibold">{hover.name}</span>
-          <span className="ml-2 text-sodium">{hover.filings.toLocaleString("en-US")}</span>
-          <span className="text-mist"> H-1B filings</span>
+          <span className="ml-2 text-sodium">{hover.tag}</span>
         </div>
       )}
     </div>

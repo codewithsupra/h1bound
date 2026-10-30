@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { IBM_Plex_Mono, Public_Sans, Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
 
@@ -9,9 +9,9 @@ const body = Public_Sans({ variable: "--font-body", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "H1Bound: jobs at companies that actually sponsor",
+  title: `${SITE_NAME}: jobs at companies that can sponsor your visa`,
   description:
-    "Chat with Maya, an AI job buddy for international students. Upload your resume and get matched to US jobs at employers with real H-1B filing history.",
+    "Chat with Maya, an AI job buddy for international students. Upload your CV and get matched to jobs in the UK, the Netherlands, Ireland and remote roles, at employers on the official visa sponsor registers.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

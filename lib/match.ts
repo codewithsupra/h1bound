@@ -1,6 +1,7 @@
 import { isEntryTitle, isSeniorTitle, titleFamily, type TitleFamily } from "./titles";
 import type { JdSponsorship } from "./jd-signals";
 import { sponsorLevel, type SponsorStats } from "./sponsor";
+import type { JobVisaFit, WorkProfile, WorkRight } from "./visa";
 
 /**
  * Deterministic job ↔ profile scoring (0–100). The LLM only writes the one-line "why it fits"
@@ -13,7 +14,10 @@ export type Profile = {
   yearsExperience: number;
   needsSponsorship: boolean;
   wantsRemote: "remote" | "hybrid" | "onsite" | "any";
-  locations: string[]; // US states or cities the user is open to; empty = anywhere in US
+  locations: string[]; // cities or US states the user is open to; empty = anywhere
+  /** UK / NL / IE matching only. */
+  work?: WorkProfile;
+  targetCountries?: string[];
 };
 
 export type JobLite = {
@@ -29,6 +33,11 @@ export type JobLite = {
 
 export type Scored = { job: JobLite; score: number; family: TitleFamily; reasons: string[] };
 
+/** UK/NL/IE matching: the visa fit from the registers replaces the H-1B filing history. */
+export type VisaInput = { fit: JobVisaFit; right: WorkRight; reason: string | null };
+
+const VISA_FACTOR: Record<JobVisaFit, number> = { ok_licensed: 1, ok: 0.85, risky: 0.25, blocked: 0 };
+
 const W = { family: 30, skills: 30, level: 15, sponsor: 15, location: 5, fresh: 5 };
 
 function skillHits(skills: string[], text: string): string[] {
@@ -41,7 +50,7 @@ function skillHits(skills: string[], text: string): string[] {
   });
 }
 
-export function scoreJob(job: JobLite, p: Profile, sponsor: SponsorStats | null, now = Date.now()): Scored {
+export function scoreJob(job: JobLite, p: Profile, sponsor: SponsorStats | null, now = Date.now(), visa?: VisaInput): Scored {
   const family = titleFamily(job.title);
   const reasons: string[] = [];
   let score = 0;
@@ -67,7 +76,10 @@ export function scoreJob(job: JobLite, p: Profile, sponsor: SponsorStats | null,
     score += senior ? W.level : W.level * 0.7;
   }
 
-  if (p.needsSponsorship) {
+  if (visa) {
+    score += W.sponsor * VISA_FACTOR[visa.fit];
+    if (visa.reason) reasons.push(visa.reason);
+  } else if (p.needsSponsorship) {
     const lvl = sponsorLevel(sponsor, family);
     const f = { strong: 1, some: 0.7, rare: 0.3, unknown: 0.2, none: 0 }[lvl];
     score += W.sponsor * f;
@@ -82,10 +94,13 @@ export function scoreJob(job: JobLite, p: Profile, sponsor: SponsorStats | null,
 
   if (job.postedAt) {
     const days = (now - Date.parse(job.postedAt)) / 86_400_000;
-    score += W.fresh * (days <= 7 ? 1 : days <= 30 ? 0.5 : 0);
+    // Recent postings get far more replies; outside the US market the weight is doubled.
+    const fresh = days <= 3 ? 1 : days <= 7 ? 0.8 : days <= 14 ? 0.5 : days <= 30 ? 0.25 : 0;
+    score += W.fresh * (visa ? 2 : 1) * fresh;
+    if (visa && days <= 7) reasons.push(days < 1 ? "posted today" : `posted ${Math.round(days)} day${Math.round(days) === 1 ? "" : "s"} ago`);
   }
 
-  return { job, family, score: Math.round(score), reasons };
+  return { job, family, score: Math.min(100, Math.round(score)), reasons };
 }
 
 /** Ranks jobs; for users who need sponsorship, drops postings that refuse it and employers with zero filings. */
@@ -98,5 +113,29 @@ export function rankJobs(
   return jobs
     .map((j) => scoreJob(j, p, sponsorOf(j.company), now))
     .filter((s) => !(p.needsSponsorship && (s.job.jdSponsorship === "no" || sponsorLevel(sponsorOf(s.job.company), s.family) === "none")))
+    .sort((a, b) => b.score - a.score || a.job.id.localeCompare(b.job.id));
+}
+
+export type RerankVerdict = { fit: number; why: string; gap: string | null };
+
+/** Validates model verdicts (numbers 1..n, fit clamped 0-100, short text) and keys them by job id. */
+export function cleanRerank(raw: { n: number; fit: number; why: string; gap: string | null }[], ids: string[]): Map<string, RerankVerdict> {
+  const out = new Map<string, RerankVerdict>();
+  for (const v of raw) {
+    const id = ids[Math.round(v.n) - 1];
+    if (!id || out.has(id) || !Number.isFinite(v.fit)) continue;
+    const words = (s: string, n: number) => s.trim().split(/\s+/).slice(0, n).join(" ");
+    out.set(id, { fit: Math.max(0, Math.min(100, Math.round(v.fit))), why: words(v.why ?? "", 24), gap: v.gap?.trim() ? words(v.gap, 14) : null });
+  }
+  return out;
+}
+
+/** Final order: half rule-based score, half the model's fit judgment; jobs it didn't judge keep their score. */
+export function blendRerank(scored: Scored[], verdicts: Map<string, RerankVerdict>): (Scored & { why?: string; gap?: string | null })[] {
+  return scored
+    .map((s) => {
+      const v = verdicts.get(s.job.id);
+      return v ? { ...s, score: Math.round((s.score + v.fit) / 2), why: v.why, gap: v.gap } : s;
+    })
     .sort((a, b) => b.score - a.score || a.job.id.localeCompare(b.job.id));
 }

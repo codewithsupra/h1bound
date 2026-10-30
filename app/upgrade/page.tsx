@@ -3,12 +3,13 @@ import { SiteHeader } from "@/components/site/site-header";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/insforge/server";
-import { currencyForCountry, PRICES } from "@/lib/billing";
+import { priceForCountry } from "@/lib/billing";
 import { hasPaidPlan, trialState } from "@/lib/server/growth";
 import { TrialButton } from "@/components/growth/trial-button";
 import { CheckoutButton } from "./checkout-button";
+import { SITE_NAME } from "@/lib/site";
 
-export const metadata = { title: "Pro · H1Bound" };
+export const metadata = { title: `Pro · ${SITE_NAME}` };
 
 const FEATURES: [string, string][] = [
   ["Unlimited matches", "New sponsor jobs every morning, ranked for you."],
@@ -23,7 +24,7 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
   if (!user) redirect("/login?mode=signup");
   const [paid, trial] = await Promise.all([hasPaidPlan(user.id), trialState(user.id)]);
   if (paid) redirect("/account");
-  const price = PRICES[currencyForCountry((await headers()).get("x-vercel-ip-country"))];
+  const price = priceForCountry((await headers()).get("x-vercel-ip-country"));
   const { canceled } = await searchParams;
 
   return (
@@ -32,7 +33,7 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
       <Link href="/chat" className="btn-light !px-4 !py-2 text-sm">Back to Maya</Link>
     </SiteHeader>
     <main className="rise mx-auto w-full max-w-xl flex-1 px-4 py-10">
-            <h1 className="mt-4 font-display text-4xl font-bold tracking-[-0.01em]">H1Bound Pro</h1>
+            <h1 className="mt-4 font-display text-4xl font-bold tracking-[-0.01em]">{SITE_NAME} Pro</h1>
       <p className="mt-2 text-lg text-slate">{price.label}. Cancel anytime from your account.</p>
       {trial.active && trial.endsAt && (
         <p className="mt-4 rounded-lg border border-green/30 bg-green/[0.06] p-3 text-sm">You&apos;re on the free trial until {new Date(trial.endsAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}. Upgrade any time to keep Pro after that.</p>

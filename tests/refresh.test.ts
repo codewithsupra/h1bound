@@ -24,3 +24,31 @@ describe("inShard", () => {
     expect(inShard(crypto.randomUUID(), 0, 1)).toBe(true);
   });
 });
+
+import { boardPattern, licenceFor } from "@/lib/ingest/refresh";
+import { fromGreenhouse } from "@/lib/ingest/ats";
+
+describe("licenceFor", () => {
+  const idx = new Map([["GB:stripe", "lic-gb"], ["IE:stripe technology", "lic-ie"]]);
+  const job = (location: string) => fromGreenhouse("stripe", "Stripe", { id: 1, title: "Engineer", absolute_url: "u", location: { name: location } });
+  it("links a London job to the UK register entry by name", () => {
+    expect(licenceFor(job("London, UK"), ["Stripe, Inc."], idx)).toBe("lic-gb");
+  });
+  it("tries every known name for the employer", () => {
+    expect(licenceFor(job("Dublin"), ["Stripe Technology Europe Limited"], idx)).toBe("lic-ie");
+  });
+  it("prefers the board's own licence when the country matches", () => {
+    expect(licenceFor(job("London"), [], idx, { id: "own", country: "GB" })).toBe("own");
+    expect(licenceFor(job("Dublin"), ["Stripe Technology Europe Limited"], idx, { id: "own", country: "GB" })).toBe("lic-ie");
+  });
+  it("has no licence for US jobs", () => {
+    expect(licenceFor(job("San Francisco, CA"), ["Stripe"], idx)).toBeNull();
+  });
+});
+
+describe("boardPattern", () => {
+  it("escapes LIKE wildcards in slugs", () => {
+    expect(boardPattern("stripe")).toBe("stripe:%");
+    expect(boardPattern("my_co%")).toBe("my\\_co\\%:%");
+  });
+});

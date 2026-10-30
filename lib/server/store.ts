@@ -72,7 +72,7 @@ function userStore(id: string, name: string | null, referrals: number): Store {
 
 type GuestRow = ProfileRow & { id: string; shown_job_ids: string[]; chat_enc: string | null; messages_today: number; day: string };
 
-const GUEST_COLUMNS = "id,details_enc,skills,target_families,years_experience,visa_status,needs_sponsorship,wants_remote,locations,onboarded,shown_job_ids,chat_enc,messages_today,day";
+const GUEST_COLUMNS = "id,details_enc,skills,target_families,years_experience,visa_status,needs_sponsorship,wants_remote,locations,onboarded,citizenship,visa_country,visa_situation,target_countries,shown_job_ids,chat_enc,messages_today,day";
 
 function guestStore(id: string): Store {
   const row = async () => {
@@ -129,6 +129,11 @@ function guestStore(id: string): Store {
   };
 }
 
+/** A user's Store outside a request (cron jobs); never call with an id that came from a client. */
+export async function storeForUser(id: string, name: string | null): Promise<Store> {
+  return userStore(id, name, await activatedReferrals(id));
+}
+
 /** The signed-in user, else the verified guest from the cookie, else null. */
 export async function getStore(): Promise<Store | null> {
   const user = await getSessionUser();
@@ -179,7 +184,8 @@ export async function claimGuest(userId: string): Promise<void> {
       await saveProfile(userId, {
         details, skills: row.skills, target_families: row.target_families, years_experience: row.years_experience,
         visa_status: row.visa_status, needs_sponsorship: row.needs_sponsorship, wants_remote: row.wants_remote,
-        locations: row.locations, onboarded: row.onboarded,
+        locations: row.locations, onboarded: row.onboarded, citizenship: row.citizenship, visa_country: row.visa_country,
+        visa_situation: row.visa_situation, target_countries: row.target_countries,
       });
     }
     if (seen.size) {

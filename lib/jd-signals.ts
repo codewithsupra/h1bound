@@ -19,6 +19,12 @@ const NO = [
   /\bexport (control )?regulations?\b.{0,120}\b(citizen|permanent resident|u\.?s\.? person)/,
   /\bmust\s+be\s+an?\s+(\(i\)\s*)?u\.?s\.?\s+citizen/,
   /\bmust\s+(be\s+)?(legally\s+)?authorized\s+to\s+work\s+in\s+the\s+(us|u\.s\.|united states)\s+without\s+(the\s+need\s+for\s+)?(current\s+or\s+future\s+)?(employer\s+)?sponsorship/,
+  // UK / EU phrasing. "Right to work" alone is common boilerplate, so it only counts when the sentence rules out sponsorship.
+  /\b(must|need to|required to)\s+(already\s+)?(have|hold|possess)\s+(the\s+|full\s+|an?\s+existing\s+|existing\s+|unrestricted\s+)?right\s+to\s+work\s+in\s+the\s+(uk|united kingdom|netherlands|eu|european union|republic of ireland|ireland)\b(?![^.]{0,60}\b(or|and)\b[^.]{0,40}\bsponsor)/,
+  /\b(valid\s+)?(eu|eea)\s+(work\s+permit|passport|citizenship)\s+(is\s+)?(required|necessary|mandatory)/,
+  /\b(only|solely)\s+(consider|accept)\w*\s+(applicants|candidates)\s+(who|with)\b.{0,40}\bright\s+to\s+work/,
+  /\b(sole\s+)?uk\s+national(s|ity)?\s+(only|required)/,
+  /\b(sc|dv|security)\s+clear(ed|ance)\s+(is\s+)?(required|essential)/,
 ];
 
 const YES = [
@@ -26,6 +32,11 @@ const YES = [
   /\b(we|will|can|able to)\s+(provide\s+|offer\s+)?sponsor\s+(visas?|h-?1b|work\s+authorization)/,
   /\bopen\s+to\s+sponsor/,
   /\bsponsorship\s+available\b/,
+  /\b(offer|provide|support)s?\s+(full\s+)?(visa|immigration|relocation\s+and\s+visa)\s+(sponsorship|support)\b/,
+  /\b(we\s+)?(can|will|are able to)\s+sponsor\s+(a\s+)?(skilled\s+worker|tier\s*2|work)\s+(visa|permit)s?/,
+  /\b(skilled\s+worker|tier\s*2)\s+(visa\s+)?sponsorship\s+(is\s+)?(available|offered|possible)/,
+  /\b(kennismigrant|highly\s+skilled\s+migrant)\b.{0,60}\b(available|possible|support|eligible|offer)/,
+  /\b(critical\s+skills|general)\s+employment\s+permit\b.{0,40}\b(available|support|sponsor)/,
 ];
 
 export function jdSponsorship(text: string): JdSponsorship {

@@ -5,6 +5,7 @@ import type { Profile } from "@/lib/match";
 import type { TitleFamily } from "@/lib/titles";
 import type { Usage } from "@/lib/quota";
 import type { OptClock } from "@/lib/opt";
+import type { VisaSituation } from "@/lib/visa";
 
 /** Identity + resume details. Stored only as ciphertext in profiles.details_enc. */
 export type ProfileDetails = {
@@ -16,6 +17,8 @@ export type ProfileDetails = {
   experience: { company: string; title: string; start: string | null; end: string | null; highlights: string[] }[];
   projects: { name: string; summary: string }[];
   optEndDate: string | null;
+  /** Graduation date (YYYY-MM), for graduate schemes and post-study visa timing. */
+  graduation?: string | null;
   /** OPT unemployment clock, set in chat or from the /opt-clock page. */
   opt?: OptClock;
   resumeText: string;
@@ -37,6 +40,11 @@ export type ProfileRow = {
   wants_remote: Profile["wantsRemote"];
   locations: string[];
   onboarded: boolean;
+  /** UK / NL / IE matching. */
+  citizenship: string | null;
+  visa_country: string | null;
+  visa_situation: VisaSituation | null;
+  target_countries: string[];
 };
 
 const db = () => createAdminInsForge().database;
@@ -64,6 +72,8 @@ export function toMatchProfile(row: ProfileRow): Profile {
     needsSponsorship: row.needs_sponsorship,
     wantsRemote: row.wants_remote,
     locations: row.locations,
+    work: { citizenship: row.citizenship ?? null, visaCountry: row.visa_country ?? null, visaSituation: row.visa_situation ?? null },
+    targetCountries: row.target_countries ?? [],
   };
 }
 

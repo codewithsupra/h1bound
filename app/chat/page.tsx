@@ -4,11 +4,15 @@ import { Chat } from "@/components/chat/chat";
 import { SiteHeader } from "@/components/site/site-header";
 import { getStore } from "@/lib/server/store";
 import { optStatus } from "@/lib/opt";
+import { SITE_NAME } from "@/lib/site";
 
-export const metadata = { title: "Chat with Maya · H1Bound" };
+export const metadata = { title: `Chat with Maya · ${SITE_NAME}` };
 
 /** Works for signed-in users and for guests trying Maya before signing up. */
-export default async function ChatPage() {
+export default async function ChatPage({ searchParams }: PageProps<"/chat">) {
+  const ask = (await searchParams).ask;
+  // Links from daily picks (Telegram, email) open the chat with a question ready to send, never auto-sent.
+  const prefill = typeof ask === "string" ? ask.slice(0, 300) : undefined;
   const store = await getStore();
   const [history, profile, pro] = store ? await Promise.all([store.loadChat(), store.loadProfile(), store.isPro()]) : [[], null, false];
   const firstName = profile?.details?.name?.split(" ")[0] ?? store?.firstName ?? null;
@@ -37,7 +41,7 @@ export default async function ChatPage() {
           </>
         )}
       </SiteHeader>
-      <Chat initialMessages={history} firstName={firstName} viewer={store?.kind ?? null} />
+      <Chat initialMessages={history} firstName={firstName} viewer={store?.kind ?? null} prefill={prefill} autoFocus={Boolean(prefill)} />
     </div>
   );
 }

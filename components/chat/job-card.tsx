@@ -24,7 +24,17 @@ export function JobCard({ job, onAsk, index = 0 }: { job: Job; onAsk: (text: str
         <Stamp badge={job.badge} animate />
       </div>
       <p className="mt-3 text-sm text-mist">{job.badge.detail}</p>
-      {job.reasons.length > 0 && <p className="mt-2 text-sm">Why it fits: {job.reasons.join(", ")}.</p>}
+      {job.why ? (
+        <p className="mt-2 text-sm">Why it fits: {job.why.replace(/\.?$/, ".")}</p>
+      ) : (
+        job.reasons.length > 0 && <p className="mt-2 text-sm">Why it fits: {job.reasons.join(", ")}.</p>
+      )}
+      {job.gap && <p className="mt-1 text-sm text-mist">Gap to cover: {job.gap.replace(/\.?$/, ".")}</p>}
+      {job.why && job.reasons.length > 0 && (
+        <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="Signals">
+          {job.reasons.slice(0, 4).map((r) => <li key={r} className="rounded-full bg-haze/60 px-2.5 py-0.5 text-xs text-mist">{r}</li>)}
+        </ul>
+      )}
       <div className="mt-4 flex flex-wrap gap-2">
         <a href={job.url} target="_blank" rel="noopener noreferrer" className="btn-light !px-4 !py-1.5 text-sm">Open posting</a>
         <button onClick={() => onAsk(`Review my resume for the ${job.title} role at ${job.company} (job ${job.id})`)} className="rounded-full border border-haze px-3.5 py-1.5 text-sm transition-colors hover:border-moon/30">
@@ -33,7 +43,15 @@ export function JobCard({ job, onAsk, index = 0 }: { job: Job; onAsk: (text: str
         <button onClick={() => onAsk(`Draft a cold email for the ${job.title} role at ${job.company} (job ${job.id})`)} className="rounded-full border border-haze px-3.5 py-1.5 text-sm transition-colors hover:border-moon/30">
           Cold email the hiring manager
         </button>
+        <button onClick={() => onAsk(`What's it like to work at ${job.company}? Culture, reviews and interviews.`)} className="rounded-full border border-haze px-3.5 py-1.5 text-sm transition-colors hover:border-moon/30">
+          About {job.company}
+        </button>
       </div>
+      {job.via && (
+        <p className="mt-3 text-xs text-mist">
+          Listed via <a href={job.via.url} target="_blank" rel="noopener" className="underline underline-offset-2">{job.via.name}</a>
+        </p>
+      )}
     </article>
   );
 }

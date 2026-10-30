@@ -14,10 +14,10 @@ export function openMaya(e: { clientX: number; clientY: number } | null, prompt?
 }
 
 const PROMPTS = [
-  "Who sponsors new-grad backend engineers?",
-  "Does Databricks actually file H-1Bs?",
-  "I'm on STEM OPT with 80 days left. Help?",
-  "Find me data science jobs that sponsor.",
+  "Graduate data jobs in London that sponsor?",
+  "Is Monzo a licensed UK sponsor?",
+  "I'm on a Graduate visa until June. Help?",
+  "Remote backend roles open to India?",
 ];
 
 /** Hero CTA: looks like a chat box and types real questions; clicking opens Maya. */

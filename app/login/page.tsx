@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 import { SiteHeader } from "@/components/site/site-header";
 import { getSessionUser } from "@/lib/insforge/server";
 import { AuthForm } from "./auth-form";
+import { SITE_NAME } from "@/lib/site";
 
-export const metadata = { title: "Sign in · H1Bound" };
+export const metadata = { title: `Sign in · ${SITE_NAME}` };
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ mode?: string }> }) {
   if (await getSessionUser()) redirect("/chat");

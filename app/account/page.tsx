@@ -10,19 +10,25 @@ import { SITE_URL } from "@/lib/site";
 import { InviteCard } from "@/components/growth/invite-card";
 import { TrialButton } from "@/components/growth/trial-button";
 import { AccountControls } from "./controls";
+import { Connections } from "./connections";
+import { gmailConfigured } from "@/lib/server/gmail";
+import { telegramConfigured } from "@/lib/server/telegram";
+import { SITE_NAME } from "@/lib/site";
 
-export const metadata = { title: "Account · H1Bound" };
+export const metadata = { title: `Account · ${SITE_NAME}` };
 
 export default async function AccountPage() {
   const user = await getSessionUser();
   if (!user) redirect("/login");
-  const [pro, usage, consent, ref, trial] = await Promise.all([
+  const [pro, usage, consent, ref, trial, gmail] = await Promise.all([
     isPro(user.id),
     loadUsage(user.id),
-    createAdminInsForge().database.from("consents").select("email_updates").eq("user_id", user.id).maybeSingle(),
+    createAdminInsForge().database.from("consents").select("email_updates,telegram_chat_hash").eq("user_id", user.id).maybeSingle(),
     referralInfo(user.id),
     trialState(user.id),
+    createAdminInsForge().database.from("gmail_accounts").select("user_id").eq("user_id", user.id).maybeSingle(),
   ]);
+  const telegram = Boolean((consent.data as { telegram_chat_hash?: string | null } | null)?.telegram_chat_hash);
   const jobLimit = freeJobLimit(ref.activated);
   const emailUpdates = Boolean((consent.data as { email_updates?: boolean } | null)?.email_updates);
 
@@ -58,10 +64,12 @@ export default async function AccountPage() {
         <InviteCard link={`${SITE_URL}/r/${ref.code}`} activated={ref.activated} maxFriends={ref.maxFriends} jobsPerFriend={ref.jobsPerFriend} />
       </div>
 
+      <Connections gmail={Boolean(gmail.data)} telegram={telegram} gmailAvailable={gmailConfigured()} telegramAvailable={telegramConfigured()} />
+
       <AccountControls emailUpdates={emailUpdates} />
 
       <p className="mt-8 text-sm text-slate">
-        What we keep: your parsed resume (encrypted), your chat with Maya (encrypted), the jobs you were shown and your notes on them. Your original file is never stored. Deleting your account erases all of it.
+        What we keep: your parsed resume (encrypted), your chat with Maya (encrypted), the jobs you were shown and your notes on them, and, if you connect them, your Gmail send permission and Telegram chat (both encrypted). Your original file is never stored. Deleting your account erases all of it.
       </p>
     </main>
     </>

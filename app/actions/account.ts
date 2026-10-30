@@ -7,6 +7,8 @@ import { createAuthActions } from "@insforge/sdk/ssr";
 import { createAdminInsForge } from "@/lib/insforge/admin";
 import { getSessionUser } from "@/lib/insforge/server";
 import { hasPaidPlan } from "@/lib/server/growth";
+import { disconnectGmail } from "@/lib/server/gmail";
+import { unlinkTelegram } from "@/lib/server/telegram";
 
 export async function setEmailUpdates(on: boolean) {
   const user = await getSessionUser();
@@ -27,4 +29,18 @@ export async function deleteAccount(_prev: DeleteState, form: FormData): Promise
   if (error) return { error: "Couldn't delete your account. Try again in a minute." };
   await createAuthActions({ cookies: await cookies() }).signOut();
   redirect("/?deleted=1");
+}
+
+export async function disconnectGmailAction() {
+  const user = await getSessionUser();
+  if (!user) redirect("/login");
+  await disconnectGmail(user.id);
+  revalidatePath("/account");
+}
+
+export async function disconnectTelegramAction() {
+  const user = await getSessionUser();
+  if (!user) redirect("/login");
+  await unlinkTelegram(user.id);
+  revalidatePath("/account");
 }

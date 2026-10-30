@@ -25,7 +25,7 @@ export function HeroAndBoard({ lights, idle, children }: { lights: Light[]; idle
       <section id="board" className="relative mx-auto max-w-5xl scroll-mt-24 px-4 pb-28 sm:px-6">
         <h2 className="font-display text-[clamp(1.9rem,4vw,3rem)] font-semibold tracking-[-0.02em]">Does this company sponsor?</h2>
         <p className="mt-3 max-w-[40rem] text-lg text-mist">
-          Every H-1B starts with a labor filing to the US Dept. of Labor. We count them per company and role, so you know before you apply.
+          In the UK and the Netherlands, only employers on the government&apos;s register can sponsor a work visa. Ireland publishes every permit it grants. Check any company before you apply.
         </p>
         <div className="mt-8">
           <FlapBoard idle={idle} pick={pick} />

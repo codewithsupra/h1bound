@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { WaitlistForm } from "./waitlist-form";
 
 const Tile = ({ className = "", children }: { className?: string; children: React.ReactNode }) => (
@@ -16,10 +15,10 @@ export function Bento({ inviteJobs, samples }: { inviteJobs: number; samples: { 
       </h2>
       <div className="mt-14 grid gap-4 md:grid-cols-6">
         <Tile className="md:col-span-4">
-          <H>Resume reviews for the job in front of you</H>
+          <H>CV reviews for the job in front of you</H>
           <P>Not generic tips: what to move, cut and quantify for this posting. Free on 5 jobs.</P>
           <div className="mt-7 space-y-2 text-sm" aria-hidden>
-            {["Lead with the payments internship", "Quantify the queue rewrite", "Cut the objective line"].map((t, i) => (
+            {["Lead with the placement year", "Quantify the churn model", "Cut the personal statement"].map((t, i) => (
               <div key={t} className="flex items-center gap-3 rounded-xl border border-haze bg-night/50 px-4 py-2.5" style={{ marginLeft: `${i * 1.25}rem` }}>
                 <span className="h-1.5 w-1.5 rounded-full bg-sodium" />{t}
               </div>
@@ -28,30 +27,30 @@ export function Bento({ inviteJobs, samples }: { inviteJobs: number; samples: { 
         </Tile>
         <Tile className="md:col-span-2">
           <H>Free sponsor lookup</H>
-          <P>Any employer&apos;s H-1B record, no account needed.</P>
+          <P>Is a company on the official register? Check any employer, no account needed.</P>
           <dl className="mt-6 space-y-1.5 font-flap text-sm" aria-hidden>
             {samples.map((r) => (
-              <div key={r.name} className="flex justify-between gap-3 rounded-lg bg-night/60 px-3 py-2"><dt className="truncate uppercase">{r.name}</dt><dd className="text-sodium">{r.total.toLocaleString("en-US")}</dd></div>
+              <div key={r.name} className="flex justify-between gap-3 rounded-lg bg-night/60 px-3 py-2"><dt className="truncate uppercase">{r.name}</dt><dd className="text-sodium">{r.total.toLocaleString("en-GB")}</dd></div>
             ))}
           </dl>
-          <Link href="/sponsors" className="mt-6 inline-block text-moon underline decoration-haze underline-offset-4 hover:decoration-sodium">Browse 52,000+ employers</Link>
+          <a href="#board" className="mt-6 inline-block text-moon underline decoration-haze underline-offset-4 hover:decoration-sodium">Search the registers</a>
         </Tile>
         <Tile className="md:col-span-2">
           <H>Interview plans</H>
-          <P>A 7-day prep plan per job, including how to answer &quot;will you need sponsorship?&quot;</P>
+          <P>A 7-day prep plan per job, including how to answer &quot;will you need sponsorship?&quot; with confidence.</P>
         </Tile>
         <Tile className="md:col-span-2">
-          <H>Tailoring</H>
-          <P>Rewrites that use only your real experience. Nothing invented.</P>
+          <H>What it&apos;s like to work there</H>
+          <P>Culture, work-life balance and interviews, summarized from public sources with links.</P>
         </Tile>
         <Tile className="md:col-span-2 border-sodium/30 bg-sodium/[0.06]">
           <H>Bring friends, get jobs</H>
-          <P>Each friend who joins and uploads a resume gives you {inviteJobs} more free matches.</P>
+          <P>Each friend who joins and uploads a CV gives you {inviteJobs} more free matches.</P>
         </Tile>
         <Tile className="md:col-span-6 md:flex md:items-center md:justify-between md:gap-10">
           <div>
-            <H>Maya on WhatsApp is coming.</H>
-            <P>Matches and OPT reminders where you already talk. Leave your email and we&apos;ll tell you once when it&apos;s ready.</P>
+            <H>Daily picks on Telegram today. WhatsApp next.</H>
+            <P>Your best new matches every morning, where you already talk. Connect Telegram from your account; for WhatsApp, leave your email and we&apos;ll tell you once when it&apos;s ready.</P>
           </div>
           <WaitlistForm />
         </Tile>

@@ -1,4 +1,5 @@
 "use client";
+import { SITE_NAME } from "@/lib/site";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -7,7 +8,7 @@ import { openMaya } from "../try-maya";
 const LINKS = [
   { id: "how", label: "How it works" },
   { id: "record", label: "The record" },
-  { id: "opt", label: "OPT clock" },
+  { id: "rights", label: "Visa check" },
   { id: "why", label: "Why us" },
   { id: "pricing", label: "Pricing" },
   { id: "faq", label: "FAQ" },
@@ -38,7 +39,7 @@ export function SectionNav() {
       inert={!shown}
     >
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <Link href="/" className="py-3.5 font-display text-lg font-bold tracking-tight">H1Bound<span className="text-sodium">.</span></Link>
+        <Link href="/" className="py-3.5 font-display text-lg font-bold tracking-tight">{SITE_NAME}<span className="text-sodium">.</span></Link>
         <ul className="ml-auto hidden items-center gap-1 text-sm lg:flex">
           {LINKS.map((l) => (
             <li key={l.id}>

@@ -15,6 +15,7 @@ import { chatModel } from "@/lib/ai/models";
 import { mayaSystem } from "@/lib/ai/maya";
 import { buildTools } from "@/lib/ai/tools";
 import { getStore } from "@/lib/server/store";
+import { isMarketProfile, MARKET_NAME, workRights, type Market } from "@/lib/visa";
 
 export const maxDuration = 60;
 
@@ -32,7 +33,11 @@ export async function POST(req: Request) {
     store.loadChat(), store.loadProfile(), store.isPro(), store.usage(),
     store.kind === "user" ? trialState(store.id) : null,
   ]);
+  const row = profile?.row;
   const opt = profile?.details?.opt;
+  const knowsRights = Boolean(row?.citizenship || row?.visa_situation);
+  const rights = knowsRights ? workRights({ citizenship: row?.citizenship ?? null, visaCountry: row?.visa_country ?? null, visaSituation: row?.visa_situation ?? null }) : null;
+  const RIGHT_TEXT = { free: "free to work", post_study: "can work on a post-study visa, needs a sponsor long term", sponsor: "needs a licensed sponsor" } as const;
   const optNow = opt ? optStatus(opt) : null;
 
   let messages: UIMessage[];
@@ -59,6 +64,13 @@ export async function POST(req: Request) {
       trialUsed: trial?.used ?? false,
       usage: { jobsShown: usage.jobsShown, reviewedJobs: usage.reviewedJobIds.length, reviewRounds: usage.reviewRounds },
       today: new Date().toISOString().slice(0, 10),
+      market: row ? isMarketProfile(row) : true,
+      citizenship: row?.citizenship ?? null,
+      visaCountry: row?.visa_country ?? null,
+      visaSituation: row?.visa_situation ?? null,
+      targetCountries: row?.target_countries ?? [],
+      workRights: rights ? Object.entries(rights).map(([m, r]) => `${MARKET_NAME[m as Market]}: ${RIGHT_TEXT[r]}`).join("; ") : null,
+      graduation: profile?.details?.graduation ?? null,
     }),
     messages: await convertToModelMessages(messages),
     tools,

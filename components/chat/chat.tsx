@@ -11,21 +11,24 @@ import { TrialButton } from "@/components/growth/trial-button";
 import { JobCard } from "./job-card";
 import { OptChip } from "./opt-chip";
 import { Stamp } from "./stamp";
+import { SendEmail } from "./send-email";
+import type { Draft } from "@/lib/email-draft";
 
 type ToolPart = { type: string; state: string; output?: Record<string, unknown>; errorText?: string };
 export type Viewer = "user" | "guest" | null;
 
 const WORKING: Record<string, string> = {
-  "tool-findJobs": "Scanning today's openings at sponsoring employers…",
+  "tool-findJobs": "Checking today's openings against the sponsor registers…",
   "tool-reviewResume": "Reading your resume against the posting…",
   "tool-coldEmail": "Finding the right person and drafting your email…",
   "tool-interviewPlan": "Building your prep plan…",
   "tool-tailorResume": "Working out what to change for this role…",
-  "tool-companySponsorship": "Checking Dept. of Labor filings…",
+  "tool-companySponsorship": "Checking the official sponsor registers…",
+  "tool-companyInsight": "Reading what people say about working there…",
   "tool-setOptClock": "Setting your OPT clock…",
 };
 
-const STARTERS = ["Who sponsors new-grad backend engineers?", "Does Databricks sponsor H-1Bs?", "I'm on STEM OPT. Where do I start?"];
+const STARTERS = ["I'm on a UK Graduate visa. Who's hiring?", "Is Monzo a licensed UK sponsor?", "Graduate data jobs in Amsterdam"];
 
 function LongForm({ title, body, copy }: { title: string; body: string; copy?: boolean }) {
   const [copied, setCopied] = useState(false);
@@ -57,6 +60,47 @@ function Upsell({ text, signUp }: { text: string; signUp?: boolean }) {
         </div>
       )}
     </div>
+  );
+}
+
+type InsightOut = { found: boolean; company?: string; summary?: string; pros?: string[]; cons?: string[]; interviews?: string | null; sources?: { title: string; url: string }[]; reviewsLink: string; reason?: string };
+
+function InsightCard({ o }: { o: Record<string, unknown> }) {
+  const i = o as unknown as InsightOut;
+  if (!i.found) {
+    return (
+      <p className="text-sm text-mist">
+        {i.reason} <a href={i.reviewsLink} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">Read employee reviews</a>.
+      </p>
+    );
+  }
+  return (
+    <article className="rise space-y-3 rounded-2xl border border-haze bg-night-2/80 p-4 sm:p-5">
+      <h3 className="font-display text-[1.05rem] font-semibold">Working at {i.company}</h3>
+      <p className="text-sm">{i.summary}</p>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {!!i.pros?.length && (
+          <div>
+            <p className="text-xs font-medium text-sodium">People like</p>
+            <ul className="mt-1 list-disc space-y-1 pl-4 text-sm text-mist">{i.pros.map((x) => <li key={x}>{x}</li>)}</ul>
+          </div>
+        )}
+        {!!i.cons?.length && (
+          <div>
+            <p className="text-xs font-medium text-sodium">Watch out for</p>
+            <ul className="mt-1 list-disc space-y-1 pl-4 text-sm text-mist">{i.cons.map((x) => <li key={x}>{x}</li>)}</ul>
+          </div>
+        )}
+      </div>
+      {i.interviews && <p className="text-sm"><span className="text-mist">Interviews: </span>{i.interviews}</p>}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-haze pt-3 text-xs text-mist">
+        <span>Sources:</span>
+        {i.sources?.map((s) => (
+          <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer nofollow" className="underline underline-offset-2 hover:text-moon">{s.title}</a>
+        ))}
+        <a href={i.reviewsLink} target="_blank" rel="noopener noreferrer" className="ml-auto underline underline-offset-2 hover:text-moon">Employee reviews</a>
+      </div>
+    </article>
   );
 }
 
@@ -103,7 +147,19 @@ function ToolView({ part, ask }: { part: ToolPart; ask: (t: string) => void }) {
           <p className="text-sm text-mist">
             {c ? <>Likely contact: <strong className="text-moon">{c.name}</strong>{c.title ? `, ${c.title}` : ""} · {c.email} ({c.confidence}% confidence)</> : <>No verified contact found. <a className="text-runway underline" href={o.findContactYourself as string} target="_blank" rel="noopener noreferrer">Search LinkedIn for their engineering managers</a>.</>}
           </p>
-          <LongForm title={`Cold email: ${job?.company}`} body={o.email as string} copy />
+          {o.draft && o.outreachId && job ? (
+            <SendEmail
+              outreachId={o.outreachId as string}
+              followUpId={(o.followUpId as string | null) ?? null}
+              draft={o.draft as Draft}
+              to={c?.email ?? null}
+              gmail={(o.gmail as "connected" | "not_connected" | "unavailable") ?? "unavailable"}
+              job={job}
+              onAsk={ask}
+            />
+          ) : (
+            <LongForm title={`Cold email: ${job?.company}`} body={o.email as string} copy />
+          )}
         </div>
       );
     }
@@ -113,7 +169,21 @@ function ToolView({ part, ask }: { part: ToolPart; ask: (t: string) => void }) {
       return upsell ? <Upsell text={upsell} signUp={signUp} /> : <LongForm title={`Tailoring: ${job?.title} at ${job?.company}`} body={o.tips as string} copy />;
     case "tool-updateJobStatus":
       return upsell ? <Upsell text={upsell} signUp={signUp} /> : null;
+    case "tool-companyInsight":
+      return <InsightCard o={o} />;
     case "tool-companySponsorship":
+      if (Array.isArray(o.registers)) {
+        const regs = o.registers as { country: string; registeredName: string; city: string | null; evidence: string }[];
+        return (
+          <div className="rise space-y-2 rounded-2xl border border-haze bg-night-2/80 p-4">
+            {regs.length ? regs.map((r) => (
+              <p key={r.country + r.registeredName} className="text-sm">
+                <strong className="text-moon">{r.registeredName}</strong>{r.city ? `, ${r.city}` : ""}: <span className="text-mist">{r.evidence}.</span>
+              </p>
+            )) : <p className="text-sm text-mist">{o.note as string}</p>}
+          </div>
+        );
+      }
       return (
         <div className="rise flex flex-wrap items-center gap-3 rounded-2xl border border-haze bg-night-2/80 p-4">
           <Stamp badge={o.badge as SponsorBadge} animate />

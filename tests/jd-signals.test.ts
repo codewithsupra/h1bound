@@ -43,3 +43,20 @@ describe("export-control citizenship requirements", () => {
     expect(jdSponsorship("We do not discriminate on the basis of citizenship or immigration status.")).toBeNull();
   });
 });
+
+describe("UK and EU sponsorship wording", () => {
+  it("reads UK and EU refusals", () => {
+    expect(jdSponsorship("Applicants must already have the right to work in the UK.")).toBe("no");
+    expect(jdSponsorship("We are unable to offer visa sponsorship for this role.")).toBe("no");
+    expect(jdSponsorship("A valid EU work permit is required.")).toBe("no");
+    expect(jdSponsorship("SC clearance is required for this project.")).toBe("no");
+  });
+  it("does not treat right-to-work boilerplate that allows sponsorship as a refusal", () => {
+    expect(jdSponsorship("You must have the right to work in the UK or be eligible for sponsorship.")).not.toBe("no");
+  });
+  it("reads UK and EU offers", () => {
+    expect(jdSponsorship("We offer visa sponsorship and relocation.")).toBe("yes");
+    expect(jdSponsorship("We can sponsor Skilled Worker visas for this role.")).toBe("yes");
+    expect(jdSponsorship("Kennismigrant visa support available.")).toBe("yes");
+  });
+});

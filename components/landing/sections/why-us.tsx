@@ -1,3 +1,4 @@
+import { SITE_NAME } from "@/lib/site";
 import { COMPARISON, type Cell } from "@/lib/landing-content";
 
 function Mark({ v, strong = false }: { v: Cell; strong?: boolean }) {
@@ -19,15 +20,15 @@ export function WhyUs() {
         Made for the search where the visa decides.
       </h2>
       <p className="mt-6 max-w-[38rem] text-lg leading-relaxed text-mist">
-        Job boards were built for people who can work anywhere. General AI job agents send more applications. You need the few employers that will actually file for you, before your clock runs out.
+        Job boards were built for people who can work anywhere. General AI job agents send more applications. You need employers who are allowed to hire you, and a reply from the person who decides.
       </p>
       <div className="mt-14 overflow-hidden rounded-[2rem] border border-haze">
         <table className="w-full table-fixed border-collapse text-left">
-          <caption className="sr-only">H1Bound compared with job boards and general AI job agents</caption>
+          <caption className="sr-only">{SITE_NAME} compared with job boards and general AI job agents</caption>
           <thead>
             <tr className="border-b border-haze text-xs sm:text-sm">
               <th scope="col" className="w-[38%] p-3 font-normal text-mist sm:w-[46%] sm:p-6"><span className="sr-only">Feature</span></th>
-              <th scope="col" className="bg-sodium/[0.07] px-1 py-3 text-center font-display font-semibold sm:p-6">H1Bound</th>
+              <th scope="col" className="bg-sodium/[0.07] px-1 py-3 text-center font-display font-semibold sm:p-6">{SITE_NAME}</th>
               <th scope="col" className="px-1 py-3 text-center font-normal text-mist sm:p-6">Job boards</th>
               <th scope="col" className="px-1 py-3 text-center font-normal text-mist sm:p-6">AI agents</th>
             </tr>

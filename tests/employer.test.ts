@@ -68,3 +68,12 @@ describe("sameCompany", () => {
     expect(sameCompany("Apple", "Applebee's Services")).toBe(false);
   });
 });
+
+describe("prettyCompany for UK, Dutch and Irish names", () => {
+  it("strips European legal forms and keeps domains lowercase", () => {
+    expect(prettyCompany("Booking Holdings B.V.")).toBe("Booking Holdings");
+    expect(prettyCompany("BOOKING.COM LIMITED")).toBe("Booking.com");
+    expect(prettyCompany("Stripe Payments Europe DAC")).toBe("Stripe Payments Europe");
+    expect(prettyCompany("WPP MEDIA UK LTD")).toBe("Wpp Media UK");
+  });
+});

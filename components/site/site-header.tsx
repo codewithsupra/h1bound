@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SITE_NAME } from "@/lib/site";
 
 /**
  * One header for every page: the wordmark always goes home. `back` adds a Home button on the
@@ -8,8 +9,8 @@ export function SiteHeader({ back = false, fixed = false, children }: { back?: b
   return (
     <header className={`${fixed ? "fixed" : "sticky"} inset-x-0 top-0 z-30 border-b border-transparent bg-night/70 backdrop-blur-md`}>
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
-        <Link href="/" aria-label="H1Bound home" className="font-display text-lg font-bold tracking-tight transition-opacity hover:opacity-80">
-          H1Bound<span className="text-sodium">.</span>
+        <Link href="/" aria-label={`${SITE_NAME} home`} className="font-display text-lg font-bold tracking-tight transition-opacity hover:opacity-80">
+          {SITE_NAME}<span className="text-sodium">.</span>
         </Link>
         <nav className="flex items-center gap-2 text-sm">
           {back && (

@@ -1,14 +1,19 @@
 /**
- * Public job-board APIs (no auth, no scraping): Greenhouse, Lever, Ashby. Each normalizer turns a
- * raw posting into one `NormalizedJob`; fetchers are thin and injectable for tests.
+ * Public job-board APIs (no auth, no scraping): Greenhouse, Lever, Ashby, Recruitee. Each normalizer
+ * turns a raw posting into one `NormalizedJob`; fetchers are thin and injectable for tests.
  */
 
 import { isUsLocation, jdSponsorship, type JdSponsorship } from "../jd-signals";
+import { countriesIn, remoteScope, type RemoteScope } from "../geo";
+import { seniority, type Seniority } from "../titles";
 
-export type AtsKind = "greenhouse" | "lever" | "ashby";
+export type AtsKind = "greenhouse" | "lever" | "ashby" | "recruitee";
+/** Aggregated remote-job feeds; every job from them is shown with a credit link to the source. */
+export type FeedKind = "himalayas" | "remoteok";
+export type JobSource = AtsKind | FeedKind;
 
 export type NormalizedJob = {
-  source: AtsKind;
+  source: JobSource;
   sourceId: string; // `${board}:${id}` — unique per source
   board: string;
   company: string;
@@ -20,6 +25,11 @@ export type NormalizedJob = {
   postedAt: string | null;
   jdSponsorship: JdSponsorship;
   isUs: boolean;
+  /** GB / NL / IE / US when the location names one; for remote jobs, the one country they're limited to. */
+  country: string | null;
+  /** Where a remote job can be done from; null for on-site jobs. */
+  remoteScope: RemoteScope | null;
+  seniority: Seniority;
 };
 
 const MAX_DESC = 12_000;
@@ -39,9 +49,25 @@ export function htmlToText(html: string): string {
     .join("\n");
 }
 
-function finish(j: Omit<NormalizedJob, "jdSponsorship" | "isUs" | "description"> & { description: string }): NormalizedJob {
+type Raw = Omit<NormalizedJob, "jdSponsorship" | "isUs" | "country" | "remoteScope" | "seniority"> & { country?: string | null };
+
+export function finish(j: Raw): NormalizedJob {
   const description = j.description.slice(0, MAX_DESC);
-  return { ...j, title: j.title.trim(), description, jdSponsorship: jdSponsorship(description), isUs: isUsLocation(j.location) || (j.remote && /\b(us|usa|united states)\b/i.test(j.location)) };
+  const countries = countriesIn(j.location);
+  const isUs = isUsLocation(j.location) || (j.remote && /\b(us|usa|united states)\b/i.test(j.location));
+  const country = j.country ?? (countries.length === 1 ? countries[0] : countries.find((c) => c !== "US") ?? (isUs && !j.remote ? "US" : null));
+  return {
+    ...j, title: j.title.trim(), description, jdSponsorship: jdSponsorship(description), isUs,
+    country, remoteScope: j.remote ? remoteScope(j.location) : null, seniority: seniority(j.title),
+  };
+}
+
+/** Jobs worth keeping: the US (existing users), our European markets, and remote roles open to Europe. */
+export const MARKET_COUNTRIES = new Set(["GB", "NL", "IE"]);
+export function keepJob(j: NormalizedJob): boolean {
+  if (j.isUs) return true;
+  if (j.country && MARKET_COUNTRIES.has(j.country)) return true;
+  return j.remote && (j.remoteScope === "anywhere" || j.remoteScope === "europe");
 }
 
 type GhJob = { id: number | string; title: string; absolute_url: string; location?: { name?: string }; content?: string; first_published?: string; updated_at?: string; company_name?: string };
@@ -73,10 +99,27 @@ export function fromAshby(board: string, company: string, j: AshbyJob): Normaliz
   });
 }
 
+type RecruiteeOffer = {
+  id: number; title: string; careers_url: string; location?: string; city?: string; country_code?: string; remote?: boolean;
+  description?: string; requirements?: string; published_at?: string; company_name?: string; status?: string;
+};
+export function fromRecruitee(board: string, company: string, j: RecruiteeOffer): NormalizedJob {
+  const location = j.location || [j.city, j.country_code].filter(Boolean).join(", ");
+  const code = j.country_code?.toUpperCase() || null;
+  return finish({
+    source: "recruitee", sourceId: `${board}:${j.id}`, board, company: j.company_name || company, title: j.title, location,
+    remote: Boolean(j.remote) || /remote/i.test(location), url: j.careers_url,
+    description: [htmlToText(j.description ?? ""), htmlToText(j.requirements ?? "")].filter(Boolean).join("\n"),
+    postedAt: j.published_at ? new Date(j.published_at.replace(" UTC", "Z").replace(" ", "T")).toISOString() : null,
+    country: code === "UK" ? "GB" : code,
+  });
+}
+
 export const BOARD_URL: Record<AtsKind, (board: string) => string> = {
   greenhouse: (b) => `https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(b)}/jobs?content=true`,
   lever: (b) => `https://api.lever.co/v0/postings/${encodeURIComponent(b)}?mode=json`,
   ashby: (b) => `https://api.ashbyhq.com/posting-api/job-board/${encodeURIComponent(b)}`,
+  recruitee: (b) => `https://${encodeURIComponent(b)}.recruitee.com/api/offers/`,
 };
 
 type Fetch = (url: string) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>;
@@ -89,6 +132,7 @@ export async function fetchBoard(kind: AtsKind, board: string, company: string, 
   const body = (await res.json()) as unknown;
   if (kind === "greenhouse") return ((body as { jobs?: GhJob[] }).jobs ?? []).map((j) => fromGreenhouse(board, company, j));
   if (kind === "lever") return (Array.isArray(body) ? (body as LeverJob[]) : []).map((j) => fromLever(board, company, j));
+  if (kind === "recruitee") return ((body as { offers?: RecruiteeOffer[] }).offers ?? []).filter((j) => !j.status || j.status === "published").map((j) => fromRecruitee(board, company, j));
   return ((body as { jobs?: AshbyJob[] }).jobs ?? []).filter((j) => j.isListed !== false).map((j) => fromAshby(board, company, j));
 }
 

@@ -1,5 +1,5 @@
 /**
- * Shown while the home page streams in (it loads the 3,000-sponsor map). Scoped to the (home)
+ * Shown while the home page streams in (it loads the sponsor map). Scoped to the (home)
  * route group so other pages never see it. Pure CSS: it has to paint before any JS arrives.
  */
 export default function Loading() {
@@ -52,7 +52,7 @@ export default function Loading() {
         <p className="mt-8 font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">
           Taking you back<span className="launch-dots" aria-hidden><span>.</span><span>.</span><span>.</span></span>
         </p>
-        <p className="mt-2 text-sm text-mist">Lighting up 3,000 sponsors on the map</p>
+        <p className="mt-2 text-sm text-mist">Lighting up the sponsor map</p>
       </div>
     </div>
   );

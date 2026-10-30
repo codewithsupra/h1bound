@@ -1,3 +1,5 @@
+import { SITE_NAME } from "./site";
+
 /**
  * Decides which (if any) email Maya sends a user today. Pure + tested. Useful first, selling
  * second: follow-ups and new jobs beat upgrade asks, and an upgrade ask goes out at most once.
@@ -33,7 +35,7 @@ export function chooseNudge(s: NudgeState): NudgeKind | null {
 
 export function nudgeCopy(kind: NudgeKind, firstName: string | null, n: { stale: number; jobs: number }, appUrl: string, unsubscribeUrl: string) {
   const hi = firstName ? `Hey ${firstName},` : "Hey,";
-  const sign = `\n\nMaya (your AI job buddy at H1Bound)\n\nDon't want these? Unsubscribe: ${unsubscribeUrl}`;
+  const sign = `\n\nMaya (your AI job buddy at ${SITE_NAME})\n\nDon't want these? Unsubscribe: ${unsubscribeUrl}`;
   switch (kind) {
     case "follow_up":
       return {
