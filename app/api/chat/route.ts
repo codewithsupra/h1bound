@@ -8,6 +8,8 @@ import {
   validateUIMessages,
   type UIMessage,
 } from "ai";
+import { trialState } from "@/lib/server/growth";
+import { optStatus, optSummary } from "@/lib/opt";
 import { NextResponse } from "next/server";
 import { chatModel } from "@/lib/ai/models";
 import { mayaSystem } from "@/lib/ai/maya";
@@ -26,7 +28,12 @@ export async function POST(req: Request) {
   }
 
   const tools = buildTools(store);
-  const [history, profile, pro, usage] = await Promise.all([store.loadChat(), store.loadProfile(), store.isPro(), store.usage()]);
+  const [history, profile, pro, usage, trial] = await Promise.all([
+    store.loadChat(), store.loadProfile(), store.isPro(), store.usage(),
+    store.kind === "user" ? trialState(store.id) : null,
+  ]);
+  const opt = profile?.details?.opt;
+  const optNow = opt ? optStatus(opt) : null;
 
   let messages: UIMessage[];
   try {
@@ -42,10 +49,14 @@ export async function POST(req: Request) {
       guest: store.kind === "guest",
       jobLimit: store.jobLimit,
       onboarded: Boolean(profile?.row.onboarded),
-      hasResume: Boolean(profile?.details),
+      hasResume: Boolean(profile?.details?.resumeText),
       visaStatus: profile?.row.visa_status ?? null,
       optEndDate: profile?.details?.optEndDate ?? null,
+      optClock: opt && optNow ? optSummary(optNow, opt.employed) : null,
+      optDaysLeft: optNow?.left ?? null,
       pro,
+      trialEndsAt: trial?.active ? trial.endsAt : null,
+      trialUsed: trial?.used ?? false,
       usage: { jobsShown: usage.jobsShown, reviewedJobs: usage.reviewedJobIds.length, reviewRounds: usage.reviewRounds },
       today: new Date().toISOString().slice(0, 10),
     }),

@@ -2,13 +2,14 @@ import { headers } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 import { createInsForgeServerClient, getSessionUser } from "@/lib/insforge/server";
 import { currencyForCountry, PAYMENTS_ENV, PRICES } from "@/lib/billing";
-import { isPro } from "@/lib/server/profile";
+import { hasPaidPlan } from "@/lib/server/growth";
 
 /** Starts Stripe Checkout. Pro is granted only by the webhook trigger, never by the success URL. */
 export async function POST(request: NextRequest) {
   const user = await getSessionUser();
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  if (await isPro(user.id)) return NextResponse.json({ error: "You're already on Pro.", manage: true }, { status: 409 });
+  // Trial users can buy; only an existing subscription blocks a second checkout.
+  if (await hasPaidPlan(user.id)) return NextResponse.json({ error: "You're already on Pro.", manage: true }, { status: 409 });
 
   const price = PRICES[currencyForCountry((await headers()).get("x-vercel-ip-country"))];
   if (!price.id) return NextResponse.json({ error: "Payments aren't set up yet." }, { status: 503 });

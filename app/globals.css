@@ -135,3 +135,7 @@ button:disabled { cursor: not-allowed; }
 
 /* Text fields show focus with their own amber border; skip the extra outline ring. */
 input:not([type="checkbox"]):not([type="file"]):focus-visible, select:focus-visible { outline: none; }
+
+/* FAQ: our own +/− marker instead of the browser triangle. */
+.faq summary { list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }

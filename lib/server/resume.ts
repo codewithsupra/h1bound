@@ -54,6 +54,6 @@ export async function parseResume(text: string): Promise<ParsedResume> {
 export function toDetails(p: ParsedResume, resumeText: string, prev?: ProfileDetails | null): ProfileDetails {
   return {
     name: p.name, email: p.email, phone: p.phone, headline: p.headline, education: p.education, experience: p.experience,
-    projects: p.projects, optEndDate: prev?.optEndDate ?? null, resumeText: resumeText.slice(0, 30_000),
+    projects: p.projects, optEndDate: prev?.optEndDate ?? null, ...(prev?.opt ? { opt: prev.opt } : {}), resumeText: resumeText.slice(0, 30_000),
   };
 }

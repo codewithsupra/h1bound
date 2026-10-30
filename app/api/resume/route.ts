@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ACCEPTED, fileToText, MAX_UPLOAD_BYTES, parseResume, toDetails } from "@/lib/server/resume";
 import { getStore } from "@/lib/server/store";
+import { activateReferral } from "@/lib/server/growth";
 
 export const maxDuration = 60;
 
@@ -32,6 +33,7 @@ export async function POST(req: Request) {
     years_experience: Math.max(0, Math.min(60, Math.floor(parsed.yearsExperience))),
     ...(prev?.row.target_families?.length ? {} : { target_families: parsed.targetFamilies }),
   });
+  if (store.kind === "user") await activateReferral(store.id);
 
   return NextResponse.json({
     ok: true,

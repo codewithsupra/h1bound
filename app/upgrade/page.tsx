@@ -4,7 +4,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/insforge/server";
 import { currencyForCountry, PRICES } from "@/lib/billing";
-import { isPro } from "@/lib/server/profile";
+import { hasPaidPlan, trialState } from "@/lib/server/growth";
+import { TrialButton } from "@/components/growth/trial-button";
 import { CheckoutButton } from "./checkout-button";
 
 export const metadata = { title: "Pro · H1Bound" };
@@ -20,7 +21,8 @@ const FEATURES: [string, string][] = [
 export default async function UpgradePage({ searchParams }: { searchParams: Promise<{ canceled?: string }> }) {
   const user = await getSessionUser();
   if (!user) redirect("/login?mode=signup");
-  if (await isPro(user.id)) redirect("/account");
+  const [paid, trial] = await Promise.all([hasPaidPlan(user.id), trialState(user.id)]);
+  if (paid) redirect("/account");
   const price = PRICES[currencyForCountry((await headers()).get("x-vercel-ip-country"))];
   const { canceled } = await searchParams;
 
@@ -32,6 +34,16 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
     <main className="rise mx-auto w-full max-w-xl flex-1 px-4 py-10">
             <h1 className="mt-4 font-display text-4xl font-bold tracking-[-0.01em]">H1Bound Pro</h1>
       <p className="mt-2 text-lg text-slate">{price.label}. Cancel anytime from your account.</p>
+      {trial.active && trial.endsAt && (
+        <p className="mt-4 rounded-lg border border-green/30 bg-green/[0.06] p-3 text-sm">You&apos;re on the free trial until {new Date(trial.endsAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}. Upgrade any time to keep Pro after that.</p>
+      )}
+      {!trial.used && (
+        <div className="mt-6 rounded-2xl border border-sodium/30 bg-sodium/[0.06] p-4">
+          <p className="font-display font-semibold">Try Pro free for 7 days</p>
+          <p className="mb-3 mt-1 text-sm text-slate">No card. Cold emails (3 contact lookups), interview plans, tailoring and unlimited matches. It just ends; nothing renews.</p>
+          <TrialButton />
+        </div>
+      )}
       {canceled && <p className="mt-4 rounded-lg border border-line bg-card p-3 text-sm">Checkout canceled. Nothing was charged.</p>}
       <dl className="mt-8 space-y-5">
         {FEATURES.map(([t, d]) => (

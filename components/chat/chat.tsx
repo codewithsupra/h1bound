@@ -6,7 +6,10 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { JobCard as Job } from "@/lib/server/jobs";
 import type { SponsorBadge } from "@/lib/sponsor";
+import { InviteCard } from "@/components/growth/invite-card";
+import { TrialButton } from "@/components/growth/trial-button";
 import { JobCard } from "./job-card";
+import { OptChip } from "./opt-chip";
 import { Stamp } from "./stamp";
 
 type ToolPart = { type: string; state: string; output?: Record<string, unknown>; errorText?: string };
@@ -19,6 +22,7 @@ const WORKING: Record<string, string> = {
   "tool-interviewPlan": "Building your prep plan…",
   "tool-tailorResume": "Working out what to change for this role…",
   "tool-companySponsorship": "Checking Dept. of Labor filings…",
+  "tool-setOptClock": "Setting your OPT clock…",
 };
 
 const STARTERS = ["Who sponsors new-grad backend engineers?", "Does Databricks sponsor H-1Bs?", "I'm on STEM OPT. Where do I start?"];
@@ -47,7 +51,10 @@ function Upsell({ text, signUp }: { text: string; signUp?: boolean }) {
       {signUp ? (
         <Link href="/login?mode=signup" className="btn-light mt-3 !py-2 !px-4 text-sm">Create free account</Link>
       ) : (
-        <Link href="/upgrade" className="btn-light mt-3 !py-2 !px-4 text-sm">See Pro</Link>
+        <div className="mt-3 flex flex-wrap items-start gap-2">
+          <TrialButton />
+          <Link href="/upgrade" className="btn-ghost !py-2 !px-4 text-sm">See Pro</Link>
+        </div>
       )}
     </div>
   );
@@ -80,9 +87,12 @@ function ToolView({ part, ask }: { part: ToolPart; ask: (t: string) => void }) {
             </p>
           )}
           {upsell && <Upsell text={upsell} signUp={signUp} />}
+          {typeof o.inviteLink === "string" && <InviteCard link={o.inviteLink} compact />}
         </div>
       );
     }
+    case "tool-setOptClock":
+      return <OptChip left={o.left as number} allowance={o.allowance as number} deadline={o.deadline as string | null} />;
     case "tool-reviewResume":
       return upsell ? <Upsell text={upsell} signUp={signUp} /> : o.feedback ? <LongForm title={`Resume review: ${job?.title} at ${job?.company}`} body={o.feedback as string} /> : null;
     case "tool-coldEmail": {

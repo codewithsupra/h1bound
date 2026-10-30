@@ -8,7 +8,7 @@ const CHARSET = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$.-&";
 type Tone = "moon" | "sodium" | "green" | "red" | "mist";
 
 /** One split-flap field: cells flip through the charset until they land on the target. */
-function FlapText({ text, width, tone = "moon", delay = 0 }: { text: string; width: number; tone?: Tone; delay?: number }) {
+export function FlapText({ text, width, tone = "moon", delay = 0 }: { text: string; width: number; tone?: Tone; delay?: number }) {
   const target = useMemo(() => text.toUpperCase().replace(/[^A-Z0-9$.\-& ]/g, " ").slice(0, width).padEnd(width, " "), [text, width]);
   const [shown, setShown] = useState(target);
   const reduce = useRef(false);

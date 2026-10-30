@@ -4,7 +4,11 @@ import { redirect } from "next/navigation";
 import { createAdminInsForge } from "@/lib/insforge/admin";
 import { getSessionUser } from "@/lib/insforge/server";
 import { isPro, loadUsage } from "@/lib/server/profile";
-import { FREE_LIMITS } from "@/lib/quota";
+import { FREE_LIMITS, freeJobLimit } from "@/lib/quota";
+import { referralInfo, trialState } from "@/lib/server/growth";
+import { SITE_URL } from "@/lib/site";
+import { InviteCard } from "@/components/growth/invite-card";
+import { TrialButton } from "@/components/growth/trial-button";
 import { AccountControls } from "./controls";
 
 export const metadata = { title: "Account · H1Bound" };
@@ -12,11 +16,14 @@ export const metadata = { title: "Account · H1Bound" };
 export default async function AccountPage() {
   const user = await getSessionUser();
   if (!user) redirect("/login");
-  const [pro, usage, consent] = await Promise.all([
+  const [pro, usage, consent, ref, trial] = await Promise.all([
     isPro(user.id),
     loadUsage(user.id),
     createAdminInsForge().database.from("consents").select("email_updates").eq("user_id", user.id).maybeSingle(),
+    referralInfo(user.id),
+    trialState(user.id),
   ]);
+  const jobLimit = freeJobLimit(ref.activated);
   const emailUpdates = Boolean((consent.data as { email_updates?: boolean } | null)?.email_updates);
 
   return (
@@ -31,14 +38,25 @@ export default async function AccountPage() {
       <section className="mt-8 glass rounded-3xl p-6">
         <h2 className="font-display text-lg font-semibold">Plan</h2>
         {pro ? (
-          <p className="mt-1">Pro. Unlimited matches, cold emails, interview plans and tailoring.</p>
+          <p className="mt-1">
+            {trial.active && trial.endsAt ? `Pro trial, until ${new Date(trial.endsAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}. ` : "Pro. "}
+            Unlimited matches, cold emails, interview plans and tailoring.
+            {trial.active && <a href="/upgrade" className="ml-1 text-sodium underline">Keep Pro</a>}
+          </p>
         ) : (
           <>
-            <p className="mt-1">Free. {Math.max(0, FREE_LIMITS.jobs - usage.jobsShown)} of {FREE_LIMITS.jobs} matches left, reviews on {Math.max(0, FREE_LIMITS.reviewedJobs - usage.reviewedJobIds.length)} more jobs, {Math.max(0, FREE_LIMITS.reviewRounds - usage.reviewRounds)} review rounds left.</p>
-            <a href="/upgrade" className="btn-light mt-4 !px-4 !py-2 text-sm">See Pro</a>
+            <p className="mt-1">Free. {Math.max(0, jobLimit - usage.jobsShown)} of {jobLimit} matches left, reviews on {Math.max(0, FREE_LIMITS.reviewedJobs - usage.reviewedJobIds.length)} more jobs, {Math.max(0, FREE_LIMITS.reviewRounds - usage.reviewRounds)} review rounds left.</p>
+            <div className="mt-4 flex flex-wrap items-start gap-2">
+              {!trial.used && <TrialButton />}
+              <a href="/upgrade" className="btn-ghost !px-4 !py-2 text-sm">See Pro</a>
+            </div>
           </>
         )}
       </section>
+
+      <div className="mt-6">
+        <InviteCard link={`${SITE_URL}/r/${ref.code}`} activated={ref.activated} maxFriends={ref.maxFriends} jobsPerFriend={ref.jobsPerFriend} />
+      </div>
 
       <AccountControls emailUpdates={emailUpdates} />
 

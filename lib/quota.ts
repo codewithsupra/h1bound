@@ -11,6 +11,16 @@ export const FREE_LIMITS = { jobs: 10, reviewedJobs: 5, reviewRounds: 15 } as co
 /** Try-before-signup: guests see 5 jobs; reviews and everything else need a free account. */
 export const GUEST_LIMITS = { jobs: 5 } as const;
 
+/** Invite friends: +5 free jobs for each friend who signs up and uploads a resume, up to 3 friends. */
+export const REFERRAL = { jobsPerFriend: 5, maxFriends: 3 } as const;
+
+export function freeJobLimit(activatedReferrals: number): number {
+  return FREE_LIMITS.jobs + Math.min(Math.max(0, activatedReferrals), REFERRAL.maxFriends) * REFERRAL.jobsPerFriend;
+}
+
+/** Pro trial: 7 days, no card, once per account. Contact lookups are capped to protect the Hunter quota. */
+export const TRIAL = { days: 7, contactLookups: 3 } as const;
+
 export const PRO_FEATURES = ["cold_email", "interview_plan", "tailoring", "unlimited_jobs", "follow_ups"] as const;
 export type ProFeature = (typeof PRO_FEATURES)[number];
 
@@ -45,7 +55,7 @@ export function canUse(feature: ProFeature, isPro: boolean): Decision {
 export function upsellLine(reason: Exclude<Decision, { ok: true }>["reason"]): string {
   switch (reason) {
     case "jobs":
-      return "You've seen all 10 of your free matches. Pro unlocks unlimited matches and new sponsor jobs every morning.";
+      return "You've seen all your free matches. Invite a friend for 5 more each, or try Pro free for 7 days: unlimited matches and new sponsor jobs every morning.";
     case "reviewed_jobs":
       return "Free covers resume reviews for 5 jobs, and you've used them. Pro gives unlimited reviews plus a tailored resume per job.";
     case "review_rounds":

@@ -23,7 +23,7 @@ describe("free limits", () => {
   it("gates pro features", () => {
     expect(canUse("cold_email", false)).toEqual({ ok: false, reason: "pro_only" });
     expect(canUse("cold_email", true).ok).toBe(true);
-    expect(upsellLine("jobs")).toMatch(/10/);
+    expect(upsellLine("jobs")).toMatch(/friend/);
   });
 });
 

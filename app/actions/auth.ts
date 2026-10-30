@@ -4,6 +4,7 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createAuthActions } from "@insforge/sdk/ssr";
 import { claimGuest } from "@/lib/server/store";
+import { claimReferral, REF_COOKIE } from "@/lib/server/growth";
 
 export type AuthState = { error: string | null };
 
@@ -39,7 +40,12 @@ export async function signUp(_prev: AuthState, formData: FormData): Promise<Auth
   });
   if (error) return { error: error.message ?? "Could not create your account." };
   if (data?.requireEmailVerification) return { error: "Check your inbox to verify your email, then sign in." };
-  if (data?.user) await claimGuest(data.user.id);
+  if (data?.user) {
+    await claimGuest(data.user.id);
+    const jar = await cookies();
+    await claimReferral(data.user.id, jar.get(REF_COOKIE)?.value);
+    jar.delete(REF_COOKIE);
+  }
   redirect(AFTER_SIGN_IN);
 }
 

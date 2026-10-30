@@ -4,6 +4,7 @@ import { decryptJson, encryptJson } from "@/lib/crypto";
 import type { Profile } from "@/lib/match";
 import type { TitleFamily } from "@/lib/titles";
 import type { Usage } from "@/lib/quota";
+import type { OptClock } from "@/lib/opt";
 
 /** Identity + resume details. Stored only as ciphertext in profiles.details_enc. */
 export type ProfileDetails = {
@@ -15,8 +16,15 @@ export type ProfileDetails = {
   experience: { company: string; title: string; start: string | null; end: string | null; highlights: string[] }[];
   projects: { name: string; summary: string }[];
   optEndDate: string | null;
+  /** OPT unemployment clock, set in chat or from the /opt-clock page. */
+  opt?: OptClock;
   resumeText: string;
 };
+
+/** For details saved before any resume (e.g. the OPT clock set first). */
+export const emptyDetails = (): ProfileDetails => ({
+  name: null, email: null, phone: null, headline: null, education: [], experience: [], projects: [], optEndDate: null, resumeText: "",
+});
 
 export type ProfileRow = {
   user_id: string;

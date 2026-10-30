@@ -6,7 +6,7 @@ export const revalidate = 86400;
 
 /** Search engines cap a sitemap at 50,000 URLs; sitemap 0 also carries the static pages. */
 const PER_SITEMAP = 50_000;
-const STATIC = ["/", "/sponsors"];
+const STATIC = ["/", "/sponsors", "/opt-clock"];
 
 export async function generateSitemaps() {
   const n = Math.max(1, Math.ceil((STATIC.length + (await sitemapSponsorCount())) / PER_SITEMAP));

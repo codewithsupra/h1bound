@@ -65,7 +65,7 @@ export function AskMayaBar() {
   );
 }
 
-/** Floating launcher + the chat panel. The panel stays mounted once opened so the chat survives closing. */
+/** The chat panel, opened from any Try Maya button via openMaya(). The panel stays mounted once opened so the chat survives closing. */
 export function MayaPanel() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -73,7 +73,6 @@ export function MayaPanel() {
   const [rel, setRel] = useState({ x: 0, y: 0, r: 0 });
   const [revealed, setRevealed] = useState(false);
   const [prefill, setPrefill] = useState<string | undefined>();
-  const [launcher, setLauncher] = useState(false);
   const [viewer, setViewer] = useState<Viewer>(null);
   const returnFocus = useRef<Element | null>(null);
   const panel = useRef<HTMLDivElement>(null);
@@ -87,11 +86,7 @@ export function MayaPanel() {
       setMounted(true);
     };
     window.addEventListener(EVENT, onOpen);
-    // The hero has its own Try Maya bar; the floating launcher appears once you scroll past it.
-    const onScroll = () => setLauncher(window.scrollY > window.innerHeight * 0.75);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => { window.removeEventListener(EVENT, onOpen); window.removeEventListener("scroll", onScroll); };
+    return () => window.removeEventListener(EVENT, onOpen);
   }, []);
 
   // Once the panel exists, measure where the click was relative to it, then start the reveal.
@@ -128,19 +123,6 @@ export function MayaPanel() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={(e) => openMaya(e)}
-        aria-label="Chat with Maya"
-        className={`fixed bottom-5 right-5 z-40 flex items-center gap-2.5 rounded-full border border-haze bg-night-2/90 py-2 pl-2 pr-4 shadow-2xl backdrop-blur transition-all duration-500 hover:border-sodium/60 ${launcher && !open ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"}`}
-      >
-        <span className="relative grid h-9 w-9 place-items-center rounded-full bg-sodium font-display font-bold text-night">
-          M
-          <span className="absolute inset-0 animate-ping rounded-full bg-sodium/40 motion-reduce:hidden" />
-        </span>
-        <span className="text-sm font-medium">Try Maya</span>
-      </button>
-
       {mounted && (
         <div
           className={`fixed inset-0 z-50 transition-colors duration-500 ${open ? "bg-night/50 backdrop-blur-[2px]" : "pointer-events-none bg-transparent"}`}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/site";
 import { IBM_Plex_Mono, Public_Sans, Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
 
@@ -7,6 +8,7 @@ const flap = IBM_Plex_Mono({ variable: "--font-flap", subsets: ["latin"], weight
 const body = Public_Sans({ variable: "--font-body", subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "H1Bound: jobs at companies that actually sponsor",
   description:
     "Chat with Maya, an AI job buddy for international students. Upload your resume and get matched to US jobs at employers with real H-1B filing history.",

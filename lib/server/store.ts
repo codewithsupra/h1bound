@@ -4,9 +4,10 @@ import type { UIMessage } from "ai";
 import { createAdminInsForge } from "@/lib/insforge/admin";
 import { getSessionUser } from "@/lib/insforge/server";
 import { decryptJson, encryptJson } from "@/lib/crypto";
-import { FREE_LIMITS, GUEST_LIMITS, type Usage } from "@/lib/quota";
+import { freeJobLimit, GUEST_LIMITS, type Usage } from "@/lib/quota";
 import { GUEST_COOKIE, GUEST_MAX_AGE, hashIp, signGuest, verifyGuest } from "./guest-cookie";
 import { appendMessages, DAILY_MESSAGE_CAP, HISTORY, loadChat, messagesToday } from "./chat-store";
+import { activatedReferrals, contactLookupAllowed } from "./growth";
 import { isPro, loadProfile, loadUsage, saveProfile, type ProfileDetails, type ProfileRow } from "./profile";
 
 /**
@@ -27,6 +28,8 @@ export type Store = {
   saveProfile(patch: ProfilePatch): Promise<void>;
   usage(): Promise<Usage>;
   isPro(): Promise<boolean>;
+  /** Pro contact finding (Hunter) is capped during the free trial. */
+  contactLookupAllowed(): Promise<boolean>;
   seenJobIds(): Promise<Set<string>>;
   recordShown(rows: Shown[]): Promise<void>;
   hasJob(jobId: string): Promise<boolean>;
@@ -37,13 +40,14 @@ export type Store = {
 
 const db = () => createAdminInsForge().database;
 
-function userStore(id: string, name: string | null): Store {
+function userStore(id: string, name: string | null, referrals: number): Store {
   return {
-    kind: "user", id, firstName: name?.split(" ")[0] ?? null, jobLimit: FREE_LIMITS.jobs, dailyMessageCap: DAILY_MESSAGE_CAP,
+    kind: "user", id, firstName: name?.split(" ")[0] ?? null, jobLimit: freeJobLimit(referrals), dailyMessageCap: DAILY_MESSAGE_CAP,
     loadProfile: () => loadProfile(id),
     saveProfile: (patch) => saveProfile(id, patch),
     usage: () => loadUsage(id),
     isPro: () => isPro(id),
+    contactLookupAllowed: () => contactLookupAllowed(id),
     async seenJobIds() {
       const { data } = await db().from("matches").select("job_id").eq("user_id", id);
       return new Set(((data ?? []) as { job_id: string }[]).map((r) => r.job_id));
@@ -95,6 +99,7 @@ function guestStore(id: string): Store {
       return { jobsShown: r?.shown_job_ids.length ?? 0, reviewedJobIds: [], reviewRounds: 0 };
     },
     isPro: async () => false,
+    contactLookupAllowed: async () => false,
     async seenJobIds() {
       return new Set((await row())?.shown_job_ids ?? []);
     },
@@ -127,7 +132,7 @@ function guestStore(id: string): Store {
 /** The signed-in user, else the verified guest from the cookie, else null. */
 export async function getStore(): Promise<Store | null> {
   const user = await getSessionUser();
-  if (user) return userStore(user.id, user.name);
+  if (user) return userStore(user.id, user.name, await activatedReferrals(user.id));
   const guestId = verifyGuest((await cookies()).get(GUEST_COOKIE)?.value);
   if (!guestId) return null;
   // A failed lookup (network, timeout) must surface as an error, not quietly log the guest out.
@@ -169,7 +174,7 @@ export async function claimGuest(userId: string): Promise<void> {
   const g = guestStore(guestId);
   const [profile, chat, seen, existing] = await Promise.all([g.loadProfile(), g.loadChat(), g.seenJobIds(), loadProfile(userId)]);
   try {
-    if (profile?.details && !existing) {
+    if (profile?.details && (!existing || !existing.details?.resumeText)) {
       const { row, details } = profile;
       await saveProfile(userId, {
         details, skills: row.skills, target_families: row.target_families, years_experience: row.years_experience,

@@ -1,8 +1,18 @@
 import Link from "next/link";
-import { FlightPath } from "@/components/landing/flight-path";
 import { HeroAndBoard } from "@/components/landing/hero-board";
-import { MayaDemo } from "@/components/landing/maya-demo";
 import { AskMayaBar, MayaPanel } from "@/components/landing/try-maya";
+import { Bento } from "@/components/landing/sections/bento";
+import { Faq } from "@/components/landing/sections/faq";
+import { Numbers } from "@/components/landing/sections/numbers";
+import { OptSection } from "@/components/landing/sections/opt-section";
+import { Pricing } from "@/components/landing/sections/pricing";
+import { Privacy } from "@/components/landing/sections/privacy";
+import { Record } from "@/components/landing/sections/record";
+import { SectionNav } from "@/components/landing/sections/section-nav";
+import { StickyBar } from "@/components/landing/sections/sticky-bar";
+import { Story } from "@/components/landing/sections/story";
+import { WhyUs } from "@/components/landing/sections/why-us";
+import { REFERRAL } from "@/lib/quota";
 import { SiteHeader } from "@/components/site/site-header";
 import type { BoardRow } from "@/components/landing/flap-board";
 import type { Light } from "@/components/landing/night-map";
@@ -25,9 +35,10 @@ async function load() {
   const failed = pages.find((p) => p.error);
   if (failed) throw new Error(`landing data: ${failed.error!.message}`);
   const top = pages.flatMap((p) => (p.data ?? []) as Row[]);
-  const [{ count: employers }, { count: jobs }] = await Promise.all([
+  const [{ count: employers }, { count: jobs }, { count: boards }] = await Promise.all([
     db.from("companies").select("id", { count: "exact", head: true }),
     db.from("jobs").select("id", { count: "exact", head: true }).eq("active", true).eq("is_us", true),
+    db.from("companies").select("id", { count: "exact", head: true }).not("board_kind", "is", null),
   ]);
 
   const lights: Light[] = top.filter((r) => r.top_states[0]).map((r) => ({ n: label(r), f: r.total_filings, s: r.top_states[0] }));
@@ -44,12 +55,20 @@ async function load() {
     }));
   const stripe = top.find((r) => r.board_slug === "stripe");
   const demo = stripe ? { company: label(stripe), badge: sponsorBadge(stats(stripe), "software_engineer") } : null;
-  return { lights, idle, demo, employers: employers ?? 0, jobs: jobs ?? 0, filings: top.reduce((a, r) => a + r.total_filings, 0) };
+  const record = stripe
+    ? {
+        company: label(stripe), slug: stripe.slug, fiscalYear: stripe.fiscal_year, total: stripe.total_filings,
+        roleCount: stripe.by_family.software_engineer?.count ?? 0, roleMedian: stripe.by_family.software_engineer?.medianWage ?? null,
+        lastFiled: stripe.last_filed, states: stripe.top_states,
+      }
+    : null;
+  // Real rows for the lookup tile: two of the biggest boards-backed sponsors plus Stripe.
+  const samples = [...top.filter((r) => r.board_slug && r.board_slug !== "stripe").slice(0, 2), ...(stripe ? [stripe] : [])].map((r) => ({ name: label(r), total: r.total_filings }));
+  return { lights, idle, demo, record, samples, employers: employers ?? 0, jobs: jobs ?? 0, boards: boards ?? 0, filings: top.reduce((a, r) => a + r.total_filings, 0) };
 }
 
 export default async function Home() {
   const d = await load();
-  const fmt = (n: number) => n.toLocaleString("en-US");
 
   return (
     <main className="flex-1 overflow-x-clip">
@@ -57,6 +76,7 @@ export default async function Home() {
         <Link href="/login" className="rounded-full px-3 py-2 text-mist transition-colors hover:text-moon">Sign in</Link>
         <Link href="/login?mode=signup" className="btn-ghost !px-4 !py-2 text-sm">Create account</Link>
       </SiteHeader>
+      <SectionNav />
       <MayaPanel />
 
       <HeroAndBoard lights={d.lights} idle={d.idle}>
@@ -68,75 +88,72 @@ export default async function Home() {
             Apply where you can actually stay.
           </h1>
           <p className="rise mt-6 max-w-[32rem] text-lg leading-relaxed text-mist" style={{ animationDelay: "2.8s" }}>
-            Maya is an AI job buddy for international students. She matches your resume to open US jobs at employers with a real H-1B record, then helps you reach the person who decides.
+            Maya is an AI job buddy for international students. She matches your resume to open US jobs at employers with a real H-1B record, keeps your OPT clock, and helps you reach the person who decides.
           </p>
           <div className="rise mt-9" style={{ animationDelay: "3.1s" }}>
             <AskMayaBar />
             <p className="pointer-events-auto mt-4 text-sm text-mist">
-              No account needed: try it on your resume and see 5 matches.{" "}
+              Free: 10 sponsor-verified jobs, no card. Try 5 without an account.{" "}
               <a href="#board" className="text-moon underline decoration-haze underline-offset-4 transition-colors hover:decoration-sodium">Or check a company first</a>
             </p>
           </div>
-          <dl className="rise mt-10 grid grid-cols-3 gap-x-4 text-sm sm:mt-12 sm:flex sm:gap-x-10" style={{ animationDelay: "3.4s" }}>
-            <div><dt className="text-mist">Sponsoring employers</dt><dd className="font-flap text-xl text-moon">{fmt(d.employers)}</dd></div>
-            <div><dt className="text-mist">Open US jobs today</dt><dd className="font-flap text-xl text-moon">{fmt(d.jobs)}</dd></div>
-            <div><dt className="text-mist">Lights on this map</dt><dd className="font-flap text-xl text-sodium">{fmt(d.lights.length)}</dd></div>
-          </dl>
         </div>
       </HeroAndBoard>
 
-      <section className="mx-auto grid max-w-6xl items-center gap-14 px-4 py-28 sm:px-6 lg:grid-cols-[1fr_1.05fr]">
-        <div>
-          <h2 className="font-display text-[clamp(1.9rem,4vw,3rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
-            Talks like a friend in recruiting. Never pretends to be one.
+      <Numbers
+        figures={[
+          { value: d.employers, label: "employers with certified H-1B filings this fiscal year" },
+          { value: d.filings, label: "H-1B labor filings by the 3,000 biggest sponsors", note: "US Dept. of Labor, FY2026" },
+          { value: d.jobs, label: "open US jobs at those employers today" },
+          { value: d.boards, label: "career boards checked every morning" },
+        ]}
+      />
+      {d.demo && <Story company={d.demo.company} badge={d.demo.badge} />}
+      {d.record && <Record r={d.record} />}
+      <OptSection />
+      <WhyUs />
+      <Bento inviteJobs={REFERRAL.jobsPerFriend} samples={d.samples} />
+      <Privacy />
+      <Pricing inviteJobs={REFERRAL.jobsPerFriend} />
+      <Faq />
+
+      <section id="final-cta" aria-labelledby="final-h" className="relative isolate overflow-hidden border-t border-haze">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(90%_70%_at_50%_0%,#1d2760_0%,#0d1330_65%)]" />
+        <div className="mx-auto flex max-w-4xl flex-col items-center px-4 py-32 text-center sm:px-6 sm:py-40">
+          <h2 id="final-h" className="max-w-[16ch] font-display text-[clamp(2.4rem,6vw,5rem)] font-semibold leading-[0.98] tracking-[-0.04em]">
+            Your clock is running. Your next sponsor is one chat away.
           </h2>
-          <p className="mt-5 max-w-[34rem] text-lg leading-relaxed text-mist">
-            Maya asks one thing at a time, remembers your OPT clock, and only cites numbers from public filings. She&apos;s an AI, and says so.
-          </p>
-        </div>
-        {d.demo && <MayaDemo company={d.demo.company} badge={d.demo.badge} />}
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
-        <h2 className="mb-14 font-display text-[clamp(1.9rem,4vw,3rem)] font-semibold tracking-[-0.02em]">Your route</h2>
-        <FlightPath />
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-28 sm:px-6">
-        <h2 className="font-display text-[clamp(1.9rem,4vw,3rem)] font-semibold tracking-[-0.02em]">Free to start.</h2>
-        <div className="mt-12 grid gap-5 md:grid-cols-2">
-          <div className="glass rounded-3xl p-7">
-            <p className="font-display text-lg font-semibold">Free</p>
-            <p className="mt-2 font-display text-5xl font-semibold tracking-tight">$0</p>
-            <ul className="mt-7 space-y-3 text-mist">
-              <li>10 matched jobs, each with its sponsorship record</li>
-              <li>Resume reviews on 5 of them (15 rounds in total)</li>
-              <li>Chat with Maya about your search</li>
-            </ul>
-            <Link href="/login?mode=signup" className="btn-ghost mt-8">Start free</Link>
-          </div>
-          <div className="glass relative overflow-hidden rounded-3xl p-7 ring-1 ring-sodium/40">
-            <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-sodium/20 blur-3xl" />
-            <p className="font-display text-lg font-semibold">Pro</p>
-            <p className="mt-2 font-display text-5xl font-semibold tracking-tight">$12<span className="text-lg font-normal text-mist">/month</span></p>
-            <p className="mt-1 text-sm text-mist">₹399/month in India. Cancel anytime.</p>
-            <ul className="mt-7 space-y-3 text-mist">
-              <li><span className="text-moon">Unlimited matches</span>, new sponsor jobs every morning</li>
-              <li><span className="text-moon">Cold emails</span>: Maya finds the hiring manager or CTO and drafts it</li>
-              <li><span className="text-moon">Interview plans</span> and <span className="text-moon">resume tailoring</span> per job</li>
-              <li>Follow-up reminders by email</li>
-            </ul>
-            <Link href="/login?mode=signup" className="btn-light mt-8">Start free, upgrade in chat</Link>
-          </div>
+          <p className="mt-6 max-w-[30rem] text-lg text-mist">Drop in your resume and see 5 matches with their H-1B record. No account needed.</p>
+          <div className="mt-10 flex w-full justify-center"><AskMayaBar /></div>
         </div>
       </section>
 
       <footer className="border-t border-haze">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-10 text-sm text-mist sm:flex-row sm:justify-between sm:px-6">
-          <p>Data: US Dept. of Labor LCA disclosures, FY2026 Q3 ({fmt(d.filings)} filings among the top 3,000 employers). A filing isn&apos;t a visa guarantee.</p>
-          <p>Your resume is read once and stored encrypted. Delete everything anytime.</p>
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 text-sm sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
+          <div>
+            <p className="font-display text-lg font-bold text-moon">H1Bound<span className="text-sodium">.</span></p>
+            <p className="mt-3 max-w-sm text-mist">Data: US Dept. of Labor LCA disclosures, FY2026. A certified filing isn&apos;t a visa guarantee. Maya is an AI and can make mistakes.</p>
+          </div>
+          <nav aria-label="Product">
+            <p className="font-medium text-moon">Product</p>
+            <ul className="mt-3 space-y-2 text-mist">
+              <li><Link className="hover:text-moon" href="/chat">Chat with Maya</Link></li>
+              <li><Link className="hover:text-moon" href="/sponsors">Sponsor lookup</Link></li>
+              <li><Link className="hover:text-moon" href="/opt-clock">OPT clock</Link></li>
+              <li><a className="hover:text-moon" href="#pricing">Pricing</a></li>
+            </ul>
+          </nav>
+          <nav aria-label="Account">
+            <p className="font-medium text-moon">Account</p>
+            <ul className="mt-3 space-y-2 text-mist">
+              <li><Link className="hover:text-moon" href="/login?mode=signup">Create account</Link></li>
+              <li><Link className="hover:text-moon" href="/login">Sign in</Link></li>
+              <li><a className="hover:text-moon" href="#faq">FAQ</a></li>
+            </ul>
+          </nav>
         </div>
       </footer>
+      <StickyBar />
     </main>
   );
 }
