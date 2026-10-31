@@ -21,8 +21,17 @@ export type ProfileDetails = {
   graduation?: string | null;
   /** OPT unemployment clock, set in chat or from the /opt-clock page. */
   opt?: OptClock;
+  /** Your case: what Maya puts in every email. */
+  pitch?: string | null;
+  signOff?: string | null;
+  links?: ProfileLinks;
+  /** Gaps Maya noticed in the resume, answered or skipped on the Your case page. */
+  questions?: CaseQuestion[];
   resumeText: string;
 };
+
+export type ProfileLinks = { github?: string | null; portfolio?: string | null; linkedin?: string | null; other?: string | null };
+export type CaseQuestion = { id: string; q: string; answer?: string | null; skipped?: boolean };
 
 /** For details saved before any resume (e.g. the OPT clock set first). */
 export const emptyDetails = (): ProfileDetails => ({
@@ -45,6 +54,12 @@ export type ProfileRow = {
   visa_country: string | null;
   visa_situation: VisaSituation | null;
   target_countries: string[];
+  /** Workspace settings (migration 20261101090000). */
+  picks_per_day?: number;
+  picks_hour?: number;
+  timezone?: string;
+  email_tone?: "plain" | "warm" | "direct";
+  visa_ends_on?: string | null;
 };
 
 const db = () => createAdminInsForge().database;

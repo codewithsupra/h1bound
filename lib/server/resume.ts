@@ -29,6 +29,7 @@ const parsedSchema = z.object({
   yearsExperience: z.number().describe("Full-time professional years only; internships count as 0.25 each; round down"),
   targetFamilies: z.array(z.enum(TITLE_FAMILIES)).describe("1-3 best-fit role families for this person"),
   usEducated: z.boolean().describe("Has or is pursuing a US degree"),
+  questions: z.array(z.string()).describe("Up to 3 short questions to the candidate about gaps or conflicts that would sharpen job matching or outreach (e.g. two different home cities, a missing graduation date, an unexplained gap). Never ask for contact details, age, nationality, or anything already in the document. Empty if the document is clear."),
 });
 
 export type ParsedResume = z.infer<typeof parsedSchema>;
@@ -37,6 +38,8 @@ export async function parseResume(text: string): Promise<ParsedResume> {
   const { output } = await generateText({
     model: smartModel(),
     output: Output.object({ schema: parsedSchema }),
+    // Always cap output: without it providers reserve their maximum, which fails on a near-limit key.
+    maxOutputTokens: 6000,
     system:
       "You extract structured data from resumes, CVs, transcripts and biodata. Only use what the document says; never invent employers, dates or skills. If the document is a transcript, infer skills from courses.",
     prompt: text.slice(0, 30_000),
@@ -48,12 +51,19 @@ export async function parseResume(text: string): Promise<ParsedResume> {
     projects: output.projects.slice(0, 6),
     skills: output.skills.slice(0, 40),
     targetFamilies: output.targetFamilies.slice(0, 3),
+    questions: (output.questions ?? []).map((q) => q.trim().slice(0, 300)).filter(Boolean).slice(0, 3),
   };
 }
 
 export function toDetails(p: ParsedResume, resumeText: string, prev?: ProfileDetails | null): ProfileDetails {
+  // Questions answered before survive a re-read; new ones replace the unanswered rest.
+  const answered = (prev?.questions ?? []).filter((q) => q.answer);
+  const fresh = (p.questions ?? []).filter((q) => !answered.some((a) => a.q === q)).map((q, i) => ({ id: `${Date.now().toString(36)}${i}`, q }));
   return {
     name: p.name, email: p.email, phone: p.phone, headline: p.headline, education: p.education, experience: p.experience,
     projects: p.projects, optEndDate: prev?.optEndDate ?? null, ...(prev?.opt ? { opt: prev.opt } : {}), resumeText: resumeText.slice(0, 30_000),
+    // What the student wrote on Your case is theirs: a new CV never overwrites it.
+    graduation: prev?.graduation ?? null, pitch: prev?.pitch ?? null, signOff: prev?.signOff ?? null, links: prev?.links ?? {},
+    questions: [...answered, ...fresh],
   };
 }

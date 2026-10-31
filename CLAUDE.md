@@ -103,7 +103,14 @@ Migrations live in `migrations/`. Apply one with `npx -y @insforge/cli db migrat
 - Data-shaped copy (FAQ, comparison table) is in `lib/landing-content.ts`.
 - Register pages live at `/sponsors/{uk,nl,ie}/<slug>`, all served by `app/sponsors/_components/licence-page.tsx`. US pages stay at `/sponsors/<slug>`. Sitemap ids: 0+ US, 100+ UK, 200+ NL, 300+ IE.
 
+### Signed-in workspace (`app/(app)/`)
+- Sign-in lands on `/pipeline`. The `(app)` layout requires a session and renders `components/app/workspace.tsx`: a rail (visa clock, last-24h meter, Gmail prompt), the page, and Maya docked on the right (Cmd/Ctrl+K). `useMaya().ask(text)` opens the dock with a prefilled question, which is never auto-sent. Each page re-checks the session itself, because layout and page render in parallel.
+- `lib/pipeline.ts` (pure, tested) holds the board logic: `stageOf`, `nextAction` (follow-up 4 days after a tracked send, "any reply?" weekly), `groupRows` (sponsors first when the visa clock is under 90 days), `replyStats` (hidden under 5 sends, never estimated) and `caseStrength`. `lib/server/pipeline.ts` loads matches, jobs, licences and the latest outreach (decrypted for the owner only), and `loadShell` holds request-time `now`.
+- Server actions live in `app/(app)/actions.ts`: stage, reply, notes (encrypted), Your case, settings, and the JSON data export. `/account` redirects to `/settings`; `/privacy` and `/terms` live in `app/(legal)/`.
+- Daily picks run hourly and only send to users whose local `picks_hour` it is (`localHour`). The count is `picks_per_day` (3–15) for paid Pro and is capped at 3 on the trial (`picksToday`).
+
 ## Rules that are easy to break
+- Always set `maxOutputTokens` on AI calls. Without it, providers reserve their maximum, which fails once the OpenRouter key is near its limit.
 
 - **Sponsorship claims:**
   - Always cite the source: "on the UK Home Office sponsor register (A-rated)", "issued 92 Irish permits", or "filed N H-1B LCAs".

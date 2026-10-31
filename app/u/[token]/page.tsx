@@ -12,7 +12,7 @@ export default async function Unsubscribe({ params }: { params: Promise<{ token:
       <p className="mt-3 text-slate">
         {data ? "Maya won't email you anymore. You can turn updates back on from your account anytime." : "It may have expired. You can turn email updates off from your account page."}
       </p>
-      <a href="/account" className="mt-6 inline-block underline">Go to account</a>
+      <a href="/settings" className="mt-6 inline-block underline">Go to settings</a>
     </main>
   );
 }

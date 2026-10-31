@@ -9,7 +9,23 @@ import type { Contact } from "./hunter";
 type Job = { title: string; company: string; location: string; description: string };
 
 const jobBlock = (j: Job) => `JOB: ${j.title} at ${j.company} (${j.location})\n${j.description.slice(0, 6000)}`;
-const meBlock = (d: ProfileDetails) => `CANDIDATE RESUME:\n${d.resumeText.slice(0, 12000)}`;
+const meBlock = (d: ProfileDetails) => {
+  const links = Object.values(d.links ?? {}).filter(Boolean);
+  const answers = (d.questions ?? []).filter((q) => q.answer).map((q) => `- ${q.q} ${q.answer}`);
+  return [
+    `CANDIDATE RESUME:\n${d.resumeText.slice(0, 12000)}`,
+    d.pitch ? `CANDIDATE'S OWN ONE-LINE PITCH: ${d.pitch}` : "",
+    links.length ? `CANDIDATE'S LINKS: ${links.join(" ")}` : "",
+    answers.length ? `CANDIDATE'S ANSWERS TO FOLLOW-UP QUESTIONS:\n${answers.join("\n")}` : "",
+  ].filter(Boolean).join("\n\n");
+};
+
+export type EmailStyle = { tone?: "plain" | "warm" | "direct"; signOff?: string | null };
+const TONE: Record<NonNullable<EmailStyle["tone"]>, string> = {
+  plain: "Plain and factual: no exclamation marks, no flattery.",
+  warm: "Warm and human, friendly but not gushing.",
+  direct: "Direct and brief: lead with the ask, shortest sentences possible.",
+};
 
 const RULES = `Rules: never invent experience, numbers, employers or skills the resume doesn't show. If something is missing, say what to add and how, don't fake it. Be specific to THIS job. Plain text with short headings and bullets, no markdown tables. Warm, direct, like a friend who works in tech recruiting.`;
 
@@ -42,11 +58,11 @@ export function interviewPlan(d: ProfileDetails, j: Job) {
   );
 }
 
-export function coldEmail(d: ProfileDetails, j: Job, contact: Contact | null) {
+export function coldEmail(d: ProfileDetails, j: Job, contact: Contact | null, style: EmailStyle = {}) {
   const to = contact ? `${contact.name}${contact.title ? `, ${contact.title}` : ""}` : "the hiring manager (name unknown: use a placeholder like [First name])";
   return run(
     "You write short cold emails that get replies from busy engineering leaders.",
-    `${jobBlock(j)}\n\n${meBlock(d)}\n\nWrite a cold email to ${to}. Format:\nSubject: <max 8 words, specific>\n\n<body: max 120 words. Hook tied to something real about the company/team from the posting, one proof point from the resume with a number if the resume has one, a clear ask for a 15-min chat, sign off with the candidate's first name>\n\nThen write "Follow-up (send after 5 business days):" with a 50-word follow-up. Do not mention visas or sponsorship in the cold email.`,
+    `${jobBlock(j)}\n\n${meBlock(d)}\n\nWrite a cold email to ${to}. Format:\nSubject: <max 8 words, specific>\n\n<body: max 120 words. Hook tied to something real about the company/team from the posting, one proof point from the resume with a number if the resume has one, a clear ask for a 15-min chat, sign off with ${style.signOff ? `exactly "${style.signOff.replace(/"/g, "")}"` : "the candidate's first name"}${Object.values(d.links ?? {}).some(Boolean) ? ", and put the candidate's most relevant link under the sign-off" : ""}>\nTone: ${TONE[style.tone ?? "warm"]}\n\nThen write "Follow-up (send after 5 business days):" with a 50-word follow-up. Do not mention visas or sponsorship in the cold email.`,
     2500,
   );
 }

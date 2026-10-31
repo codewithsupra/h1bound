@@ -125,7 +125,7 @@ function diversify<S extends Scored>(ranked: S[], byJob: Map<string, { company: 
 type MarketJobRow = JobRow & { country: string | null; remote_scope: string | null; licence_id: string | null; source: string; seniority: string | null };
 type LicenceRow = { id: string; country: Market; rating: string | null; routes: string[]; permits: Record<string, number> };
 
-async function licencesById(ids: string[]): Promise<Map<string, LicenceProof>> {
+export async function licencesById(ids: string[]): Promise<Map<string, LicenceProof>> {
   const out = new Map<string, LicenceProof>();
   const uniq = [...new Set(ids.filter(Boolean))];
   for (let i = 0; i < uniq.length; i += 200) {
@@ -195,7 +195,7 @@ async function findMarketJobs(store: Store, row: ProfileRow, pro: boolean, usage
 
   const { show, blocked } = canShowJobs(usage, pro, Math.min(opts.count, ordered.length), store.jobLimit);
   const picked = ordered.slice(0, show);
-  await store.recordShown(picked.map((s) => ({ jobId: s.job.id, score: s.score, reasons: s.reasons })));
+  await store.recordShown(picked.map((s: Scored & { why?: string }) => ({ jobId: s.job.id, score: s.score, reasons: s.reasons, why: s.why ?? null })));
   const cards: JobCard[] = picked.map((s: Scored & { why?: string; gap?: string | null }) => {
     const j = byJob.get(s.job.id)!;
     return {

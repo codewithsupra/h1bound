@@ -28,6 +28,7 @@ export async function rerank(resume: string, prefs: string, jobs: RerankJob[], t
     const { output } = await generateText({
       model: chatModel(),
       output: Output.object({ schema }),
+      maxOutputTokens: 3000,
       abortSignal: AbortSignal.timeout(timeoutMs),
       system:
         "You are a strict technical recruiter. Judge each job for THIS candidate: required skills they actually have (from the resume, not guesses), seniority match (penalize roles needing far more experience), domain fit, and preferences. Only cite experience the resume shows. Be calibrated: most jobs are 40-75; reserve 85+ for near-perfect fits.",

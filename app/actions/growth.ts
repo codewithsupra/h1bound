@@ -11,7 +11,7 @@ export async function startTrialAction(): Promise<TrialResult> {
   if (!user) return { ok: false, error: "Create a free account first, then start your trial." };
   const r = await startTrial(user.id);
   if (!r.ok) return { ok: false, error: "You've already used your free trial." };
-  revalidatePath("/account");
+  revalidatePath("/settings");
   revalidatePath("/upgrade");
   return r;
 }

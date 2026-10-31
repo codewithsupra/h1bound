@@ -14,7 +14,7 @@ export async function setEmailUpdates(on: boolean) {
   const user = await getSessionUser();
   if (!user) redirect("/login");
   await createAdminInsForge().database.from("consents").upsert({ user_id: user.id, email_updates: on, updated_at: new Date().toISOString() }, { onConflict: "user_id" });
-  revalidatePath("/account");
+  revalidatePath("/settings");
 }
 
 export type DeleteState = { error: string | null };
@@ -35,12 +35,12 @@ export async function disconnectGmailAction() {
   const user = await getSessionUser();
   if (!user) redirect("/login");
   await disconnectGmail(user.id);
-  revalidatePath("/account");
+  revalidatePath("/settings");
 }
 
 export async function disconnectTelegramAction() {
   const user = await getSessionUser();
   if (!user) redirect("/login");
   await unlinkTelegram(user.id);
-  revalidatePath("/account");
+  revalidatePath("/settings");
 }

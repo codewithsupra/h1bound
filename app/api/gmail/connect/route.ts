@@ -6,7 +6,7 @@ import { authUrl, GMAIL_STATE_COOKIE, gmailConfigured, newState } from "@/lib/se
 export async function GET(req: NextRequest) {
   const user = await getSessionUser();
   if (!user) return NextResponse.redirect(new URL("/login?next=/chat", req.url));
-  if (!gmailConfigured()) return NextResponse.redirect(new URL("/account?gmail=unavailable", req.url));
+  if (!gmailConfigured()) return NextResponse.redirect(new URL("/settings?gmail=unavailable", req.url));
   const state = newState(user.id);
   const res = NextResponse.redirect(authUrl(state));
   res.cookies.set(GMAIL_STATE_COOKIE, state, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/api/gmail", maxAge: 600 });

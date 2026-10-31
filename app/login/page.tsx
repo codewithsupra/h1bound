@@ -8,7 +8,7 @@ import { SITE_NAME } from "@/lib/site";
 export const metadata = { title: `Sign in · ${SITE_NAME}` };
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ mode?: string }> }) {
-  if (await getSessionUser()) redirect("/chat");
+  if (await getSessionUser()) redirect("/pipeline");
   const { mode } = await searchParams;
   return (
     <div className="relative flex min-h-dvh flex-col overflow-hidden">

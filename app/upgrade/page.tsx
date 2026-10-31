@@ -23,7 +23,7 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
   const user = await getSessionUser();
   if (!user) redirect("/login?mode=signup");
   const [paid, trial] = await Promise.all([hasPaidPlan(user.id), trialState(user.id)]);
-  if (paid) redirect("/account");
+  if (paid) redirect("/settings");
   const price = priceForCountry((await headers()).get("x-vercel-ip-country"));
   const { canceled } = await searchParams;
 

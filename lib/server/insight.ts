@@ -42,6 +42,7 @@ export async function companyInsight(company: string, where = ""): Promise<Insig
   const { output } = await generateText({
     model: chatModel(),
     output: Output.object({ schema: shape }),
+    maxOutputTokens: 1500,
     abortSignal: AbortSignal.timeout(20_000),
     prompt: `Turn these research notes about ${company} into the requested fields. Use only what the notes say; drop markdown links, and leave out any rating, percentage or quote attributed to Glassdoor.\n\nNOTES:\n${research.text.slice(0, 6000)}`,
   });

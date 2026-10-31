@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   const insforge = await createInsForgeServerClient();
   const { data, error } = await insforge.payments.stripe.createCustomerPortalSession(PAYMENTS_ENV, {
     subject: { type: "user", id: user.id },
-    returnUrl: `${request.nextUrl.origin}/account`,
+    returnUrl: `${request.nextUrl.origin}/settings`,
   });
   const url = data?.customerPortalSession?.url;
   if (error || !url) return NextResponse.json({ error: "No subscription to manage yet." }, { status: 404 });

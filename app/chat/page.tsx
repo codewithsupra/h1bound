@@ -31,7 +31,7 @@ export default async function ChatPage({ searchParams }: PageProps<"/chat">) {
         {signedIn ? (
           <>
             {pro ? <span className="rounded-full border border-green/40 px-3 py-1.5 text-green">Pro</span> : <Link href="/upgrade" className="btn-light !px-4 !py-1.5 text-sm">Go Pro</Link>}
-            <Link href="/account" className="rounded-full px-3 py-1.5 text-mist transition-colors hover:text-moon">Account</Link>
+            <Link href="/pipeline" className="rounded-full px-3 py-1.5 text-mist transition-colors hover:text-moon">Pipeline</Link>
             <form action={signOut}><button className="rounded-full px-3 py-1.5 text-mist transition-colors hover:text-moon">Sign out</button></form>
           </>
         ) : (

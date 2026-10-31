@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       const linked = ev.token ? await claimLink(ev.token, ev.chatId) : null;
       await sendText(ev.chatId, linked
         ? `You're connected. I'll send your best new matches here each morning, with the sponsor proof. Tap a button to learn about a company or draft your email. Send /stop any time.`
-        : `Hi! I'm Maya, ${escapeHtml(SITE_NAME)}'s AI job buddy. To get daily picks here, open your account at ${SITE_URL}/account and tap "Connect Telegram".`);
+        : `Hi! I'm Maya, ${escapeHtml(SITE_NAME)}'s AI job buddy. To get daily picks here, open ${SITE_URL}/settings and tap "Connect Telegram".`);
     } else if (ev.kind === "stop") {
       await stopChat(ev.chatId);
       await sendText(ev.chatId, "Done, no more daily picks. Send /start from your account page to turn them back on.");

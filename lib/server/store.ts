@@ -15,7 +15,7 @@ import { isPro, loadProfile, loadUsage, saveProfile, type ProfileDetails, type P
  * personal tables) and guests trying it before signing up (one row in guest_sessions). Routes and
  * tools only ever see a Store, so quota, privacy and persistence rules live in one place.
  */
-export type Shown = { jobId: string; score: number; reasons: string[] };
+export type Shown = { jobId: string; score: number; reasons: string[]; why?: string | null };
 export type ProfilePatch = Partial<Omit<ProfileRow, "user_id" | "details_enc">> & { details?: ProfileDetails };
 
 export type Store = {
@@ -55,7 +55,7 @@ function userStore(id: string, name: string | null, referrals: number): Store {
     async recordShown(rows) {
       if (!rows.length) return;
       const { error } = await db().from("matches").upsert(
-        rows.map((r) => ({ user_id: id, job_id: r.jobId, score: r.score, reasons: r.reasons })),
+        rows.map((r) => ({ user_id: id, job_id: r.jobId, score: r.score, reasons: r.reasons, why: r.why ?? null })),
         { onConflict: "user_id,job_id", ignoreDuplicates: true },
       );
       if (error) throw new Error(error.message);

@@ -8,7 +8,7 @@ import { claimReferral, REF_COOKIE } from "@/lib/server/growth";
 
 export type AuthState = { error: string | null };
 
-const AFTER_SIGN_IN = "/chat";
+const AFTER_SIGN_IN = "/pipeline";
 
 async function appOrigin() {
   if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;

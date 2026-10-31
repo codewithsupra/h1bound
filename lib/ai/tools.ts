@@ -55,6 +55,7 @@ export function buildTools(store: Store) {
         visaSituation: z.enum(["student", "graduate", "sponsored", "none"]).optional().describe("student: on a study visa now; graduate: on a post-study route (UK Graduate visa, Irish Stamp 1G, Dutch orientation year); sponsored: on an employer-sponsored work visa; none: no visa in our markets"),
         targetCountries: z.array(z.enum(["GB", "NL", "IE"])).max(3).optional().describe("Where they want to work. Remote jobs open to them are always included."),
         graduation: z.string().regex(/^\d{4}-\d{2}$/).optional().describe("Graduation month, YYYY-MM"),
+        visaEndsOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe("When their student or post-study visa ends, YYYY-MM-DD. Starts the visa clock on their dashboard."),
         visaStatus: z.enum(VISA).optional().describe("US only (legacy): only for people looking in the US"),
         optEndDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe("YYYY-MM-DD"),
         targetFamilies: z.array(z.enum(TITLE_FAMILIES)).max(3).optional(),
@@ -74,6 +75,8 @@ export function buildTools(store: Store) {
         if (i.wantsRemote) patch.wants_remote = i.wantsRemote;
         if (i.locations) patch.locations = i.locations;
         if (i.onboardingComplete) patch.onboarded = true;
+        // Signed-in only: guest sessions have no visa clock (they set it on Your case after signing up).
+        if (i.visaEndsOn && !guest) patch.visa_ends_on = i.visaEndsOn;
         if (i.optEndDate || i.graduation) patch.details = { ...(p?.details ?? emptyDetails()), ...(i.optEndDate ? { optEndDate: i.optEndDate } : {}), ...(i.graduation ? { graduation: i.graduation } : {}) };
         await store.saveProfile(patch);
         const row = { ...p?.row, ...patch };
@@ -202,7 +205,7 @@ export function buildTools(store: Store) {
         if (!job) return { error: "unknown_job" };
         const lookups = await store.contactLookupAllowed();
         const contact = lookups ? await findContact(job.company, titleFamily(job.title)).catch(() => null) : null;
-        const email = await coldEmail(p.details, job, contact);
+        const email = await coldEmail(p.details, job, contact, { tone: p.row.email_tone, signOff: p.details.signOff });
         const draft = parseDraft(email);
         const senderName = p.details.name ?? store.firstName;
         const save = async (kind: "cold_email" | "follow_up", body: unknown) => {

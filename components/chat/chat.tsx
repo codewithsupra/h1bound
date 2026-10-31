@@ -206,7 +206,9 @@ export function Chat({
   variant = "page",
   autoFocus = false,
   prefill,
+  prefillNonce = 0,
   onViewer,
+  onReply,
 }: {
   initialMessages?: UIMessage[];
   firstName?: string | null;
@@ -214,7 +216,11 @@ export function Chat({
   variant?: "page" | "panel";
   autoFocus?: boolean;
   prefill?: string;
+  /** Bump to put the same `prefill` back in the box (the workspace dock asks about many jobs). */
+  prefillNonce?: number;
   onViewer?: (v: Viewer) => void;
+  /** Called each time Maya finishes a reply, so the page around the chat can refresh. */
+  onReply?: () => void;
 }) {
   const { messages, sendMessage, setMessages, status, error } = useChat({
     messages: initialMessages,
@@ -254,9 +260,15 @@ export function Chat({
   // A question picked on the landing page lands in the box, ready to send.
   useEffect(() => {
     if (!prefill) return;
-    const id = setTimeout(() => setInput(prefill), 0);
+    const id = setTimeout(() => { setInput(prefill); inputRef.current?.focus({ preventScroll: true }); }, 0);
     return () => clearTimeout(id);
-  }, [prefill]);
+  }, [prefill, prefillNonce]);
+
+  const wasBusy = useRef(false);
+  useEffect(() => {
+    if (wasBusy.current && !busy) onReply?.();
+    wasBusy.current = busy;
+  }, [busy, onReply]);
 
   useEffect(() => {
     const el = scroller.current;
@@ -308,7 +320,7 @@ export function Chat({
           <div className="rise">
             <p className="font-display text-2xl font-semibold tracking-tight">Hey{firstName ? ` ${firstName}` : ""}, I&apos;m Maya.</p>
             <p className="mt-2 max-w-[34rem] leading-relaxed text-mist">
-              I&apos;m an AI that finds US jobs at companies with a real record of filing H-1Bs. Drop in your resume, CV or transcript and I&apos;ll show you who&apos;s hiring people like you.
+              I&apos;m an AI that finds jobs in the UK, Netherlands and Ireland at employers on the official visa sponsor registers, plus remote roles open to you. Drop in your CV and I&apos;ll show you who&apos;s hiring people like you.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               <button onClick={() => fileRef.current?.click()} className="btn-light !py-2.5 text-sm">Upload my resume</button>
@@ -380,7 +392,7 @@ export function Chat({
             Send
           </button>
         </div>
-        <p className="mt-2 text-[11px] text-mist">Maya is an AI. Sponsorship info comes from public Dept. of Labor filings and can&apos;t guarantee a visa.</p>
+        <p className="mt-2 text-[11px] text-mist">Maya is an AI. Sponsor info comes from the official UK, Dutch and Irish registers and can&apos;t guarantee a visa.</p>
       </form>
     </div>
   );
