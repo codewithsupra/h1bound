@@ -17,7 +17,8 @@
    "registerName": "Portbase B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-002",
@@ -27,7 +28,8 @@
    "registerName": "Adyen N.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-003",
@@ -37,7 +39,10 @@
    "registerName": "Effectory Holding B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Effectory B.V."
+   ]
   },
   {
    "id": "brand-004",
@@ -47,7 +52,8 @@
    "registerName": "Genscript Biotech (Netherlands) B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-005",
@@ -57,7 +63,8 @@
    "registerName": "Sqills Products B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-006",
@@ -67,7 +74,8 @@
    "registerName": "Brenger B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-007",
@@ -77,7 +85,8 @@
    "registerName": "Triple Jump B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-008",
@@ -87,7 +96,8 @@
    "registerName": "Quion Groep B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-009",
@@ -97,7 +107,10 @@
    "registerName": "NICE Netherlands B.V.",
    "label": "same",
    "confidence": "medium",
-   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed."
+   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed.",
+   "rivals": [
+    "Nice to Meat B.V."
+   ]
   },
   {
    "id": "brand-010",
@@ -107,7 +120,8 @@
    "registerName": "Sotheby's",
    "label": "same",
    "confidence": "high",
-   "evidence": "Board name equals the register name once legal and regional words are removed."
+   "evidence": "Board name equals the register name once legal and regional words are removed.",
+   "rivals": []
   },
   {
    "id": "brand-011",
@@ -117,7 +131,8 @@
    "registerName": "OKX UK FinTech Company LImited",
    "label": "same",
    "confidence": "medium",
-   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed."
+   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed.",
+   "rivals": []
   },
   {
    "id": "brand-012",
@@ -127,7 +142,8 @@
    "registerName": "Keyloop (UK) Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-013",
@@ -137,7 +153,8 @@
    "registerName": "Redpanda Data EMEA Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-014",
@@ -147,7 +164,8 @@
    "registerName": "Cision Group Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-015",
@@ -157,7 +175,11 @@
    "registerName": "Apax Partners UK Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "APAX SUPPORT LIMITED T/A APAX",
+    "The Apax Foundation"
+   ]
   },
   {
    "id": "brand-016",
@@ -167,7 +189,8 @@
    "registerName": "Claimsorted Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-017",
@@ -177,7 +200,8 @@
    "registerName": "Lefebvre Sdu B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-018",
@@ -187,7 +211,8 @@
    "registerName": "FGS Global (UK) Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-019",
@@ -197,7 +222,8 @@
    "registerName": "Celonis Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-020",
@@ -207,7 +233,8 @@
    "registerName": "Waymo UK Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-021",
@@ -217,7 +244,8 @@
    "registerName": "Nebius B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-022",
@@ -227,7 +255,8 @@
    "registerName": "Samsara Nederland B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-023",
@@ -237,7 +266,8 @@
    "registerName": "Mixpanel UK Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-024",
@@ -247,7 +277,8 @@
    "registerName": "FIREBLOCKS UK INT'L LIMITED",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-025",
@@ -257,7 +288,8 @@
    "registerName": "Naktuinbouw",
    "label": "same",
    "confidence": "high",
-   "evidence": "Board name equals the register name once legal and regional words are removed."
+   "evidence": "Board name equals the register name once legal and regional words are removed.",
+   "rivals": []
   },
   {
    "id": "brand-026",
@@ -267,7 +299,8 @@
    "registerName": "UIPATH UK LIMITED",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-027",
@@ -277,7 +310,8 @@
    "registerName": "DeciBio Consulting Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-028",
@@ -287,7 +321,8 @@
    "registerName": "Cloudinary UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-029",
@@ -297,7 +332,8 @@
    "registerName": "ROCSYS B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-030",
@@ -307,7 +343,8 @@
    "registerName": "Lyra Health International Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-031",
@@ -317,7 +354,8 @@
    "registerName": "Kao (UK) Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-032",
@@ -327,7 +365,8 @@
    "registerName": "Ping Identity Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-033",
@@ -337,7 +376,8 @@
    "registerName": "CONGA EUROPE LTD",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-034",
@@ -347,7 +387,10 @@
    "registerName": "Envoy EMEA Limited",
    "label": "same",
    "confidence": "medium",
-   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed."
+   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed.",
+   "rivals": [
+    "Envoy Partnership"
+   ]
   },
   {
    "id": "brand-035",
@@ -357,7 +400,8 @@
    "registerName": "Okta Identity Ireland Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-036",
@@ -367,7 +411,8 @@
    "registerName": "Tower Research Capital Europe Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-037",
@@ -377,7 +422,8 @@
    "registerName": "QphoX B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-038",
@@ -387,7 +433,8 @@
    "registerName": "Rubrik UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-039",
@@ -397,7 +444,8 @@
    "registerName": "EcoChain Technologies B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-040",
@@ -407,7 +455,8 @@
    "registerName": "New Relic UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-041",
@@ -417,7 +466,8 @@
    "registerName": "GumGum Netherlands B.V.",
    "label": "same",
    "confidence": "medium",
-   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed."
+   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed.",
+   "rivals": []
   },
   {
    "id": "brand-042",
@@ -427,7 +477,8 @@
    "registerName": "VOID Interactive Ltd.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-043",
@@ -437,7 +488,8 @@
    "registerName": "SWAP Support B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-044",
@@ -447,7 +499,10 @@
    "registerName": "Quantium Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "QUANTIUM TECHNOLOGY LTD"
+   ]
   },
   {
    "id": "brand-045",
@@ -457,7 +512,8 @@
    "registerName": "StockX Marketplace NL B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-046",
@@ -467,7 +523,8 @@
    "registerName": "Anthropic Ireland Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-047",
@@ -477,7 +534,8 @@
    "registerName": "Nintex UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-048",
@@ -487,7 +545,8 @@
    "registerName": "MisterGreen Products B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-049",
@@ -497,7 +556,8 @@
    "registerName": "Bdairy B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-050",
@@ -507,7 +567,8 @@
    "registerName": "SYSTEMIQ Nederland B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-051",
@@ -517,7 +578,8 @@
    "registerName": "Flo Health UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-052",
@@ -527,7 +589,8 @@
    "registerName": "VAYNERMEDIA LIMITED",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-053",
@@ -537,7 +600,8 @@
    "registerName": "SolarWinds Software Europe DAC",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-054",
@@ -547,7 +611,8 @@
    "registerName": "Celerion GB Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-055",
@@ -557,7 +622,8 @@
    "registerName": "Westfort Vleesproducten B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-056",
@@ -567,7 +633,8 @@
    "registerName": "PhysicsX Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-057",
@@ -577,7 +644,8 @@
    "registerName": "PAI Partners (UK) Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-058",
@@ -587,7 +655,8 @@
    "registerName": "Amsterdam Data Collective B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-059",
@@ -597,7 +666,8 @@
    "registerName": "Baringa Partners LLP",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-060",
@@ -607,7 +677,8 @@
    "registerName": "CROP accountants & adviseurs B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-061",
@@ -617,7 +688,8 @@
    "registerName": "6sense Insights UK Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-062",
@@ -627,7 +699,8 @@
    "registerName": "Wunderkind Technologies UK Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-063",
@@ -637,7 +710,8 @@
    "registerName": "FincoEnergies B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-064",
@@ -647,7 +721,8 @@
    "registerName": "SurePay B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-065",
@@ -657,7 +732,8 @@
    "registerName": "Funda Real Estate B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-066",
@@ -667,7 +743,8 @@
    "registerName": "Mirakl Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-067",
@@ -677,7 +754,8 @@
    "registerName": "CLINCHOICE LIMITED",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-068",
@@ -687,7 +765,11 @@
    "registerName": "Howden Thomassen Compressors B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board jobs are Howden Nederland (insurance broker; werkenbij.howdennederland.nl, e.g. 'Acceptant Volmacht Motorrijtuigen en Transport'); the register entry is a compressor manufacturer. 28 active jobs carry this link."
+   "evidence": "Board jobs are Howden Nederland (insurance broker; werkenbij.howdennederland.nl, e.g. 'Acceptant Volmacht Motorrijtuigen en Transport'); the register entry is a compressor manufacturer. 28 active jobs carry this link.",
+   "rivals": [
+    "Howden M&A (Germany) GmbH",
+    "Howden Netherlands B.V."
+   ]
   },
   {
    "id": "brand-069",
@@ -697,7 +779,21 @@
    "registerName": "Insight Venture Management UK Limited",
    "label": "unsure",
    "confidence": "medium",
-   "evidence": "Board 'Insight' (Greenhouse) could be Insight Partners, Insight Enterprises or others; 4 unrelated register entries share the board."
+   "evidence": "Board 'Insight' (Greenhouse) could be Insight Partners, Insight Enterprises or others; 4 unrelated register entries share the board.",
+   "rivals": [
+    "INSIGHT FIRE SOLUTIONS LTD",
+    "INSIGHT REALTY LTD",
+    "Insight Advisory Partners Ltd",
+    "Insight Analytics Solutions Limited",
+    "Insight Care & Support Ltd",
+    "Insight Care Group Ltd",
+    "Insight Construction Limited",
+    "Insight Data Analytics Limited",
+    "Insight Direct (UK) Ltd",
+    "Insight Financial Associates Ltd",
+    "Insight Global Limited",
+    "Insight International (UK) Limited"
+   ]
   },
   {
    "id": "brand-070",
@@ -707,7 +803,14 @@
    "registerName": "Foundry (UK) Ltd",
    "label": "unsure",
    "confidence": "medium",
-   "evidence": "Two different companies trade as Foundry (media/IT vs VFX software); the job is a facilities role."
+   "evidence": "Two different companies trade as Foundry (media/IT vs VFX software); the job is a facilities role.",
+   "rivals": [
+    "Foundry Bargain Store Ltd",
+    "Foundry Lane Surgery",
+    "Foundry Services Limited",
+    "Foundry Sourcing Ltd.",
+    "The Foundry Visionmongers Ltd."
+   ]
   },
   {
    "id": "brand-071",
@@ -717,7 +820,12 @@
    "registerName": "WPP Brands (UK) Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "WPP 2005 Limited",
+    "WPP Media UK Limited",
+    "WPP Production Limited"
+   ]
   },
   {
    "id": "brand-072",
@@ -727,7 +835,12 @@
    "registerName": "WPP 2005 Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "WPP Brands (UK) Limited",
+    "WPP Media UK Limited",
+    "WPP Production Limited"
+   ]
   },
   {
    "id": "brand-073",
@@ -737,7 +850,11 @@
    "registerName": "Synechron Solutions Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "SYNECHRON PLATFORM CONSULTING LTD",
+    "Synechron Limited"
+   ]
   },
   {
    "id": "brand-074",
@@ -747,7 +864,13 @@
    "registerName": "NTS Proto Systems B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "NTS CombiMetaal B.V.",
+    "NTS D&E B.V.",
+    "NTS Group B.V.",
+    "NTS Mechatronics B.V."
+   ]
   },
   {
    "id": "brand-075",
@@ -757,7 +880,13 @@
    "registerName": "NTS D&E B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "NTS CombiMetaal B.V.",
+    "NTS Group B.V.",
+    "NTS Mechatronics B.V.",
+    "NTS Proto Systems B.V."
+   ]
   },
   {
    "id": "brand-076",
@@ -767,7 +896,13 @@
    "registerName": "NTS CombiMetaal B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "NTS D&E B.V.",
+    "NTS Group B.V.",
+    "NTS Mechatronics B.V.",
+    "NTS Proto Systems B.V."
+   ]
   },
   {
    "id": "brand-077",
@@ -777,7 +912,13 @@
    "registerName": "NTS Mechatronics B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "NTS CombiMetaal B.V.",
+    "NTS D&E B.V.",
+    "NTS Group B.V.",
+    "NTS Proto Systems B.V."
+   ]
   },
   {
    "id": "brand-078",
@@ -787,7 +928,10 @@
    "registerName": "ESRI Global Inc.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Esri (UK) Ltd"
+   ]
   },
   {
    "id": "brand-079",
@@ -797,7 +941,12 @@
    "registerName": "Dept NL Holding B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Dept Creative & Media B.V.",
+    "Dept Design & Technology B.V.",
+    "Dept Holding B.V."
+   ]
   },
   {
    "id": "brand-080",
@@ -807,7 +956,12 @@
    "registerName": "Dept Creative & Media B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Dept Design & Technology B.V.",
+    "Dept Holding B.V.",
+    "Dept NL Holding B.V."
+   ]
   },
   {
    "id": "brand-081",
@@ -817,7 +971,12 @@
    "registerName": "Dept Holding B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Dept Creative & Media B.V.",
+    "Dept Design & Technology B.V.",
+    "Dept NL Holding B.V."
+   ]
   },
   {
    "id": "brand-082",
@@ -827,7 +986,12 @@
    "registerName": "Dept Design & Technology B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Dept Creative & Media B.V.",
+    "Dept Holding B.V.",
+    "Dept NL Holding B.V."
+   ]
   },
   {
    "id": "brand-083",
@@ -837,7 +1001,8 @@
    "registerName": "E-Mergo",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-084",
@@ -847,7 +1012,10 @@
    "registerName": "Stripe Technology Company Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Stripe Payments Europe Limited"
+   ]
   },
   {
    "id": "brand-085",
@@ -857,7 +1025,10 @@
    "registerName": "Stripe Payments Europe Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Stripe Technology Company Limited"
+   ]
   },
   {
    "id": "brand-086",
@@ -867,7 +1038,11 @@
    "registerName": "Stripe Payments UK Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "STRIPE CONSULTING LIMITED",
+    "Stripe Partners"
+   ]
   },
   {
    "id": "brand-087",
@@ -877,7 +1052,14 @@
    "registerName": "NICE Systems UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "NICE DAY NELSON LTD",
+    "Nice Accounting & Management Limited",
+    "Nice Living Investment Ltd",
+    "Nice UK Ltd",
+    "Nice and Solid LTD"
+   ]
   },
   {
    "id": "brand-088",
@@ -887,7 +1069,11 @@
    "registerName": "Allego Employment B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Allego B.V.",
+    "Allego Holding B.V."
+   ]
   },
   {
    "id": "brand-089",
@@ -897,7 +1083,11 @@
    "registerName": "Allego Holding B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Allego B.V.",
+    "Allego Employment B.V."
+   ]
   },
   {
    "id": "brand-090",
@@ -907,7 +1097,11 @@
    "registerName": "Vitestro International B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Vitestro B.V.",
+    "Vitestro Production B.V."
+   ]
   },
   {
    "id": "brand-091",
@@ -917,7 +1111,11 @@
    "registerName": "Vitestro Production B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Vitestro B.V.",
+    "Vitestro International B.V."
+   ]
   },
   {
    "id": "brand-092",
@@ -927,7 +1125,10 @@
    "registerName": "Xsens Holding B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Xsens Technologies B.V."
+   ]
   },
   {
    "id": "brand-093",
@@ -937,7 +1138,10 @@
    "registerName": "Xsens Technologies B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Xsens Holding B.V."
+   ]
   },
   {
    "id": "brand-094",
@@ -947,7 +1151,12 @@
    "registerName": "Attentive Mobile UK Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "ATTENTIVE FIRE LIMITED",
+    "Attentive Carers Ltd",
+    "Attentive Housing Ltd"
+   ]
   },
   {
    "id": "brand-095",
@@ -957,7 +1166,21 @@
    "registerName": "Axiom Global Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Axiom Brighton Limited T/A Nostos",
+    "Axiom Care Support Limited",
+    "Axiom Engineering Associates Limited",
+    "Axiom Equity Capital Partners LLP",
+    "Axiom Home Care Limited",
+    "Axiom Hospitality Limited",
+    "Axiom Manufacturing Services Limited",
+    "Axiom Markets Ltd",
+    "Axiom Maths",
+    "Axiom Neuromonitoring Ltd",
+    "Axiom Project Services Ltd",
+    "Axiom Rectory Ltd"
+   ]
   },
   {
    "id": "brand-096",
@@ -967,7 +1190,8 @@
    "registerName": "ISN Software UK Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-097",
@@ -977,7 +1201,10 @@
    "registerName": "Travix International B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Travix Nederland B.V."
+   ]
   },
   {
    "id": "brand-098",
@@ -987,7 +1214,10 @@
    "registerName": "Joulz Meetbedrijf B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Joulz Infradiensten B.V."
+   ]
   },
   {
    "id": "brand-099",
@@ -997,7 +1227,10 @@
    "registerName": "Joulz Infradiensten B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Joulz Meetbedrijf B.V."
+   ]
   },
   {
    "id": "brand-100",
@@ -1007,7 +1240,14 @@
    "registerName": "Rubix Group International Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Rubix Data Centers Ltd",
+    "Rubix Group LTD",
+    "Rubix Industrial Services Limited",
+    "Rubix MEP",
+    "Rubix UK Limitied"
+   ]
   },
   {
    "id": "brand-101",
@@ -1017,7 +1257,14 @@
    "registerName": "Rubix Industrial Services Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Rubix Data Centers Ltd",
+    "Rubix Group International Limited",
+    "Rubix Group LTD",
+    "Rubix MEP",
+    "Rubix UK Limitied"
+   ]
   },
   {
    "id": "brand-102",
@@ -1027,7 +1274,10 @@
    "registerName": "Youwe Online B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Youwe Commerce B.V."
+   ]
   },
   {
    "id": "brand-103",
@@ -1037,7 +1287,16 @@
    "registerName": "Spire Global UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "SPIRE CARE LTD",
+    "Spire Accountants Ltd",
+    "Spire Healthcare Ltd",
+    "Spire Home Care & Training Ltd",
+    "Spire Homecare 2016 Ltd t/a Spire Homecare",
+    "Spire Management Limited",
+    "Spire Vets Limited"
+   ]
   },
   {
    "id": "brand-104",
@@ -1047,7 +1306,13 @@
    "registerName": "Via Transportation UK Ltd.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "VIA EQUIPMENT LTD",
+    "Via Community Ltd.",
+    "Via Inc Ltd",
+    "Via Properties Investments Limited"
+   ]
   },
   {
    "id": "brand-105",
@@ -1057,7 +1322,10 @@
    "registerName": "JetBrains Expo B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "JetBrains N.V."
+   ]
   },
   {
    "id": "brand-106",
@@ -1067,7 +1335,12 @@
    "registerName": "ASM International N.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "ASM Europe BV",
+    "ASM IP Holding B.V.",
+    "ASM Maritime B.V."
+   ]
   },
   {
    "id": "brand-107",
@@ -1077,7 +1350,12 @@
    "registerName": "ASM IP Holding B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "ASM Europe BV",
+    "ASM International N.V.",
+    "ASM Maritime B.V."
+   ]
   },
   {
    "id": "brand-108",
@@ -1087,7 +1365,10 @@
    "registerName": "Unis Group R&D B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Unis Group Facilities B.V."
+   ]
   },
   {
    "id": "brand-109",
@@ -1097,7 +1378,10 @@
    "registerName": "Peloton Enterprises UK Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Peloton Interactive UK Limited"
+   ]
   },
   {
    "id": "brand-110",
@@ -1107,7 +1391,10 @@
    "registerName": "Peloton Interactive UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Peloton Enterprises UK Ltd"
+   ]
   },
   {
    "id": "brand-111",
@@ -1117,7 +1404,11 @@
    "registerName": "Newtone Adviseurs & Accountants B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Newtone Audit N.V.",
+    "Newtone Belastingadviseurs B.V."
+   ]
   },
   {
    "id": "brand-112",
@@ -1127,7 +1418,11 @@
    "registerName": "Newtone Audit N.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Newtone Adviseurs & Accountants B.V.",
+    "Newtone Belastingadviseurs B.V."
+   ]
   },
   {
    "id": "brand-113",
@@ -1137,7 +1432,11 @@
    "registerName": "Newtone Belastingadviseurs B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Newtone Adviseurs & Accountants B.V.",
+    "Newtone Audit N.V."
+   ]
   },
   {
    "id": "brand-114",
@@ -1147,7 +1446,11 @@
    "registerName": "MAQQIE Payroll B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "MAQQIE Shared Service Center B.V.",
+    "MAQQIE Vaster B.V."
+   ]
   },
   {
    "id": "brand-115",
@@ -1157,7 +1460,11 @@
    "registerName": "MAQQIE Shared Service Center B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "MAQQIE Payroll B.V.",
+    "MAQQIE Vaster B.V."
+   ]
   },
   {
    "id": "brand-116",
@@ -1167,7 +1474,11 @@
    "registerName": "Asana Software UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "ASANA LEISURE LIMITED",
+    "Asana Healthcare Ltd"
+   ]
   },
   {
    "id": "brand-117",
@@ -1177,7 +1488,10 @@
    "registerName": "Prophet Brand Strategy Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Prophet plc"
+   ]
   },
   {
    "id": "brand-118",
@@ -1187,7 +1501,11 @@
    "registerName": "Avantium Chemicals B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Avantium Renewable Polymers B.V.",
+    "Avantium Support B.V."
+   ]
   },
   {
    "id": "brand-119",
@@ -1197,7 +1515,11 @@
    "registerName": "Avantium Renewable Polymers B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Avantium Chemicals B.V.",
+    "Avantium Support B.V."
+   ]
   },
   {
    "id": "brand-120",
@@ -1207,7 +1529,11 @@
    "registerName": "Avantium Support B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Avantium Chemicals B.V.",
+    "Avantium Renewable Polymers B.V."
+   ]
   },
   {
    "id": "brand-121",
@@ -1217,7 +1543,10 @@
    "registerName": "GAC Logistics (UK) Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "GAC Family Services Ltd"
+   ]
   },
   {
    "id": "brand-122",
@@ -1227,7 +1556,10 @@
    "registerName": "Sweco Holdco B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Sweco Nederland B.V."
+   ]
   },
   {
    "id": "brand-123",
@@ -1237,7 +1569,11 @@
    "registerName": "Flexport Customs B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Flexport Group B.V.",
+    "Flexport International B.V."
+   ]
   },
   {
    "id": "brand-124",
@@ -1247,7 +1583,11 @@
    "registerName": "Flexport International B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Flexport Customs B.V.",
+    "Flexport Group B.V."
+   ]
   },
   {
    "id": "brand-125",
@@ -1257,7 +1597,12 @@
    "registerName": "Ripple Markets UK Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "RIPPLE SIGNS AND PRINT LTD",
+    "Ripple Dental Limited",
+    "Ripple+ Limited"
+   ]
   },
   {
    "id": "brand-126",
@@ -1267,7 +1612,8 @@
    "registerName": "EVENTIM Benelux B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-127",
@@ -1277,7 +1623,10 @@
    "registerName": "Stepstone Group Europe Alternative Investments Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "The Stepstone Group Ireland Recruit Limited"
+   ]
   },
   {
    "id": "brand-128",
@@ -1287,7 +1636,10 @@
    "registerName": "ROLLER Networks LTD",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Roller Nation"
+   ]
   },
   {
    "id": "brand-129",
@@ -1297,7 +1649,12 @@
    "registerName": "Alloy Therapeutics UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "ALLOY FIX LTD",
+    "ALLOY WHEEL REFURBISHMENT (UK) LTD",
+    "Alloy Inc Limited"
+   ]
   },
   {
    "id": "brand-130",
@@ -1307,7 +1664,10 @@
    "registerName": "Dropbox UK Online Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Dropbox Fuels Limited"
+   ]
   },
   {
    "id": "brand-131",
@@ -1317,7 +1677,10 @@
    "registerName": "Inizio Services UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Inizio Evoke Europe Limited"
+   ]
   },
   {
    "id": "brand-132",
@@ -1327,7 +1690,10 @@
    "registerName": "Winton Capital Management Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Winton Specsavers Limited T/A Specsavers Opticians"
+   ]
   },
   {
    "id": "brand-133",
@@ -1337,7 +1703,10 @@
    "registerName": "ViCentra Manufacturing B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "ViCentra B.V."
+   ]
   },
   {
    "id": "brand-134",
@@ -1347,7 +1716,8 @@
    "registerName": "Symphony Communication Services UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": []
   },
   {
    "id": "brand-135",
@@ -1357,7 +1727,10 @@
    "registerName": "Allinq Insite B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Allinq Group B.V."
+   ]
   },
   {
    "id": "brand-136",
@@ -1367,7 +1740,16 @@
    "registerName": "Brave Software Europe Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "BRAVE EDUCATIONUK LIMITED",
+    "BRAVE LONDON LTD",
+    "Brave Bison Limited",
+    "Brave Bison Performance Limited",
+    "Brave Creative Design Ltd.",
+    "Brave Hearts International Limited",
+    "THE BRAVE GURKHAS LTD"
+   ]
   },
   {
    "id": "brand-137",
@@ -1377,7 +1759,10 @@
    "registerName": "Teneo Strategy Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Teneo Business Consulting Ltd"
+   ]
   },
   {
    "id": "brand-138",
@@ -1387,7 +1772,14 @@
    "registerName": "VIRO Arnhem B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "VIRO Beverwijk B.V.",
+    "VIRO Echt B.V.",
+    "VIRO Hengelo B.V.",
+    "VIRO Industries B.V.",
+    "VIRO Schiedam B.V."
+   ]
   },
   {
    "id": "brand-139",
@@ -1397,7 +1789,10 @@
    "registerName": "Qualinx Holding B.V.",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "Qualinx B.V."
+   ]
   },
   {
    "id": "brand-140",
@@ -1407,7 +1802,12 @@
    "registerName": "Corendon International Travel B.V.",
    "label": "same",
    "confidence": "medium",
-   "evidence": "Plausibly the same group (sister entity); not independently confirmed."
+   "evidence": "Plausibly the same group (sister entity); not independently confirmed.",
+   "rivals": [
+    "Corendon City Hotel",
+    "Corendon Hotels & Resorts B.V.",
+    "Corendon Village Exploitatie B.V."
+   ]
   },
   {
    "id": "brand-141",
@@ -1417,7 +1817,12 @@
    "registerName": "IMC Trading B.V.",
    "label": "same",
    "confidence": "medium",
-   "evidence": "Plausibly the same group (sister entity); not independently confirmed."
+   "evidence": "Plausibly the same group (sister entity); not independently confirmed.",
+   "rivals": [
+    "IMC B.V.",
+    "IMC Netherlands Services B.V.",
+    "IMC Pacific Pty Ltd"
+   ]
   },
   {
    "id": "brand-142",
@@ -1427,7 +1832,12 @@
    "registerName": "IMC Netherlands Services B.V.",
    "label": "same",
    "confidence": "medium",
-   "evidence": "Plausibly the same group (sister entity); not independently confirmed."
+   "evidence": "Plausibly the same group (sister entity); not independently confirmed.",
+   "rivals": [
+    "IMC B.V.",
+    "IMC Pacific Pty Ltd",
+    "IMC Trading B.V."
+   ]
   },
   {
    "id": "brand-143",
@@ -1437,7 +1847,21 @@
    "registerName": "Oliver Marketing",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "OLIVER ROBERTS LTD",
+    "OLIVER SERVICES LTD",
+    "OLIVER'S FISH BAR LIMITED",
+    "Oliver & Co Solicitors",
+    "Oliver Aesthetics Limited",
+    "Oliver Bedding Limited",
+    "Oliver Chapman Architects Ltd",
+    "Oliver Charles Solicitor",
+    "Oliver Connell & Son Ltd",
+    "Oliver House Kirk Hallam Ltd",
+    "Oliver James Associates Limited",
+    "Oliver James Homes Ltd"
+   ]
   },
   {
    "id": "brand-144",
@@ -1447,7 +1871,21 @@
    "registerName": "Impact Radius Ltd",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "IMPACT CONTROL SYSTEMS LTD",
+    "IMPACT FIXINGS LTD",
+    "IMPACT INVESTMENT UK",
+    "IMPACT PROFESSIONAL SOLUTIONS LTD",
+    "IMPACT PROJECT SOLUTIONS",
+    "Impact 3D Signs Limited",
+    "Impact Academy Limited",
+    "Impact Care Limited",
+    "Impact Childcare and Education Ltd",
+    "Impact Cubed Data Analytics Limited",
+    "Impact Cubed Limited",
+    "Impact Data Metrics Ltd"
+   ]
   },
   {
    "id": "brand-145",
@@ -1457,7 +1895,13 @@
    "registerName": "Coalition Risk Solutions Ltd.",
    "label": "same",
    "confidence": "medium",
-   "evidence": "Plausibly the same group (sister entity); not independently confirmed."
+   "evidence": "Plausibly the same group (sister entity); not independently confirmed.",
+   "rivals": [
+    "Coalition Brewing Company Ltd",
+    "Coalition Development Ltd",
+    "Coalition for Epidemic Preparedness Innovations UK Limited",
+    "The Coalition for a Digital Economy (Coadec) Ltd t/a The Startup Coalition"
+   ]
   },
   {
    "id": "brand-146",
@@ -1467,7 +1911,21 @@
    "registerName": "Grey Advertising Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "GREY CHILLI LTD",
+    "GREY LOOK LTD",
+    "GREY MATTERS TRADING AND CONSULTANCY LIMITED",
+    "GREY REPTILE LTD T/A SUBWAY",
+    "Grey Communications Group Limited",
+    "Grey Epoch Europe",
+    "Grey Epoch Portfolio Management Limited",
+    "Grey Gables (NEW MILTON) Limited",
+    "Grey Pepe Ltd",
+    "Grey Road Surgery",
+    "Grey Tech Limited",
+    "Grey Technology Limited (Gtech)"
+   ]
   },
   {
    "id": "brand-147",
@@ -1477,7 +1935,21 @@
    "registerName": "Grey Communications Group Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "GREY CHILLI LTD",
+    "GREY LOOK LTD",
+    "GREY MATTERS TRADING AND CONSULTANCY LIMITED",
+    "GREY REPTILE LTD T/A SUBWAY",
+    "Grey Advertising Limited",
+    "Grey Epoch Europe",
+    "Grey Epoch Portfolio Management Limited",
+    "Grey Gables (NEW MILTON) Limited",
+    "Grey Pepe Ltd",
+    "Grey Road Surgery",
+    "Grey Tech Limited",
+    "Grey Technology Limited (Gtech)"
+   ]
   },
   {
    "id": "brand-148",
@@ -1487,7 +1959,11 @@
    "registerName": "Axon Public Safety UK Limited",
    "label": "same",
    "confidence": "high",
-   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group.",
+   "rivals": [
+    "AXON VT LIMITED",
+    "Axon Communications Inc."
+   ]
   },
   {
    "id": "brand-149",
@@ -1497,7 +1973,10 @@
    "registerName": "Sedna Systems Europe Limited",
    "label": "same",
    "confidence": "medium",
-   "evidence": "Plausibly the same group (sister entity); not independently confirmed."
+   "evidence": "Plausibly the same group (sister entity); not independently confirmed.",
+   "rivals": [
+    "Sedna Lighting Ltd"
+   ]
   },
   {
    "id": "brand-150",
@@ -1507,7 +1986,13 @@
    "registerName": "Source Payroll Services B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is Source.ag (agtech); the register entry is a different company that only shares the word 'Source'."
+   "evidence": "Board is Source.ag (agtech); the register entry is a different company that only shares the word 'Source'.",
+   "rivals": [
+    "Source Engineering Services B.V.",
+    "Source Flex Solutions B.V.",
+    "Source.ag B.V.",
+    "Source.ag International B.V."
+   ]
   },
   {
    "id": "brand-151",
@@ -1517,7 +2002,13 @@
    "registerName": "Source Engineering Services B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is Source.ag (agtech); the register entry is a different company that only shares the word 'Source'."
+   "evidence": "Board is Source.ag (agtech); the register entry is a different company that only shares the word 'Source'.",
+   "rivals": [
+    "Source Flex Solutions B.V.",
+    "Source Payroll Services B.V.",
+    "Source.ag B.V.",
+    "Source.ag International B.V."
+   ]
   },
   {
    "id": "brand-152",
@@ -1527,7 +2018,13 @@
    "registerName": "Source Flex Solutions B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is Source.ag (agtech); the register entry is a different company that only shares the word 'Source'."
+   "evidence": "Board is Source.ag (agtech); the register entry is a different company that only shares the word 'Source'.",
+   "rivals": [
+    "Source Engineering Services B.V.",
+    "Source Payroll Services B.V.",
+    "Source.ag B.V.",
+    "Source.ag International B.V."
+   ]
   },
   {
    "id": "brand-153",
@@ -1537,7 +2034,15 @@
    "registerName": "ACE Incubator B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'."
+   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'.",
+   "rivals": [
+    "A.C.E. Ingenieurs en Adviesbureau, Werktuigbouw en Electrotechniek B.V.",
+    "ACE Company B.V.",
+    "ACE Management Consulting B.V.",
+    "Ace Solutions B.V.",
+    "Ace Tankers C.V.",
+    "Ace and Tate Holding B.V."
+   ]
   },
   {
    "id": "brand-154",
@@ -1547,7 +2052,15 @@
    "registerName": "ACE Management Consulting B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'."
+   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'.",
+   "rivals": [
+    "A.C.E. Ingenieurs en Adviesbureau, Werktuigbouw en Electrotechniek B.V.",
+    "ACE Company B.V.",
+    "ACE Incubator B.V.",
+    "Ace Solutions B.V.",
+    "Ace Tankers C.V.",
+    "Ace and Tate Holding B.V."
+   ]
   },
   {
    "id": "brand-155",
@@ -1557,7 +2070,15 @@
    "registerName": "Ace and Tate Holding B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'."
+   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'.",
+   "rivals": [
+    "A.C.E. Ingenieurs en Adviesbureau, Werktuigbouw en Electrotechniek B.V.",
+    "ACE Company B.V.",
+    "ACE Incubator B.V.",
+    "ACE Management Consulting B.V.",
+    "Ace Solutions B.V.",
+    "Ace Tankers C.V."
+   ]
   },
   {
    "id": "brand-156",
@@ -1567,7 +2088,15 @@
    "registerName": "Ace Tankers C.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'."
+   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'.",
+   "rivals": [
+    "A.C.E. Ingenieurs en Adviesbureau, Werktuigbouw en Electrotechniek B.V.",
+    "ACE Company B.V.",
+    "ACE Incubator B.V.",
+    "ACE Management Consulting B.V.",
+    "Ace Solutions B.V.",
+    "Ace and Tate Holding B.V."
+   ]
   },
   {
    "id": "brand-157",
@@ -1577,7 +2106,15 @@
    "registerName": "Ace Solutions B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'."
+   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'.",
+   "rivals": [
+    "A.C.E. Ingenieurs en Adviesbureau, Werktuigbouw en Electrotechniek B.V.",
+    "ACE Company B.V.",
+    "ACE Incubator B.V.",
+    "ACE Management Consulting B.V.",
+    "Ace Tankers C.V.",
+    "Ace and Tate Holding B.V."
+   ]
   },
   {
    "id": "brand-158",
@@ -1587,7 +2124,13 @@
    "registerName": "Quality Produce International (Q.P.I.) B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'."
+   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'.",
+   "rivals": [
+    "Quality Inspection Services B.V.",
+    "Quality Positioning Services (Q.P.S.) B.V.",
+    "Quality Royal B.V.",
+    "Quality by Design B.V."
+   ]
   },
   {
    "id": "brand-159",
@@ -1597,7 +2140,13 @@
    "registerName": "Quality Inspection Services B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'."
+   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'.",
+   "rivals": [
+    "Quality Positioning Services (Q.P.S.) B.V.",
+    "Quality Produce International (Q.P.I.) B.V.",
+    "Quality Royal B.V.",
+    "Quality by Design B.V."
+   ]
   },
   {
    "id": "brand-160",
@@ -1607,7 +2156,13 @@
    "registerName": "Quality by Design B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'."
+   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'.",
+   "rivals": [
+    "Quality Inspection Services B.V.",
+    "Quality Positioning Services (Q.P.S.) B.V.",
+    "Quality Produce International (Q.P.I.) B.V.",
+    "Quality Royal B.V."
+   ]
   },
   {
    "id": "brand-161",
@@ -1617,7 +2172,13 @@
    "registerName": "Quality Positioning Services (Q.P.S.) B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'."
+   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'.",
+   "rivals": [
+    "Quality Inspection Services B.V.",
+    "Quality Produce International (Q.P.I.) B.V.",
+    "Quality Royal B.V.",
+    "Quality by Design B.V."
+   ]
   },
   {
    "id": "brand-162",
@@ -1627,7 +2188,13 @@
    "registerName": "Quality Royal B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'."
+   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'.",
+   "rivals": [
+    "Quality Inspection Services B.V.",
+    "Quality Positioning Services (Q.P.S.) B.V.",
+    "Quality Produce International (Q.P.I.) B.V.",
+    "Quality by Design B.V."
+   ]
   },
   {
    "id": "brand-163",
@@ -1637,7 +2204,11 @@
    "registerName": "Oliver Conroy (Pallets) Limited",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is OLIVER (creative agency); this entry is a different business that only shares the first name."
+   "evidence": "Board is OLIVER (creative agency); this entry is a different business that only shares the first name.",
+   "rivals": [
+    "Oliver Foudy Motors Ltd",
+    "Oliver Marketing (Ireland) Ltd"
+   ]
   },
   {
    "id": "brand-164",
@@ -1647,7 +2218,21 @@
    "registerName": "Oliver Wyman Limited",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is OLIVER (creative agency); this entry is a different business that only shares the first name."
+   "evidence": "Board is OLIVER (creative agency); this entry is a different business that only shares the first name.",
+   "rivals": [
+    "OLIVER ROBERTS LTD",
+    "OLIVER SERVICES LTD",
+    "OLIVER'S FISH BAR LIMITED",
+    "Oliver & Co Solicitors",
+    "Oliver Aesthetics Limited",
+    "Oliver Bedding Limited",
+    "Oliver Chapman Architects Ltd",
+    "Oliver Charles Solicitor",
+    "Oliver Connell & Son Ltd",
+    "Oliver House Kirk Hallam Ltd",
+    "Oliver James Associates Limited",
+    "Oliver James Homes Ltd"
+   ]
   },
   {
    "id": "brand-165",
@@ -1657,7 +2242,21 @@
    "registerName": "Oliver James Associates Limited",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is OLIVER (creative agency); this entry is a different business that only shares the first name."
+   "evidence": "Board is OLIVER (creative agency); this entry is a different business that only shares the first name.",
+   "rivals": [
+    "OLIVER ROBERTS LTD",
+    "OLIVER SERVICES LTD",
+    "OLIVER'S FISH BAR LIMITED",
+    "Oliver & Co Solicitors",
+    "Oliver Aesthetics Limited",
+    "Oliver Bedding Limited",
+    "Oliver Chapman Architects Ltd",
+    "Oliver Charles Solicitor",
+    "Oliver Connell & Son Ltd",
+    "Oliver House Kirk Hallam Ltd",
+    "Oliver James Homes Ltd",
+    "Oliver Law Security Ltd"
+   ]
   },
   {
    "id": "brand-166",
@@ -1667,7 +2266,10 @@
    "registerName": "Nice to Meat B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is NICE (software); the entry is a Dutch meat/food company."
+   "evidence": "Board is NICE (software); the entry is a Dutch meat/food company.",
+   "rivals": [
+    "NICE Netherlands B.V."
+   ]
   },
   {
    "id": "brand-167",
@@ -1677,7 +2279,10 @@
    "registerName": "Viktor & Rolf B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is VIKTOR (engineering software); Viktor & Rolf is a fashion house."
+   "evidence": "Board is VIKTOR (engineering software); Viktor & Rolf is a fashion house.",
+   "rivals": [
+    "VIKTOR B.V."
+   ]
   },
   {
    "id": "brand-168",
@@ -1687,7 +2292,11 @@
    "registerName": "Appian Base Metals Management Limited",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is Appian Corporation (software); the entry is Appian Capital's metals management company."
+   "evidence": "Board is Appian Corporation (software); the entry is Appian Capital's metals management company.",
+   "rivals": [
+    "Appian Capital U.K. Limited",
+    "Appian Europe Limited"
+   ]
   },
   {
    "id": "brand-169",
@@ -1697,7 +2306,10 @@
    "registerName": "Alpine Grove (Netherlands) B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is Alpine Nederland B.V (the register also lists exactly that); this entry is a different company."
+   "evidence": "Board is Alpine Nederland B.V (the register also lists exactly that); this entry is a different company.",
+   "rivals": [
+    "Alpine Nederland B.V."
+   ]
   },
   {
    "id": "brand-170",
@@ -1707,7 +2319,21 @@
    "registerName": "Impact IT Solutions (UK) Ltd",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is impact.com (formerly Impact Radius); this entry is an unrelated IT services firm."
+   "evidence": "Board is impact.com (formerly Impact Radius); this entry is an unrelated IT services firm.",
+   "rivals": [
+    "IMPACT CONTROL SYSTEMS LTD",
+    "IMPACT FIXINGS LTD",
+    "IMPACT INVESTMENT UK",
+    "IMPACT PROFESSIONAL SOLUTIONS LTD",
+    "IMPACT PROJECT SOLUTIONS",
+    "Impact 3D Signs Limited",
+    "Impact Academy Limited",
+    "Impact Care Limited",
+    "Impact Childcare and Education Ltd",
+    "Impact Cubed Data Analytics Limited",
+    "Impact Cubed Limited",
+    "Impact Data Metrics Ltd"
+   ]
   },
   {
    "id": "brand-171",
@@ -1717,7 +2343,13 @@
    "registerName": "Coalition for Epidemic Preparedness Innovations UK Limited",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is Coalition, Inc. (cyber insurance); this entry is an unrelated organisation."
+   "evidence": "Board is Coalition, Inc. (cyber insurance); this entry is an unrelated organisation.",
+   "rivals": [
+    "Coalition Brewing Company Ltd",
+    "Coalition Development Ltd",
+    "Coalition Risk Solutions Ltd.",
+    "The Coalition for a Digital Economy (Coadec) Ltd t/a The Startup Coalition"
+   ]
   },
   {
    "id": "brand-172",
@@ -1727,7 +2359,13 @@
    "registerName": "Coalition Development Ltd",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board is Coalition, Inc. (cyber insurance); this entry is an unrelated organisation."
+   "evidence": "Board is Coalition, Inc. (cyber insurance); this entry is an unrelated organisation.",
+   "rivals": [
+    "Coalition Brewing Company Ltd",
+    "Coalition Risk Solutions Ltd.",
+    "Coalition for Epidemic Preparedness Innovations UK Limited",
+    "The Coalition for a Digital Economy (Coadec) Ltd t/a The Startup Coalition"
+   ]
   },
   {
    "id": "brand-173",
@@ -1737,7 +2375,12 @@
    "registerName": "ASM Maritime B.V.",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board ASM is ASM International (semiconductors); ASM Maritime is a shipping company."
+   "evidence": "Board ASM is ASM International (semiconductors); ASM Maritime is a shipping company.",
+   "rivals": [
+    "ASM Europe BV",
+    "ASM IP Holding B.V.",
+    "ASM International N.V."
+   ]
   },
   {
    "id": "brand-174",
@@ -1747,7 +2390,10 @@
    "registerName": "Pay for People Contracting B.V.",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "Pay to Payroll B.V."
+   ]
   },
   {
    "id": "brand-175",
@@ -1757,7 +2403,10 @@
    "registerName": "Pay to Payroll B.V.",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "Pay for People Contracting B.V."
+   ]
   },
   {
    "id": "brand-176",
@@ -1767,7 +2416,13 @@
    "registerName": "TES Global Limited",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "TES Education Ltd",
+    "TES ICES LTD t/a Aroma Ice Cream",
+    "TES Inc Ltd",
+    "TES-AMM UK Ltd"
+   ]
   },
   {
    "id": "brand-177",
@@ -1777,7 +2432,11 @@
    "registerName": "Proton Technologies Ltd",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "PROTON AVIATION CAPITAL LTD",
+    "Proton Payments Limited"
+   ]
   },
   {
    "id": "brand-178",
@@ -1787,7 +2446,21 @@
    "registerName": "Universal Music Operations Ltd",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "THE UNIVERSAL GIFT CARD COMPANY LIMITED T/A Their Perfect Gift",
+    "UNIVERSAL ACCOUNTANTS",
+    "UNIVERSAL AIR EXPRESS LTD",
+    "UNIVERSAL BARGAIN LTD",
+    "UNIVERSAL BRANDING LTD",
+    "UNIVERSAL CABS LTD",
+    "UNIVERSAL CONSULTANCY GLOBAL LIMITED",
+    "UNIVERSAL CONSULTANTS AND ASSET MANAGEMENT LIMITED",
+    "UNIVERSAL EDUCATION CARE LTD",
+    "UNIVERSAL ELECTRONICS LIMITED",
+    "UNIVERSAL FOODS STOKE LIMITED",
+    "UNIVERSAL GARMENTS INTERNATIONAL LIMITED"
+   ]
   },
   {
    "id": "brand-179",
@@ -1797,7 +2470,21 @@
    "registerName": "Universal Design Studio Limited",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "THE UNIVERSAL GIFT CARD COMPANY LIMITED T/A Their Perfect Gift",
+    "UNIVERSAL ACCOUNTANTS",
+    "UNIVERSAL AIR EXPRESS LTD",
+    "UNIVERSAL BARGAIN LTD",
+    "UNIVERSAL BRANDING LTD",
+    "UNIVERSAL CABS LTD",
+    "UNIVERSAL CONSULTANCY GLOBAL LIMITED",
+    "UNIVERSAL CONSULTANTS AND ASSET MANAGEMENT LIMITED",
+    "UNIVERSAL EDUCATION CARE LTD",
+    "UNIVERSAL ELECTRONICS LIMITED",
+    "UNIVERSAL FOODS STOKE LIMITED",
+    "UNIVERSAL GARMENTS INTERNATIONAL LIMITED"
+   ]
   },
   {
    "id": "brand-180",
@@ -1807,7 +2494,21 @@
    "registerName": "Universal Components UK Limited",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "THE UNIVERSAL GIFT CARD COMPANY LIMITED T/A Their Perfect Gift",
+    "UNIVERSAL ACCOUNTANTS",
+    "UNIVERSAL AIR EXPRESS LTD",
+    "UNIVERSAL BARGAIN LTD",
+    "UNIVERSAL BRANDING LTD",
+    "UNIVERSAL CABS LTD",
+    "UNIVERSAL CONSULTANCY GLOBAL LIMITED",
+    "UNIVERSAL CONSULTANTS AND ASSET MANAGEMENT LIMITED",
+    "UNIVERSAL EDUCATION CARE LTD",
+    "UNIVERSAL ELECTRONICS LIMITED",
+    "UNIVERSAL FOODS STOKE LIMITED",
+    "UNIVERSAL GARMENTS INTERNATIONAL LIMITED"
+   ]
   },
   {
    "id": "brand-181",
@@ -1817,7 +2518,21 @@
    "registerName": "Insight Direct (UK) Ltd",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "INSIGHT FIRE SOLUTIONS LTD",
+    "INSIGHT REALTY LTD",
+    "Insight Advisory Partners Ltd",
+    "Insight Analytics Solutions Limited",
+    "Insight Care & Support Ltd",
+    "Insight Care Group Ltd",
+    "Insight Construction Limited",
+    "Insight Data Analytics Limited",
+    "Insight Financial Associates Ltd",
+    "Insight Global Limited",
+    "Insight International (UK) Limited",
+    "Insight Optical BFD Ltd t/a Insight Opticians"
+   ]
   },
   {
    "id": "brand-182",
@@ -1827,7 +2542,21 @@
    "registerName": "Insight Analytics Solutions Limited",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "INSIGHT FIRE SOLUTIONS LTD",
+    "INSIGHT REALTY LTD",
+    "Insight Advisory Partners Ltd",
+    "Insight Care & Support Ltd",
+    "Insight Care Group Ltd",
+    "Insight Construction Limited",
+    "Insight Data Analytics Limited",
+    "Insight Direct (UK) Ltd",
+    "Insight Financial Associates Ltd",
+    "Insight Global Limited",
+    "Insight International (UK) Limited",
+    "Insight Optical BFD Ltd t/a Insight Opticians"
+   ]
   },
   {
    "id": "brand-183",
@@ -1837,7 +2566,21 @@
    "registerName": "Abacus Cambridge Partners Ltd",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "ABACUS HEALTHCARE LTD",
+    "ABACUS TAX ADVISORS LTD",
+    "ABACUS-69 HOLDINGS LIMITED",
+    "Abacus Ark",
+    "Abacus Business Consultants Limited",
+    "Abacus Care & Support Ltd",
+    "Abacus Care Solutions LTD",
+    "Abacus Commercial Cleans LTD",
+    "Abacus Glasgow Limited",
+    "Abacus Information Technology UK Limited",
+    "Abacus Lease Investment Limited",
+    "Abacus Nursery School"
+   ]
   },
   {
    "id": "brand-184",
@@ -1847,7 +2590,21 @@
    "registerName": "Abacus Information Technology UK Limited",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "ABACUS HEALTHCARE LTD",
+    "ABACUS TAX ADVISORS LTD",
+    "ABACUS-69 HOLDINGS LIMITED",
+    "Abacus Ark",
+    "Abacus Business Consultants Limited",
+    "Abacus Cambridge Partners Ltd",
+    "Abacus Care & Support Ltd",
+    "Abacus Care Solutions LTD",
+    "Abacus Commercial Cleans LTD",
+    "Abacus Glasgow Limited",
+    "Abacus Lease Investment Limited",
+    "Abacus Nursery School"
+   ]
   },
   {
    "id": "brand-185",
@@ -1857,7 +2614,21 @@
    "registerName": "Lighthouse Global Europe Limited",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "LIGHTHOUSE PVT LTD",
+    "Lighthouse Bespoke Healthcare Ltd",
+    "Lighthouse Design for Business Ltd",
+    "Lighthouse Games Limited",
+    "Lighthouse Global Solutions Ltd",
+    "Lighthouse Group Practice",
+    "Lighthouse Homecare Ltd",
+    "Lighthouse London Community Trust",
+    "Lighthouse One UK Limited",
+    "Lighthouse Visual Communications Ltd",
+    "Lighthouse Worldwide Solutions UK Ltd",
+    "The Lighthouse Bar"
+   ]
   },
   {
    "id": "brand-186",
@@ -1867,7 +2638,21 @@
    "registerName": "Euro Pool System UK Ltd",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "EURO ACCESSORIES (UK) LIMITED",
+    "EURO ASIA SUPPORT LIMITED",
+    "EURO ASIAN GROCERY LTD T/A Pran Sweet & Coffee",
+    "EURO AUTOMATIC DOORS LTD",
+    "EURO BANGLA TOURS LTD",
+    "EURO BATHROOMS LTD",
+    "EURO CARFIX GARAGE LTD",
+    "EURO CONVENIENCE LTD",
+    "EURO DELI READING LTD T/A EURO DELI",
+    "EURO DIGITAL PRINT LTD",
+    "EURO EQUIPMENT Limited",
+    "EURO FOOD & WINE 219 LTD"
+   ]
   },
   {
    "id": "brand-187",
@@ -1877,7 +2662,11 @@
    "registerName": "Ember Core Ltd",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "Ember Energy Research CIC",
+    "Ember construction LTD"
+   ]
   },
   {
    "id": "brand-188",
@@ -1887,7 +2676,13 @@
    "registerName": "Hanover Communications",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "HANOVER NEWSAGENT LIMITED",
+    "Hanover Displays Ltd",
+    "Hanover Investors Management LLP",
+    "Hanover Search Group Ltd"
+   ]
   },
   {
    "id": "brand-189",
@@ -1897,7 +2692,10 @@
    "registerName": "Airborne Composites Automation B.V.",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "Airborne Aerospace B.V."
+   ]
   },
   {
    "id": "brand-190",
@@ -1907,7 +2705,10 @@
    "registerName": "Vesper Management B.V.",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "Vesper B.V."
+   ]
   },
   {
    "id": "brand-191",
@@ -1917,7 +2718,12 @@
    "registerName": "ASM Service Support Ireland Ltd",
    "label": "unsure",
    "confidence": "high",
-   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer.",
+   "rivals": [
+    "ASM Catering LTD",
+    "ASM Tech Limited",
+    "Asm Services & Support Ireland Limited"
+   ]
   },
   {
    "id": "brand-192",
@@ -1927,7 +2733,12 @@
    "registerName": "Verve the Live Agency Limited",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board Verve is the ad-tech group; 'Verve the Live Agency' is an events agency."
+   "evidence": "Board Verve is the ad-tech group; 'Verve the Live Agency' is an events agency.",
+   "rivals": [
+    "Verve Agency Ltd",
+    "Verve Homecare Ltd",
+    "Verve Partners Limited"
+   ]
   },
   {
    "id": "brand-193",
@@ -1937,7 +2748,21 @@
    "registerName": "Axiom Manufacturing Services Limited",
    "label": "different",
    "confidence": "high",
-   "evidence": "Board Axiom is the legal-services firm; this entry is a manufacturer."
+   "evidence": "Board Axiom is the legal-services firm; this entry is a manufacturer.",
+   "rivals": [
+    "Axiom Brighton Limited T/A Nostos",
+    "Axiom Care Support Limited",
+    "Axiom Engineering Associates Limited",
+    "Axiom Equity Capital Partners LLP",
+    "Axiom Global Limited",
+    "Axiom Home Care Limited",
+    "Axiom Hospitality Limited",
+    "Axiom Markets Ltd",
+    "Axiom Maths",
+    "Axiom Neuromonitoring Ltd",
+    "Axiom Project Services Ltd",
+    "Axiom Rectory Ltd"
+   ]
   }
  ],
  "name": [

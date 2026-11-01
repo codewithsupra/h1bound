@@ -23,11 +23,25 @@ A job board's company name is attached to a register entry, and every job on tha
 | Stress set: brand collisions, enriched on purpose (105 pairs) | 75% (79/105, 95% CI 66%–83%) | 100% (79/79, 95% CI 95%–100%) | 79 | 26 | 0 | 0 |
 
 - The **random sample** is the honest estimate of how often a board link is right across all linked employers: correct: 67/68 = 99% (95% CI 92%–100%).
-- The **stress set** is drawn from the 137 boards whose brand is a prefix of several register entries (441 of 882 board links are prefix-only; 137 of those have rivals). Its precision is deliberately pessimistic and is not a population rate. It shows what kind of company the rule lets through.
+- The **stress set** is drawn from the boards whose brand is a prefix of several register entries (441 of 882 board links were prefix-only when drawn; 137 of those have rivals). Its precision is deliberately pessimistic and is not a population rate. It shows what kind of company the rule lets through.
 - Recall is 100% because the rule accepts every prefix; the cost is the false positives below.
 - Excluded as unsure: 20.
 
-**Failure cases (27):**
+#### Confirmed-sponsor claim (what the badge says)
+
+A link is **confirmed** only when it is exact, or unique (no other register entry shares the brand). Links with look-alike entries are kept but shown as "Possible sponsor: check which entity hires you" (`linkMatch` in `lib/ingest/boards.ts`). **Positive = confirmed; correct = same organisation.**
+
+| Set | Precision | Recall | TP | FP | FN | TN |
+|---|---|---|---|---|---|---|
+| Random sample (68 pairs) | 100% (65/65, 95% CI 94%–100%) | 97% (65/67, 95% CI 90%–99%) | 65 | 0 | 2 | 1 |
+| Stress set (105 pairs) | 100% (4/4, 95% CI 51%–100%) | 5% (4/79, 95% CI 2%–12%) | 4 | 0 | 75 | 26 |
+
+- **Before** (any prefix accepted): random 98.5% (67/68), stress 75% (79/105).
+- **After**: no wrong organisation is confirmed in either set. The cost is demotion: of the 104 pairs that become "possible", 77 really are the same organisation (mostly sister entities of one group such as NTS, Stripe, WPP) and 27 are different companies. On the random sample only 2 of 67 correct links lose "confirmed"; in the stress set, recall of confirmed claims is low by construction.
+- **Production impact** (dry run of `scripts/classify-board-links.mts` on 2026-11-01): 882 board links = 595 exact, 150 unique, 137 ambiguous. Active jobs behind them: 5,277 exact, 1,143 unique, 1,094 ambiguous. About 1,094 jobs (15% of board-linked jobs) would show "Possible sponsor" instead of "Licensed sponsor".
+- The name-matching path (1b) is unchanged and always exact.
+
+**Failure cases of the old rule, now demoted to "possible" (27):**
 
 - `brand-068` **false positive**: board "Howden" accepted as "Howden Thomassen Compressors B.V." (NL)
   - Board jobs are Howden Nederland (insurance broker; werkenbij.howdennederland.nl, e.g. 'Acceptant Volmacht Motorrijtuigen en Transport'); the register entry is a compressor manufacturer. 28 active jobs carry this link.
@@ -83,6 +97,10 @@ A job board's company name is attached to a register entry, and every job on tha
   - Board Verve is the ad-tech group; 'Verve the Live Agency' is an events agency.
 - `brand-193` **false positive**: board "Axiom" accepted as "Axiom Manufacturing Services Limited" (GB)
   - Board Axiom is the legal-services firm; this entry is a manufacturer.
+
+**Confirmed-claim failures after the change (0):**
+
+_None._
 
 ### 1b. Employer name to register entry (`licenceFor`, name path)
 

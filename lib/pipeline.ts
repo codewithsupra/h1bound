@@ -115,7 +115,7 @@ export function tabCounts(rows: PipelineRow[], now: number): Record<Tab, number>
 
 /** Can this employer sponsor, on the official record? Ireland needs a permit history; UK B-rated doesn't count. */
 export function canSponsor(l: LicenceProof | null): boolean {
-  if (!l) return false;
+  if (!l || l.match === "ambiguous") return false;
   if (l.country === "GB") return l.rating !== "B";
   if (l.country === "IE") return Object.values(l.permits).some((n) => n > 0);
   return true;

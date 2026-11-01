@@ -44,6 +44,8 @@ export function workRights(p: WorkProfile): Record<Market, WorkRight> {
 /** Evidence that an employer can hire someone who needs a visa, from the official registers. */
 export type LicenceProof = {
   country: Market;
+  /** How sure the link to this entry is (lib/ingest/boards.ts). "ambiguous" is shown as a possible sponsor, never a confirmed one. */
+  match?: "exact" | "unique" | "ambiguous" | null;
   /** UK licence rating; B means the Home Office has asked the employer to improve. */
   rating: string | null;
   routes: string[];
@@ -63,10 +65,12 @@ export type JobVisaFit = "ok" | "ok_licensed" | "risky" | "blocked";
  */
 export function jobVisaFit(market: Market, right: WorkRight, licence: LicenceProof | null, jd: "yes" | "no" | null): JobVisaFit {
   if (right === "free") return "ok";
-  const licensed = !!licence && (market !== "GB" || licence.rating !== "B") && (market !== "IE" || permitTotal(licence) > 0);
+  const licensed = !!licence && licence.match !== "ambiguous" && (market !== "GB" || licence.rating !== "B") && (market !== "IE" || permitTotal(licence) > 0);
   if (right === "post_study") return licensed ? "ok_licensed" : jd === "no" ? "risky" : "ok";
   if (jd === "no") return "blocked";
   if (licensed) return "ok_licensed";
+  // Look-alike register entries: it may be the employer, so show the job with a warning rather than hide it or vouch for it.
+  if (licence?.match === "ambiguous") return "risky";
   if (market === "IE" || jd === "yes") return "risky";
   return "blocked";
 }
@@ -75,6 +79,10 @@ export const permitTotal = (l: Pick<LicenceProof, "permits">) => Object.values(l
 
 /** One line citing the register, for Maya and job cards. Never says "will sponsor". */
 export function licenceLine(l: LicenceProof): string {
+  if (l.match === "ambiguous") {
+    const where = l.country === "GB" ? "UK Home Office sponsor register" : l.country === "NL" ? "Dutch IND register" : "Irish permit data";
+    return `Possible match on the ${where}: several entries share this employer's name, so check which one would hire you`;
+  }
   if (l.country === "GB") {
     const route = l.routes.includes("Skilled Worker") ? "Skilled Worker" : l.routes[0] ?? "worker";
     const rating = l.rating === "A" ? "A-rated" : l.rating === "B" ? "B-rated" : l.rating === "Provisional" ? "provisional" : "";
@@ -117,6 +125,7 @@ type Badge = { level: "strong" | "some" | "rare" | "none" | "unknown"; label: st
 export function visaBadge(fit: JobVisaFit, right: WorkRight, market: string | null, licence: LicenceProof | null, remote: boolean): Badge {
   const where = market && (MARKETS as string[]).includes(market) ? MARKET_NAME[market as Market] : null;
   if (right === "free") return { level: "strong", label: remote && !where ? "Open to you" : "No visa needed", detail: where ? `You can work in the ${where} without sponsorship.` : "This remote role is open to your location." };
+  if (licence?.match === "ambiguous") return { level: "some", label: "Possible sponsor", detail: licenceLine(licence) };
   if (fit === "ok_licensed" && licence) {
     const label = licence.country === "GB" ? "Licensed sponsor" : licence.country === "NL" ? "Recognised sponsor" : "Permit history";
     return { level: "strong", label, detail: licenceLine(licence) };
@@ -130,7 +139,8 @@ export function visaBadge(fit: JobVisaFit, right: WorkRight, market: string | nu
 }
 
 /** The departure board's register cell, at most 8 characters: "A-RATED", "LISTED", "368 PMT". */
-export function licenceFlap(l: Pick<LicenceProof, "country" | "rating" | "permits">): { text: string; tone: "green" | "sodium" | "red" | "mist" } {
+export function licenceFlap(l: Pick<LicenceProof, "country" | "rating" | "permits" | "match">): { text: string; tone: "green" | "sodium" | "red" | "mist" } {
+  if (l.match === "ambiguous") return { text: "CHECK", tone: "sodium" };
   if (l.country === "GB") {
     if (l.rating === "B") return { text: "B-RATED", tone: "red" };
     if (l.rating === "Provisional") return { text: "PROVISNL", tone: "mist" };

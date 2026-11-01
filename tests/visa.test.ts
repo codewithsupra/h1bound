@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { jobVisaFit, licenceLine, workRight, workRights } from "@/lib/visa";
+import { jobVisaFit, licenceLine, visaBadge, workRight, workRights } from "@/lib/visa";
 
 const indian = { citizenship: "IN", visaCountry: null, visaSituation: null };
 
@@ -63,5 +63,24 @@ describe("licenceFlap", () => {
     expect(licenceFlap({ country: "NL", rating: null, permits: {} }).text).toBe("LISTED");
     expect(licenceFlap({ country: "IE", rating: null, permits: { "2025": 368, "2026": 254 } }).text).toBe("622 PMT");
     for (const t of [licenceFlap({ country: "GB", rating: "Provisional", permits: {} }).text, licenceFlap({ country: "IE", rating: null, permits: { "2025": 9999 } }).text]) expect(t.length).toBeLessThanOrEqual(8);
+  });
+});
+
+describe("ambiguous register links", () => {
+  const ambiguous = { country: "GB" as const, rating: "A", routes: ["Skilled Worker"], permits: {}, match: "ambiguous" as const };
+  const exact = { ...ambiguous, match: "exact" as const };
+  it("never vouches for a sponsor when look-alike entries share the name", () => {
+    expect(jobVisaFit("GB", "sponsor", exact, null)).toBe("ok_licensed");
+    expect(jobVisaFit("GB", "sponsor", ambiguous, null)).toBe("risky");
+    expect(jobVisaFit("GB", "sponsor", ambiguous, "no")).toBe("blocked");
+  });
+  it("says 'possible' and asks the student to check", () => {
+    const badge = visaBadge("risky", "sponsor", "GB", ambiguous, false);
+    expect(badge.label).toBe("Possible sponsor");
+    expect(badge.detail).toMatch(/several entries share/);
+    expect(licenceFlap(ambiguous)).toEqual({ text: "CHECK", tone: "sodium" });
+  });
+  it("leaves people who need no sponsor untouched", () => {
+    expect(visaBadge("ok", "free", "GB", ambiguous, false).label).toBe("No visa needed");
   });
 });

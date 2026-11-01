@@ -5,6 +5,7 @@ import { decrypt } from "@/lib/crypto";
 import { isPro, loadProfile } from "@/lib/server/profile";
 import { trialState } from "@/lib/server/growth";
 import { licencesById } from "@/lib/server/jobs";
+import type { LinkMatch } from "@/lib/ingest/boards";
 import type { Contact } from "@/lib/server/hunter";
 import type { MatchStatus, PipelineRow } from "@/lib/pipeline";
 
@@ -13,7 +14,7 @@ const db = () => createAdminInsForge().database;
 type MatchRow = {
   job_id: string; score: number; why: string | null; status: MatchStatus; shown_at: string; status_at: string;
   notes_enc?: string | null; asked_reply_at?: string | null;
-  jobs: { title: string; company: string; location: string | null; country: string | null; remote: boolean; url: string; licence_id: string | null } | null;
+  jobs: { title: string; company: string; location: string | null; country: string | null; remote: boolean; url: string; licence_id: string | null; licence_match?: LinkMatch | null } | null;
 };
 type OutreachRow = { id: string; job_id: string; kind: "cold_email" | "follow_up"; sent_at: string | null; created_at: string; body_enc: string };
 type OutreachBody = { contact: Contact | null; email: string; senderName?: string | null };
@@ -21,7 +22,7 @@ type OutreachBody = { contact: Contact | null; email: string; senderName?: strin
 /** Everything on the student's board, newest first. Contacts and drafts are decrypted for the owner only. */
 export async function loadPipeline(userId: string): Promise<PipelineRow[]> {
   const [m, o] = await Promise.all([
-    db().from("matches").select("*,jobs(title,company,location,country,remote,url,licence_id)").eq("user_id", userId).order("status_at", { ascending: false }).limit(500),
+    db().from("matches").select("*,jobs(title,company,location,country,remote,url,licence_id,licence_match)").eq("user_id", userId).order("status_at", { ascending: false }).limit(500),
     db().from("outreach").select("id,job_id,kind,sent_at,created_at,body_enc").eq("user_id", userId).in("kind", ["cold_email", "follow_up"]).order("created_at", { ascending: false }).limit(1000),
   ]);
   const matches = ((m.data ?? []) as MatchRow[]).filter((r) => r.jobs);
@@ -50,7 +51,7 @@ export async function loadPipeline(userId: string): Promise<PipelineRow[]> {
     return {
       jobId: r.job_id, title: j.title, company: j.company, location: j.location ?? "", country: j.country, remote: j.remote, url: j.url,
       score: r.score, why: r.why, status: r.status, statusAt: r.status_at, shownAt: r.shown_at,
-      licence: j.licence_id ? licences.get(j.licence_id) ?? null : null,
+      licence: j.licence_id && licences.get(j.licence_id) ? { ...licences.get(j.licence_id)!, match: j.licence_match ?? null } : null,
       contact,
       draft: email ? { outreachId: email.id, followUpId: fu?.id ?? null, sentAt: email.sent_at, followUpSentAt: fu?.sent_at ?? null } : null,
       askedReplyAt: r.asked_reply_at ?? null,

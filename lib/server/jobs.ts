@@ -8,6 +8,7 @@ import { jobBadge, type SponsorBadge, type SponsorStats } from "@/lib/sponsor";
 import type { JdSponsorship } from "@/lib/jd-signals";
 import { toMatchProfile, type ProfileRow } from "./profile";
 import { blendRerank, scoreJob } from "@/lib/match";
+import type { LinkMatch } from "@/lib/ingest/boards";
 import { isMarketProfile, jobVisaFit, MARKET_NAME, MARKETS, remoteRight, visaBadge, workRights, type LicenceProof, type Market } from "@/lib/visa";
 import { SOURCE_CREDIT } from "@/lib/ingest/feeds";
 import { FAMILY_LABEL } from "@/lib/titles";
@@ -122,7 +123,7 @@ function diversify<S extends Scored>(ranked: S[], byJob: Map<string, { company: 
   });
 }
 
-type MarketJobRow = JobRow & { country: string | null; remote_scope: string | null; licence_id: string | null; source: string; seniority: string | null };
+type MarketJobRow = JobRow & { country: string | null; remote_scope: string | null; licence_id: string | null; licence_match: LinkMatch | null; source: string; seniority: string | null };
 type LicenceRow = { id: string; country: Market; rating: string | null; routes: string[]; permits: Record<string, number> };
 
 export async function licencesById(ids: string[]): Promise<Map<string, LicenceProof>> {
@@ -152,7 +153,7 @@ async function findMarketJobs(store: Store, row: ProfileRow, pro: boolean, usage
   const wanted = opts.country && (MARKETS as string[]).includes(opts.country) ? [opts.country] : (row.target_countries ?? []).filter((c) => (MARKETS as string[]).includes(c));
   const targets = wanted.length ? wanted : row.visa_country && (MARKETS as string[]).includes(row.visa_country) ? [row.visa_country] : MARKETS;
 
-  let q = db().from("jobs").select("id,title,company,company_id,location,remote,url,description,posted_at,jd_sponsorship,family,country,remote_scope,licence_id,source,seniority").eq("active", true);
+  let q = db().from("jobs").select("id,title,company,company_id,location,remote,url,description,posted_at,jd_sponsorship,family,country,remote_scope,licence_id,licence_match,source,seniority").eq("active", true);
   q = opts.country ? q.eq("country", opts.country) : q.or(`country.in.(${targets.join(",")}),remote_scope.in.(anywhere,europe)`);
   if (row.target_families.length) q = q.in("family", row.target_families);
   if (opts.remoteOnly || row.wants_remote === "remote") q = q.eq("remote", true);
@@ -171,7 +172,8 @@ async function findMarketJobs(store: Store, row: ProfileRow, pro: boolean, usage
   for (const j of pool) {
     const market = (MARKETS as string[]).includes(j.country ?? "") ? (j.country as Market) : null;
     const right = j.remote ? remoteRight(j.remote_scope, j.country, rights) : market ? rights[market] : "sponsor";
-    const licence = j.licence_id ? licences.get(j.licence_id) ?? null : null;
+    const proof = j.licence_id ? licences.get(j.licence_id) : undefined;
+    const licence = proof ? { ...proof, match: j.licence_match } : null;
     const fit = jobVisaFit(market ?? "NL", right, licence, j.jd_sponsorship);
     if (fit === "blocked") continue;
     const reason = right !== "free" && licence && fit === "ok_licensed" ? licenceReason(licence) : null;

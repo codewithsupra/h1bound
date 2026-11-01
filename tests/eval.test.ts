@@ -22,6 +22,13 @@ describe("sponsor-record matching", () => {
     expect(brand.bySet.stress.confusion.fp).toBeLessThanOrEqual(26);
     expect(brand.bySet.stress.confusion.fn).toBe(0);
   });
+  it("confirmed-sponsor claims: no wrong organisation is confirmed, and the random sample keeps nearly all", async () => {
+    const { brand } = await runSponsorRecordEval(sponsor);
+    expect(brand.confirmed.bySet.random.confusion.fp).toBe(0);
+    expect(brand.confirmed.bySet.stress.confusion.fp).toBe(0);
+    expect(brand.confirmed.bySet.random.confusion.tp).toBeGreaterThanOrEqual(65);
+    expect(brand.confirmed.failures).toEqual([]);
+  });
   it("name links: never links to the wrong entry, and misses no more than today", async () => {
     const { name } = await runSponsorRecordEval(sponsor);
     expect(name.confusion.fp).toBe(0);

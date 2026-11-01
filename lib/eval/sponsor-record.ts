@@ -1,4 +1,4 @@
-import { brandMatches } from "@/lib/ingest/boards";
+import { brandMatches, isConfirmed, linkMatch, type LinkMatch } from "@/lib/ingest/boards";
 import { licenceFor, loadLicenceIndex, type LicenceIndex } from "@/lib/ingest/refresh";
 import { licenceKey } from "@/lib/ingest/registers";
 import type { NormalizedJob } from "@/lib/ingest/ats";
@@ -21,6 +21,8 @@ export type BrandCase = {
   country: "GB" | "NL" | "IE";
   boardName: string;
   registerName: string;
+  /** Other register entries in the same country that share the board's brand (computed from the register when drawn). */
+  rivals?: string[];
   label: Label;
   confidence: "high" | "medium";
   /** What the labeler looked at. */
@@ -55,14 +57,28 @@ export type Failure = { id: string; kind: "false_positive" | "false_negative" | 
 
 type Scored = { confusion: Confusion; precision: number | null; recall: number | null };
 export type SponsorRecordResult = {
-  brand: Scored & { bySet: Record<"random" | "stress", Scored>; excludedUnsure: number; failures: Failure[] };
+  brand: Scored & {
+    bySet: Record<"random" | "stress", Scored>;
+    /**
+     * The claim that matters: "this employer is confirmed on the register". Positive = the link is
+     * exact or unique (no look-alike entries); correct = it is the same organisation. Ambiguous links
+     * are kept but not claimed, so they count as not-claimed here.
+     */
+    confirmed: Scored & { bySet: Record<"random" | "stress", Scored>; failures: Failure[]; ambiguous: { same: number; different: number } };
+    excludedUnsure: number;
+    failures: Failure[];
+  };
   name: { confusion: Confusion; precision: number | null; recall: number | null; excludedUnsure: number; failures: Failure[]; wrongEntry: number };
 };
 
 export function evalBrand(cases: BrandCase[]): SponsorRecordResult["brand"] {
   const confusion = emptyConfusion();
   const sets = { random: emptyConfusion(), stress: emptyConfusion() };
+  const conf = emptyConfusion();
+  const confSets = { random: emptyConfusion(), stress: emptyConfusion() };
   const failures: Failure[] = [];
+  const confFailures: Failure[] = [];
+  const ambiguous = { same: 0, different: 0 };
   let excludedUnsure = 0;
   for (const c of cases) {
     if (c.label === "unsure") { excludedUnsure++; continue; }
@@ -70,9 +86,19 @@ export function evalBrand(cases: BrandCase[]): SponsorRecordResult["brand"] {
     for (const t of [confusion, sets[c.set]]) tally(t, accepted, c.label === "same");
     if (accepted && c.label === "different") failures.push({ id: c.id, kind: "false_positive", summary: `board "${c.boardName}" accepted as "${c.registerName}" (${c.country})`, evidence: c.evidence });
     if (!accepted && c.label === "same") failures.push({ id: c.id, kind: "false_negative", summary: `board "${c.boardName}" rejected for "${c.registerName}" (${c.country})`, evidence: c.evidence });
+
+    const m: LinkMatch | null = linkMatch(c.boardName, c.registerName, c.rivals ?? []);
+    const claimed = isConfirmed(m);
+    for (const t of [conf, confSets[c.set]]) tally(t, claimed, c.label === "same");
+    if (m === "ambiguous") ambiguous[c.label === "same" ? "same" : "different"]++;
+    if (claimed && c.label === "different") confFailures.push({ id: c.id, kind: "false_positive", summary: `"${c.boardName}" confirmed as "${c.registerName}" (${c.country}, ${m})`, evidence: c.evidence });
   }
   const scored = (c: Confusion): Scored => ({ confusion: c, precision: precision(c), recall: recall(c) });
-  return { ...scored(confusion), bySet: { random: scored(sets.random), stress: scored(sets.stress) }, excludedUnsure, failures };
+  return {
+    ...scored(confusion), bySet: { random: scored(sets.random), stress: scored(sets.stress) },
+    confirmed: { ...scored(conf), bySet: { random: scored(confSets.random), stress: scored(confSets.stress) }, failures: confFailures, ambiguous },
+    excludedUnsure, failures,
+  };
 }
 
 /** Runs the production linker (licenceFor) against a register index built from the case's candidates. */

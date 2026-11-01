@@ -1,6 +1,7 @@
 import { fetchBoard, keepJob, MARKET_COUNTRIES, type AtsKind, type NormalizedJob } from "./ats";
 import { fetchHimalayas, fetchRemoteOk } from "./feeds";
 import { licenceKey } from "./registers";
+import { pickBoardEntry, type LinkMatch } from "./boards";
 import { titleFamily } from "../titles";
 import { prettyCompany } from "../employer";
 
@@ -11,11 +12,11 @@ import { prettyCompany } from "../employer";
  */
 
 type Db = { from(table: string): any }; // eslint-disable-line @typescript-eslint/no-explicit-any
-export type JobLink = { companyId: string | null; licenceId: string | null };
+export type JobLink = { companyId: string | null; licenceId: string | null; licenceMatch?: LinkMatch | null };
 
 export function toRow(j: NormalizedJob, link: JobLink, now: string) {
   return {
-    source: j.source, source_id: j.sourceId, company_id: link.companyId, licence_id: link.licenceId, company: prettyCompany(j.company), title: j.title,
+    source: j.source, source_id: j.sourceId, company_id: link.companyId, licence_id: link.licenceId, licence_match: link.licenceId ? link.licenceMatch ?? null : null, company: prettyCompany(j.company), title: j.title,
     family: titleFamily(j.title), location: j.location, remote: j.remote, is_us: j.isUs, country: j.country, remote_scope: j.remoteScope,
     seniority: j.seniority, url: j.url, description: j.description, posted_at: j.postedAt, jd_sponsorship: j.jdSponsorship, active: true, last_seen: now,
   };
@@ -56,38 +57,65 @@ export async function loadLicenceIndex(db: Db, names: string[]): Promise<Licence
   return idx;
 }
 
-/** The register entry for a job: the board's own licence when the countries agree, else a name match in the job's country. */
-export function licenceFor(j: NormalizedJob, names: string[], idx: LicenceIndex, own?: { id: string; country: string } | null): string | null {
+export type OwnLicence = { id: string; country: string; match?: LinkMatch | null };
+
+/**
+ * The register entry for a job and how sure the link is: the board's own licence when the countries
+ * agree (its confidence was decided when the board was attached), else an exact name match in the
+ * job's country (exact by construction).
+ */
+export function licenceLinkFor(j: NormalizedJob, names: string[], idx: LicenceIndex, own?: OwnLicence | null): { id: string; match: LinkMatch | null } | null {
   if (!j.country || !MARKET_COUNTRIES.has(j.country)) return null;
-  if (own && own.country === j.country) return own.id;
+  if (own && own.country === j.country) return { id: own.id, match: own.match ?? null };
   for (const n of [j.company, ...names]) {
     const id = idx.get(`${j.country}:${licenceKey(n)}`);
-    if (id) return id;
+    if (id) return { id, match: "exact" };
   }
   return null;
 }
 
-type Board = { id: string; kind: AtsKind; slug: string; label: string; names: string[]; companyId: string | null; licence: { id: string; country: string } | null };
+/** Same as licenceLinkFor, id only. */
+export function licenceFor(j: NormalizedJob, names: string[], idx: LicenceIndex, own?: OwnLicence | null): string | null {
+  return licenceLinkFor(j, names, idx, own)?.id ?? null;
+}
 
-/** Boards from both tables, merged when a US sponsor and a register entry share one board. */
+type Board = { id: string; kind: AtsKind; slug: string; label: string; names: string[]; companyId: string | null; licences: Map<string, OwnLicence> };
+
+/**
+ * Boards from both tables, merged when a US sponsor and a register entry share one board. A board
+ * attached to several register entries keeps one entry per country: the exact one, else the closest name.
+ */
 async function loadBoards(db: Db): Promise<Board[]> {
   const out = new Map<string, Board>();
   const { data: us, error } = await db.from("companies").select("id,board_kind,board_slug,display_name,name").not("board_kind", "is", null);
   if (error) throw new Error(error.message);
   for (const c of us as { id: string; board_kind: AtsKind; board_slug: string; display_name: string | null; name: string }[]) {
-    out.set(`${c.board_kind}:${c.board_slug}`, { id: c.id, kind: c.board_kind, slug: c.board_slug, label: c.display_name ?? c.name, names: [c.name, c.display_name ?? ""].filter(Boolean), companyId: c.id, licence: null });
+    out.set(`${c.board_kind}:${c.board_slug}`, { id: c.id, kind: c.board_kind, slug: c.board_slug, label: c.display_name ?? c.name, names: [c.name, c.display_name ?? ""].filter(Boolean), companyId: c.id, licences: new Map() });
   }
+  type L = { id: string; country: string; board_kind: AtsKind; board_slug: string; display_name: string | null; name: string; board_match: LinkMatch | null };
+  const attached = new Map<string, L[]>();
   for (let from = 0; ; from += 1000) {
-    const { data, error: e } = await db.from("sponsor_licences").select("id,country,board_kind,board_slug,display_name,name").not("board_kind", "is", null).order("id").range(from, from + 999);
+    const { data, error: e } = await db.from("sponsor_licences").select("id,country,board_kind,board_slug,display_name,name,board_match").not("board_kind", "is", null).order("id").range(from, from + 999);
     if (e) throw new Error(e.message);
-    const rows = data as { id: string; country: string; board_kind: AtsKind; board_slug: string; display_name: string | null; name: string }[];
+    const rows = data as L[];
     for (const l of rows) {
       const k = `${l.board_kind}:${l.board_slug}`;
-      const prev = out.get(k);
-      if (prev) { prev.licence ??= { id: l.id, country: l.country }; prev.names.push(l.name); continue; }
-      out.set(k, { id: l.id, kind: l.board_kind, slug: l.board_slug, label: l.display_name ?? l.name, names: [l.name, l.display_name ?? ""].filter(Boolean), companyId: null, licence: { id: l.id, country: l.country } });
+      (attached.get(k) ?? attached.set(k, []).get(k)!).push(l);
     }
     if (rows.length < 1000) break;
+  }
+  for (const [k, rows] of attached) {
+    const brand = rows[0].display_name ?? rows[0].name;
+    let board = out.get(k);
+    if (!board) {
+      board = { id: rows[0].id, kind: rows[0].board_kind, slug: rows[0].board_slug, label: brand, names: [], companyId: null, licences: new Map() };
+      out.set(k, board);
+    }
+    for (const country of new Set(rows.map((r) => r.country))) {
+      const best = pickBoardEntry(brand, rows.filter((r) => r.country === country));
+      if (best) board.licences.set(country, { id: best.id, country, match: best.board_match });
+    }
+    board.names.push(...rows.map((r) => r.name), brand);
   }
   return [...out.values()];
 }
@@ -117,7 +145,10 @@ export async function refreshAll(db: Db, opts: { concurrency?: number; shard?: n
       try {
         const list = await withRetry(() => fetchBoard(b.kind, b.slug, b.label));
         if (!list) continue;
-        const rows = list.filter(keepJob).map((j) => toRow(j, { companyId: b.companyId, licenceId: licenceFor(j, b.names, idx, b.licence) }, runStart));
+        const rows = list.filter(keepJob).map((j) => {
+          const link = licenceLinkFor(j, b.names, idx, j.country ? b.licences.get(j.country) : null);
+          return toRow(j, { companyId: b.companyId, licenceId: link?.id ?? null, licenceMatch: link?.match ?? null }, runStart);
+        });
         await upsertJobs(db, rows);
         // Only reached when every batch landed, so a failed board never loses its live jobs.
         await withRetry(async () => {
@@ -149,7 +180,7 @@ export async function refreshFeeds(db: Db, opts: { log?: (s: string) => void; ma
       const list = (await pull()).filter(keepJob);
       if (list.length < 20) throw new Error(`only ${list.length} jobs; keeping yesterday's`);
       const idx = await loadLicenceIndex(db, list.map((j) => j.company));
-      await upsertJobs(db, list.map((j) => toRow(j, { companyId: null, licenceId: licenceFor(j, [], idx) }, runStart)));
+      await upsertJobs(db, list.map((j) => { const link = licenceLinkFor(j, [], idx); return toRow(j, { companyId: null, licenceId: link?.id ?? null, licenceMatch: link?.match ?? null }, runStart); }));
       const { error } = await db.from("jobs").update({ active: false }).eq("source", source).lt("last_seen", runStart);
       if (error) throw new Error(error.message);
       out[source] = list.length;

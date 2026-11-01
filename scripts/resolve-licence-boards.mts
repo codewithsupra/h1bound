@@ -8,7 +8,7 @@ import { createAdminClient } from "@insforge/sdk";
 import { boardSlugs, BOARD_URL, fetchBoard, type AtsKind } from "../lib/ingest/ats";
 import { coreEmployer } from "../lib/employer";
 import { licenceKey } from "../lib/ingest/registers";
-import { boardFitsCountry, brandMatches, UK_PRIORITY_ROUTES } from "../lib/ingest/boards";
+import { boardFitsCountry, brandMatches, linkMatch, UK_PRIORITY_ROUTES } from "../lib/ingest/boards";
 
 const args = process.argv.slice(2);
 const limit = Number(args[args.indexOf("--limit") + 1]) || 100_000;
@@ -81,7 +81,14 @@ async function resolve(l: Lic) {
         if (NAMED.has(kind) && hit.companyName && !brandMatches(hit.companyName, l.name)) continue;
         const jobs = (await fetchBoard(kind, slug, hit.companyName ?? l.name).catch(() => null)) ?? [];
         if (!boardFitsCountry(jobs, l.country)) continue;
-        return { kind, slug, display: hit.companyName ?? null, inCountry: jobs.filter((j) => j.country === l.country).length };
+        // How sure are we this board belongs to THIS entry? Other entries sharing the brand make it only a "possible" link.
+        const brand = hit.companyName ?? l.name;
+        const bk = licenceKey(brand);
+        const { data: rivals } = bk
+          ? await db.from("sponsor_licences").select("name").eq("country", l.country).eq("listed", true).neq("id", l.id).or(`key.eq."${bk}",key.like."${bk} %"`).limit(25)
+          : { data: [] };
+        const match = linkMatch(brand, l.name, ((rivals ?? []) as { name: string }[]).map((r) => r.name)) ?? "ambiguous";
+        return { kind, slug, display: hit.companyName ?? null, match, inCountry: jobs.filter((j) => j.country === l.country).length };
       }
     }
   }
@@ -93,10 +100,10 @@ await Promise.all(Array.from({ length: 10 }, async () => {
   for (let l = queue.shift(); l; l = queue.shift()) {
     const r = await resolve(l).catch(() => null);
     const now = new Date().toISOString();
-    const patch = r ? { board_kind: r.kind, board_slug: r.slug, display_name: r.display, board_checked_at: now } : { board_checked_at: now };
+    const patch = r ? { board_kind: r.kind, board_slug: r.slug, display_name: r.display, board_match: r.match, board_checked_at: now } : { board_checked_at: now };
     await db.from("sponsor_licences").update(patch).eq("id", l.id);
     done++;
-    if (r) { found++; console.log(`✓ ${l.country} ${l.name} → ${r.kind}/${r.slug} (${r.inCountry} jobs in ${l.country})`); }
+    if (r) { found++; console.log(`✓ ${l.country} ${l.name} → ${r.kind}/${r.slug} [${r.match}] (${r.inCountry} jobs in ${l.country})`); }
     if (done % 250 === 0) console.log(`… ${done} checked, ${found} boards`);
   }
 }));

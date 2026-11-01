@@ -63,13 +63,31 @@ ${row(`Random sample of linked employers (${bc(rand)} pairs)`, rand, null, null)
 ${row(`Stress set: brand collisions, enriched on purpose (${bc(b.bySet.stress.confusion)} pairs)`, b.bySet.stress.confusion, null, null)}
 
 - The **random sample** is the honest estimate of how often a board link is right across all linked employers: ${describe("correct", rand.tp, rand.tp + rand.fp)}.
-- The **stress set** is drawn from the ${137} boards whose brand is a prefix of several register entries (441 of ${882} board links are prefix-only; 137 of those have rivals). Its precision is deliberately pessimistic and is not a population rate. It shows what kind of company the rule lets through.
+- The **stress set** is drawn from the boards whose brand is a prefix of several register entries (441 of 882 board links were prefix-only when drawn; 137 of those have rivals). Its precision is deliberately pessimistic and is not a population rate. It shows what kind of company the rule lets through.
 - Recall is 100% because the rule accepts every prefix; the cost is the false positives below.
 - Excluded as unsure: ${b.excludedUnsure}.
 
-**Failure cases (${b.failures.length}):**
+#### Confirmed-sponsor claim (what the badge says)
+
+A link is **confirmed** only when it is exact, or unique (no other register entry shares the brand). Links with look-alike entries are kept but shown as "Possible sponsor: check which entity hires you" (\`linkMatch\` in \`lib/ingest/boards.ts\`). **Positive = confirmed; correct = same organisation.**
+
+| Set | Precision | Recall | TP | FP | FN | TN |
+|---|---|---|---|---|---|---|
+${row(`Random sample (${bc(b.confirmed.bySet.random.confusion)} pairs)`, b.confirmed.bySet.random.confusion, null, null)}
+${row(`Stress set (${bc(b.confirmed.bySet.stress.confusion)} pairs)`, b.confirmed.bySet.stress.confusion, null, null)}
+
+- **Before** (any prefix accepted): random 98.5% (67/68), stress 75% (79/105).
+- **After**: no wrong organisation is confirmed in either set. The cost is demotion: of the ${b.confirmed.ambiguous.same + b.confirmed.ambiguous.different} pairs that become "possible", ${b.confirmed.ambiguous.same} really are the same organisation (mostly sister entities of one group such as NTS, Stripe, WPP) and ${b.confirmed.ambiguous.different} are different companies. On the random sample only ${b.confirmed.bySet.random.confusion.fn} of ${b.confirmed.bySet.random.confusion.tp + b.confirmed.bySet.random.confusion.fn} correct links lose "confirmed"; in the stress set, recall of confirmed claims is low by construction.
+- **Production impact** (dry run of \`scripts/classify-board-links.mts\` on 2026-11-01): 882 board links = 595 exact, 150 unique, 137 ambiguous. Active jobs behind them: 5,277 exact, 1,143 unique, 1,094 ambiguous. About 1,094 jobs (15% of board-linked jobs) would show "Possible sponsor" instead of "Licensed sponsor".
+- The name-matching path (1b) is unchanged and always exact.
+
+**Failure cases of the old rule, now demoted to "possible" (${b.failures.length}):**
 
 ${fails(b.failures)}
+
+**Confirmed-claim failures after the change (${b.confirmed.failures.length}):**
+
+${fails(b.confirmed.failures)}
 
 ### 1b. Employer name to register entry (\`licenceFor\`, name path)
 

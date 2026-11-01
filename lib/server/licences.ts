@@ -25,15 +25,18 @@ export async function licenceBySlug(country: Market, slug: string): Promise<Lice
   return (data as LicenceRow | null) ?? null;
 }
 
+/** Jobs whose link to this register entry is only a possible match are not listed under it: the entry may be a different company. */
+const NOT_AMBIGUOUS = "licence_match.is.null,licence_match.neq.ambiguous";
+
 export async function openJobs(licenceId: string, limit = 8) {
-  const { data, count } = await db().from("jobs").select("id,title,location,remote,url,posted_at", { count: "exact" }).eq("licence_id", licenceId).eq("active", true).order("posted_at", { ascending: false, nullsFirst: false }).limit(limit);
+  const { data, count } = await db().from("jobs").select("id,title,location,remote,url,posted_at", { count: "exact" }).eq("licence_id", licenceId).eq("active", true).or(NOT_AMBIGUOUS).order("posted_at", { ascending: false, nullsFirst: false }).limit(limit);
   return { jobs: (data ?? []) as { id: string; title: string; location: string; remote: boolean; url: string; posted_at: string | null }[], count: count ?? 0 };
 }
 
 async function jobCounts(ids: string[]): Promise<Map<string, number>> {
   const out = new Map<string, number>();
   await Promise.all(ids.map(async (id) => {
-    const { count } = await db().from("jobs").select("id", { count: "exact", head: true }).eq("licence_id", id).eq("active", true);
+    const { count } = await db().from("jobs").select("id", { count: "exact", head: true }).eq("licence_id", id).eq("active", true).or(NOT_AMBIGUOUS);
     out.set(id, count ?? 0);
   }));
   return out;
@@ -83,7 +86,7 @@ export async function landingLicences() {
     pages("GB", 2400, KNOWN_UK_CITIES),
     pages("NL", 700),
     pages("IE", 700),
-    db().from("jobs").select("licence_id").eq("active", true).not("licence_id", "is", null).limit(20_000),
+    db().from("jobs").select("licence_id").eq("active", true).not("licence_id", "is", null).or(NOT_AMBIGUOUS).limit(20_000),
     db().from("jobs").select("id", { count: "exact", head: true }).eq("active", true).or("country.in.(GB,NL,IE),remote_scope.in.(anywhere,europe)"),
     Promise.all((["GB", "NL", "IE"] as Market[]).map((c) => db().from("sponsor_licences").select("id", { count: "exact", head: true }).eq("country", c).eq("listed", true))),
   ]);
@@ -112,7 +115,7 @@ export async function landingLicences() {
   // jobs that has an entry-level opening, so the example job is real and plausible for a graduate.
   let feature: { licence: LicenceRow; jobs: number; role: string; city: string } | null = null;
   for (const l of ((top ?? []) as LicenceRow[]).filter((x) => x.country === "GB").sort((a, b) => (jobsBy.get(b.id) ?? 0) - (jobsBy.get(a.id) ?? 0))) {
-    const { data: js } = await db().from("jobs").select("title,location,seniority").eq("licence_id", l.id).eq("active", true).eq("country", "GB").in("seniority", ["graduate", "junior"]).limit(1);
+    const { data: js } = await db().from("jobs").select("title,location,seniority").eq("licence_id", l.id).eq("active", true).or(NOT_AMBIGUOUS).eq("country", "GB").in("seniority", ["graduate", "junior"]).limit(1);
     const j = (js ?? [])[0] as { title: string; location: string } | undefined;
     if (j) {
       feature = { licence: l, jobs: jobsBy.get(l.id) ?? 0, role: j.title, city: l.city ?? (j.location.split(",")[0] || "London") };

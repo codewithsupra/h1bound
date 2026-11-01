@@ -111,6 +111,7 @@ Migrations live in `migrations/`. Apply one with `npx -y @insforge/cli db migrat
 
 ### Evaluation and operations
 - `tests/eval/` holds frozen, hand-labeled sets and `lib/eval/` the metrics; `docs/EVAL.md` is generated (`npm run eval`) and `npm run eval:check` (part of `verify`) fails if it is stale. Sponsor-record matching (is this employer that register entry? `brandMatches`, `licenceFor`) and vacancy sponsorship (does the posting offer it? `jdSponsorship`) are measured separately on purpose. Labels are by an AI labeler and unverified; the vacancy held-out set must not be tuned against (draw a new one with `scripts/eval-draw-jd.mts`). Floors in `tests/eval.test.ts` are the measured level: raise them when a matcher improves.
+- Job-to-register links carry a confidence (`LinkMatch`: exact | unique | ambiguous; `jobs.licence_match`, `sponsor_licences.board_match`). Only exact/unique may be shown as "Licensed sponsor"; ambiguous means look-alike entries exist and must read "Possible sponsor". A board keeps one entry per country (`pickBoardEntry`).
 - Scheduled runs are recorded in `job_runs`/`board_failures` and every AI call in `ai_calls` (`lib/server/ops.ts`: `trackRun`, `tracked`, `recordAi`). Telemetry is best-effort and must never fail a job or request. `scripts/ops-report.mts` reports a period; `/api/cron/ops-check` emails `OWNER_EMAIL` on a breach (`lib/ops.ts`). Runbook: `docs/OPERATIONS.md`; failures go in `docs/INCIDENTS.md`.
 
 ## Rules that are easy to break
