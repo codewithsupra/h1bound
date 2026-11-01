@@ -25,6 +25,13 @@ const NO = [
   /\b(only|solely)\s+(consider|accept)\w*\s+(applicants|candidates)\s+(who|with)\b.{0,40}\bright\s+to\s+work/,
   /\b(sole\s+)?uk\s+national(s|ity)?\s+(only|required)/,
   /\b(sc|dv|security)\s+clear(ed|ance)\s+(is\s+)?(required|essential)/,
+  // "not currently able to sponsor visas", "not in a position to sponsor", "not eligible for employment visa sponsorship".
+  /\bnot\s+(currently\s+|presently\s+|at\s+this\s+time\s+)?(able|in\s+a\s+position)\s+to\s+(provide\s+|offer\s+)?(visa\s+|immigration\s+|work\s+)?sponsor/,
+  /\bnot\s+(eligible|available)\s+for\s+(new\s+|any\s+)?(employment\s+|work\s+)?(visa\s+|immigration\s+)?sponsorship/,
+  // "Visa sponsorship: Not available for this role."
+  /\bsponsorship\s*[:\-\u2013]\s*(is\s+)?(not\s+(available|offered|provided|applicable|possible)|n\/?a\b|unavailable)/,
+  // Dutch: "Visa sponsorship voor deze rol is niet van toepassing."
+  /\bsponsorship\b.{0,40}\bniet\s+(van\s+toepassing|beschikbaar|mogelijk)/,
 ];
 
 const YES = [
@@ -37,12 +44,30 @@ const YES = [
   /\b(skilled\s+worker|tier\s*2)\s+(visa\s+)?sponsorship\s+(is\s+)?(available|offered|possible)/,
   /\b(kennismigrant|highly\s+skilled\s+migrant)\b.{0,60}\b(available|possible|support|eligible|offer)/,
   /\b(critical\s+skills|general)\s+employment\s+permit\b.{0,40}\b(available|support|sponsor)/,
+  // "We sponsor work visas", "We do sponsor visas!", "We can sponsor your visa", "willing to sponsor eligible candidates for employment visas".
+  /\bwe\s+(do\s+)?sponsor\s+(work\s+|skilled\s+worker\s+)?visas?\b/,
+  /\b(can|will|would|willing\s+to|happy\s+to|able\s+to)\s+sponsor\s+(your\s+|a\s+|an\s+)?(eligible\s+)?(candidates?\s+for\s+(an?\s+)?)?(employment\s+|work\s+|skilled\s+worker\s+)?visas?\b/,
+  /\bvisa\s+sponsorship\s+where\s+applicable\b/,
+  // A benefits list: "- Skilled Worker visa sponsorship - 28 days annual leave".
+  /[-\u2022\u00b7*]\s*(skilled\s+worker\s+)?visa\s+sponsorship\s*[-\u2022\u00b7*]/,
 ];
 
+const NEGATION = /\b(not|no|never|cannot|unable)\b|n't\b/;
+
+/** A "yes" phrase inside a sentence that also negates ("We can't offer visa sponsorship, but...") is not an offer. */
+function negated(t: string, at: number): boolean {
+  const start = Math.max(t.lastIndexOf(".", at), t.lastIndexOf("!", at), t.lastIndexOf("?", at)) + 1;
+  return NEGATION.test(t.slice(start, at));
+}
+
 export function jdSponsorship(text: string): JdSponsorship {
-  const t = text.toLowerCase().replace(/\s+/g, " ");
+  // Curly apostrophes ("can\u2019t") are common in job ads and must not defeat the patterns.
+  const t = text.toLowerCase().replace(/[\u2018\u2019\u02bc`\u00b4]/g, "'").replace(/\s+/g, " ");
   if (NO.some((r) => r.test(t))) return "no";
-  if (YES.some((r) => r.test(t))) return "yes";
+  for (const r of YES) {
+    const m = r.exec(t);
+    if (m && !negated(t, m.index)) return "yes";
+  }
   return null;
 }
 

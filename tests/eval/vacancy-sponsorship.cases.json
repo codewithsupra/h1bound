@@ -1,0 +1,785 @@
+{
+ "version": 1,
+ "labeler": "Claude (AI) reading each excerpt; needs spot-checking by a human",
+ "drawnAt": "2026-11-01",
+ "cases": [
+  {
+   "id": "vac-001",
+   "country": "GB",
+   "company": "Verkada",
+   "text": "We are unable to sponsor or take over sponsorship of an employment visa for this role, at this time. Salary: £45k Basic + bonus based commission scheme, OTE £57k Verkada Is An Equal Opportunity Employer As an equal opportunity employer, Verkada is committed",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-002",
+   "country": "GB",
+   "company": "Graphcore",
+   "text": "We can provide a flexible approach to interview and encourage you to chat to us if you require any reasonable adjustments. Applicants for this position must hold the right to work in the UK. Unfortunately at this time, we are unable to provide visa sponsorship or support for visa applications",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-003",
+   "country": null,
+   "company": "Inovalon",
+   "text": "This position is not eligible for immigration sponsorship (e.g. H-1B, TN, or E-3). Applicants must be authorized to work in the United States as a condition of employment. (This is only applicable for US-based positions) If you don’t meet every qualification listed but are excited abou",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-004",
+   "country": "GB",
+   "company": "Graphcore",
+   "text": "If you want to lead the system software organisation behind Graphcore’s next generation platforms, we’d love to hear from you. Apply now to be part of the journey. Sponsorship Applicants must have the legal right to work in the UK. Unfortunately, we are unable to provide visa sponsorship or support visa applications for this role.",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-005",
+   "country": null,
+   "company": "Affirm",
+   "text": "llingness to travel up to 30% of the time Base Pay Grade - J Equity Grade - 5 USA Pacific OTE (CA, WA, NY, NJ, CT): $175,500 - $243,000 USA Sapphire OTE (all other U.S. states): $155,250 - $222,750 Please note that visa sponsorship is not available for this position. #LI-Remote Remote-first with flexibility built in Affirm is proud to be a remote-first company. Most roles can be done from almost anywhere within the country of ",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-006",
+   "country": "GB",
+   "company": "Ohme",
+   "text": "ary Income Protection Scheme for long term illness Ride to Work Scheme Payroll Giving Scheme Season Ticket Loan to spread cost of travel over 12 months Eye Test every 2 years Please note that we are unable to offer visa sponsorship for this role. You must have full eligibility to work in the UK. Ohme is an equal opportunity employer. Diversity, Equity and Inclusion are at the heart of what we do and we encourage a culture wher",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-007",
+   "country": "GB",
+   "company": "Pmg",
+   "text": "Work Experience: Prior internships or work experience relevant to the marketing & advertising industry can help your resume stand out. Authorisation to Work: Please note, we do not offer visa sponsorship for this role. Why PMG? Competitive Salary & Bonuses: We reward your hard work and passion. Top-Notch Benefits: Including but not limited to private healthcare, employer pension contribution and £150 per month commuter allowan",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-008",
+   "country": "GB",
+   "company": "HelloFresh",
+   "text": "ndly office! ● Nursery support scheme ● Cycle to work scheme ● Group Life Assurance Location : The HelloFresh Farm, 60 Worship Street, EC2A 2EZ, London To be considered for this role, you’ll need to have the independent right to work in the UK, as we're unfortunately unable to provide sponsorship at this time. Hybrid Working Policy We offer a hybrid working policy for eligible roles, allowing flexibility to work from home and ",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-009",
+   "country": null,
+   "company": "FormativGroup",
+   "text": "Candidates residing outside these states are not currently eligible for consideration. Applicants must be authorized to work for any employer in the U.S. FormativGroup is unable to sponsor or assume sponsorship of an employment visa for this position. We are committed to pay equity and transparency. The compensation range for this position represents our good faith estimate of the range we reasonably expect to pay for",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-010",
+   "country": "NL",
+   "company": "Wetravel",
+   "text": "- Cutting-edge equipment and tools to set you up for success. - Join an international, travel-loving team with a passion for adventure and innovation. - Employer-sponsored pension plan with a 2% employer contribution deposited into your individual pension account. - Access to a 10% group discount on supplementary/additional health insurance (aanvullende verzekeringen), with the same discount availab",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-011",
+   "country": "GB",
+   "company": "Carta",
+   "text": "Client-ready under pressure. You're comfortable as the named contact for demanding institutional clients in a fast-paced financial services environment — credible, responsive, and composed when deals get complicated. Right to work in the UK without visa sponsorship is required for this role. At Carta, you're not just an employee. You're a builder who is creating infrastructure that accelerates innovation and empowers more owne",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-012",
+   "country": "GB",
+   "company": "Guidepoint",
+   "text": "This is a hybrid position based in Manchester. All applicants must have the right to work in the UK. Interview Process: Meet your Guidepoint Recruiter! Initial Candidate Screen Meet the Guidepoint Teams! Hiring Manager Interview Mock Assessment (Role dependent) Complete a simulated client request and gain more insi",
+   "label": "unclear",
+   "confidence": "medium",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-013",
+   "country": "GB",
+   "company": "SiriusPoint",
+   "text": "Federal Trade Commission at ReportFraud.ftc.gov or the FBI's Internet Crime Complaint Center at ic3.gov. We are unable to sponsor or take over sponsorship of an employment visa at this time.",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-014",
+   "country": null,
+   "company": "Twin Health",
+   "text": "This remote opportunity based out of the U.S. Applicants must be authorized to work for any employer in the U.S. We are unable to sponsor or take over sponsorship of an employment Visa at this time. Compensation and Benefits The compensation range for this position is $215,000 - $245,000 annually. Twin has an ambitious vision to empower people to live healthier and ha",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-015",
+   "country": null,
+   "company": "FloQast",
+   "text": "We call on key client stakeholders within the office of the Chief Financial Officer (CFO). If you are looking to advance your career, this role will serve as the foundation for an exciting pathway into sales. *Visa sponsorship is NOT available at this time* What You'll Do Cultivate new business opportunities and create outreach strategies to build rapport with senior level executives at potential clients Develop and maintain a",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-016",
+   "country": null,
+   "company": "FormativGroup",
+   "text": "Applicants must be authorized to work for ANY employer in the U.S. We are unable to sponsor or take over sponsorship of an employment visa currently . To be considered for this position, candidates must reside in one of the following U.S. states: AL, AR, AZ, CA, CO, CT, DE, FL, GA, IA, ID, IL, IN, KS, MA, MD, MI, MN, MO, N",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-017",
+   "country": "GB",
+   "company": "SumUp",
+   "text": "SumUp | Product & Design | London, United Kingdom Competitive salary · Office-first This role does not support Visa sponsorship and candidates must have the right to work in the UK. About the team The Consumer Bank squad sits at the heart of one of SumUp's most exciting growth bets — scaling SumUp Pay, our consumer fintech product, to millions of active",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-018",
+   "country": "GB",
+   "company": "Convene Hospitality Group",
+   "text": "Event Production Manager Please note: Candidates must currently reside in the UK and be able to work in the UK without sponsorship. About Convene Rathbone Located in the heart of London’s iconic West End, Convene Rathbone is set to open in Spring 2027 as one of the city’s most anticipated new Meetings & Events destinations. The 54,000-square-foot venue at O",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-019",
+   "country": null,
+   "company": "GuidePoint Security",
+   "text": "We are unable to sponsor or take over sponsorship of an employment visa for this role. We use Greenhouse Software as our applicant tracking system and Zoom Scheduler for HR screen request scheduling. At times, your email may block our communication with you",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-020",
+   "country": null,
+   "company": "3Cloud",
+   "text": "At this time, we cannot sponsor applicants for work visas.",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-021",
+   "country": null,
+   "company": "Esri",
+   "text": "of an organization Knowledge of industry fiscal year, budgeting, and procurement cycles Ability to travel domestically or internationally 25-50% Bachelor’s degree in GIS, business administration, or a related field Visa sponsorship is not available for this posting. Applicants must be authorized to work for any employer in the U.S. Recommended Qualifications General knowledge of data science or spatial analysis and how it is u",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-022",
+   "country": null,
+   "company": "Second Front Systems",
+   "text": "s with hyperscalers, cloud providers, primes, and systems integrators, support partner enablement, and deliver clean handoffs to implementation — serving as the voice of technical feasibility throughout the sales cycle. Work authorization & location: Candidates must hold the right to work in the EU and be based in the EU (Remote). Residency is required in whichever EU country you’re working from. Employment type & schedule: Th",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-023",
+   "country": null,
+   "company": "3Cloud",
+   "text": "At this time, we cannot sponsor applicants for work visas. This Job Posting will expire on Monday, October 26th, 2026. 3Cloud Total Rewards Highlights Include: Flexible work location with a virtual first approach to work! 401(K) with match up to 50% of your 6% con",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-024",
+   "country": "GB",
+   "company": "Monzo",
+   "text": "What’s in it for you: 💰 £130,000 - £170,000 + Equity ✈️We can help you relocate to the UK ✅ We can sponsor visas. 📍This role can be based in our London office or remotely across the UK (with ad hoc meetings in London). ⏰We offer flexible working hours and trust you to work enough hours to do your job well, at times that suit you and you",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-025",
+   "country": "GB",
+   "company": "Kaluza",
+   "text": "Director - Energy Retail (Billing & Payments) Location: London OR Bristol (Hybrid working model) Salary: £150,000 - £190,000 Team: Billing & Payments Reporting To: VP Product Please note: This role requires an existing right to work in the UK. We can’t offer visa sponsorship, but we review sponsorship role by role, so keep an eye on our careers site for future opportunities. Kaluza is the Energy Intelligence Platform, turning ",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-026",
+   "country": "GB",
+   "company": "Anthropic",
+   "text": "Visa Sponsorship: We are not currently able to sponsor visas for fellows. To participate in the Fellows program, you need to have or independently obtain full-time work authorization in the UK, the US, or Canada.",
+   "label": "no",
+   "confidence": "high",
+   "note": "Full sentence taken from the posting; the matcher read the same text as an offer."
+  },
+  {
+   "id": "vac-027",
+   "country": "GB",
+   "company": "Monzo",
+   "text": "ruitment team at various points during your process but if you do have any specific questions ahead of this please contact us on tech-hiring@monzo.com What’s in it for you: ✈️ We can help you relocate to the UK ✅ We can sponsor visas 📍This role can be based in our London office, but we're open to distributed working within the UK (with ad hoc meetings in London). ⏰ We offer flexible working hours and trust you to work enough h",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-028",
+   "country": "NL",
+   "company": "Fidamy",
+   "text": "WHY JOIN US - Competitive compensation - Brand new MacBook Pro and equipment - Paid access to Claude Code and in-house AI agent tools for faster, safer shipping - Flexible hybrid work (2-3 days in office) - Visa sponsorship available (including transfer of Dutch visa; no relocation support) - Beautiful Amsterdam office - High autonomy and direct influence on architectural and product direction - Visible impact on strategy, pro",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-029",
+   "country": "NL",
+   "company": "Flexport",
+   "text": "Parental leave: time off for both parents to bond with a new child. Wellbeing support: an Employee Assistance Program through Aetna for you and your household, at no cost. Visa sponsorship: we sponsor visas for the right candidates and help you move to Amsterdam. Eligible international hires may also benefit from the Dutch expat tax ruling. Our hiring process Application review: our team reviews your application.",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-030",
+   "country": "NL",
+   "company": "Plumerai",
+   "text": "We have flexible working hours and work together from our offices on at least 2 fixed days per week. What we offer - Competitive salary. - Generous equity stake in the company. - Relocation assistance and visa sponsorship is provided. - Choose your own laptop and equipment. - 25 days of paid vacation time in addition to bank holidays. - Ability to attend top research conferences like NeurIPS, ICML and CVPR. Process Talent Scre",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-031",
+   "country": null,
+   "company": "Doppel",
+   "text": "We are not currently able to sponsor visas. The base salary range for this role is $100,000-$110,000 with commissions, equity participation, and comprehensive benefits. Exact compensation will be commensurate with experience and location. We are an Equal Opportunity Em",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-032",
+   "country": "GB",
+   "company": "Causaly",
+   "text": "- Own employment law compliance in every country we operate in, including right to work and visas, and keep our policies, handbooks and contracts current, with our General Counsel and local advisers. - Own our HRIS and People data, keep it accurate and compliant, and produce reporting leaders can act on. - Manage",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-033",
+   "country": "GB",
+   "company": "Zima International",
+   "text": "We do not discriminate on the basis of race, religion, color, national origin, gender, gender identity, sexual orientation, age, marital status, disability, protected veteran status, citizenship or immigration status, or any other legally protected characteristics. Dandy also fully complies with the Americans with Disabilities Act (ADA). We are dedicated to embracing challenges and creating an accessible, inclusive workplace f",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-034",
+   "country": null,
+   "company": "Axonius",
+   "text": "Axonius participates in E-Verify. To learn more, please review the E-Verify Participation Poster (PDF) and the Right to Work Poster (PDF) . By submitting your application to us, you acknowledge that your personal data will be processed in accordance with our Global Job Candidate Privacy Notice.",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-035",
+   "country": null,
+   "company": "Sezzle",
+   "text": "This is a ground-floor build with the hard parts already cleared: executive sponsorship is in place, the implementation roadmap is defined, and the core program materials are drafted. Your job is to turn that foundation into an operating program, and then to own the program as it matures. As our Privacy Manager, yo",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-036",
+   "country": "GB",
+   "company": "WPP Media",
+   "text": "If you require accommodations or flexibility, please discuss this with the hiring team during the interview process. Please note this is a UK based role and requires individuals to have the right to work in this location Please read our Privacy Notice ( https://www.wppmedia.com/pages/privacy-policy) for more information on how we process the information you provide. While we appreciate all applications received, only those can",
+   "label": "unclear",
+   "confidence": "medium",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-037",
+   "country": "GB",
+   "company": "Schonfeld",
+   "text": "Collaborate with local partners to coordinate internal employee mobility (including international transfers, visas, tax matters) and to align / streamline internal processes Advise on complex employee relations matters, including performance management, separations and sensitive investigation – navigating UK employment law and UAE labour law with",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-038",
+   "country": null,
+   "company": "Anthropic",
+   "text": "However, some roles may require more time in our offices. Visa sponsorship: We do sponsor visas! However, we aren't able to successfully sponsor visas for every role and every candidate. But if we make you an offer, we will make every reasonable effort to get you a visa, and we retain an immigration la",
+   "label": "yes",
+   "confidence": "medium"
+  },
+  {
+   "id": "vac-039",
+   "country": "NL",
+   "company": "Orbisk",
+   "text": "You like being around people, want to spend time with the team in the Amsterdam office, and thrive in a fast-paced scale-up environment. The right to work in the Netherlands. About Orbisk Orbisk helps professional kitchens stop wasting food. A camera and a scale use AI to recognise and weigh what gets thrown away, with almost no extra work for the kitchen team. Chefs and operato",
+   "label": "unclear",
+   "confidence": "medium",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-040",
+   "country": null,
+   "company": "Skydio",
+   "text": "ne coverage, forecast accuracy, linearity across the quarter, and the analysis behind them - Partner with Channel on partner strategy, joint planning, and the deal structures that get customers to yes - Act as executive sponsor on your team's largest and most competitive pursuits: present in the room, without taking the deal over - Represent your segment's customer insight, competitive intelligence, and product gaps to Marketi",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-041",
+   "country": "GB",
+   "company": "Alo",
+   "text": "We value diversity and inclusion and are proud to champion a culture where everyone feels valued, supported, and celebrated. By applying for this role, you consent to us completing a VEVO check to verify your right to work in Australia where required. #s-dni #LI-JA2 #LI-3 #LI-Onsite For CA residents, Job Applicant Privacy Policy HERE .",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-042",
+   "country": null,
+   "company": "Render Services",
+   "text": "- Commuter benefits for Renders in the Bay Area, and home office stipends for remote Renders. - Continuous learning benefits & related support. This position is generally not eligible for new visa sponsorship. At Render's discretion, the business may sponsor existing visa transfers. Applicants who require sponsorship must receive business authorization. Render is an equal-opportunity employer. We know that employing a team ric",
+   "label": "no",
+   "confidence": "medium"
+  },
+  {
+   "id": "vac-043",
+   "country": "GB",
+   "company": "Accordion",
+   "text": "Company Overview We are the better way to work in finance. As private equity’s value creation partner, we sit at the heart of PE—where sponsors and CFOs meet. Through financial consulting rooted in data, technology, and AI, we help clients drive value—supporting the office of the CFO to drive end-to-end value creation. If you crave challenging work and are looking to grow,",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-044",
+   "country": "GB",
+   "company": "Wayve Technologies",
+   "text": "What’s in it for you: 💰 Salaries benchmarked against the market annually 📈 Meaningful equity, sharing in the ownership and long term success of Wayve ✈️ Relocation support and visa sponsorship where applicable ✅ Hybrid working, core hours and the chance to work hands on in vehicle workshops and labs 📚 Learning and development budgets with support for training, conferences and growth 🩺 Comprehensive benefits includin",
+   "label": "yes",
+   "confidence": "medium"
+  },
+  {
+   "id": "vac-045",
+   "country": "GB",
+   "company": "Claimsorted",
+   "text": "COMPENSATION & BENEFITS - Generous, transparent equity participation - Skilled Worker visa sponsorship - 28 days annual leave plus bank holidays - 30 days of remote work annually - Private medical insurance - Pension contributions - Company offsites - Accelerated promotion track in a high-growth environment",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-046",
+   "country": "NL",
+   "company": "Sensorfact",
+   "text": "like to contribute to scaling our company - A strong team mindset rooted in honesty, drive, and accountability Why you will love working here: - Grow your career as we scale - Pension Contribution of 4% with an employer sponsored retirement plan - Public transport allowance via NS business card - Employee Referral Incentives up to €3,000 for a successful referral - 27 Vacation Days to rest and recharge - Remote Work Flexibilit",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-047",
+   "country": "GB",
+   "company": "iwell",
+   "text": "n how to fully install and maintain our current and future battery systems You work well both autonomously and with other team members You speak and write English fluently You hold a full UK driving licence and have the right to work in the UK (maximum 3 points) You are willing to work 5 days per week, travel across the UK, provide on-call availability (24/7) and occasionally travel to our HQ in the Netherlands for training Wh",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-048",
+   "country": null,
+   "company": "Samsara",
+   "text": "All offers of employment are contingent upon an individual’s ability to secure and maintain the legal right to work at the company and in the specified work location, if applicable. Belonging at Samsara At Samsara, we welcome everyone regardless of their background. All qualified applicants will receive consideration for employment without",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-049",
+   "country": "NL",
+   "company": "Adyen",
+   "text": "Carry out flexible, value-driven assignments , proactively unblocking teams to maximize organizational impact and drive strategic initiatives. Force Multiplier: Provide mentorship and horizontal sponsorship across the organization , fostering collaboration to share knowledge and best practices, and cultivating a culture of continuous improvement. This includes deeply engaging them in problem-solving processes and guiding them ",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-050",
+   "country": "GB",
+   "company": "Celonis",
+   "text": "Drive customer presence and sponsorship at key Celonis and industry events, serving as a Celonis leader at conferences, webinars, and through published thought leadership. Collaborate on innovation or new asset development in specific domains, and contribute to playbo",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-051",
+   "country": "NL",
+   "company": "Imc",
+   "text": "We encourage you to focus on enhancing your skillset before reapplying. To be able to take part in IMC’s internship programme, you will need to obtain the required visa and/or permit to enter, stay and work in the Netherlands. Depending on your nationality and country of residence, obtaining the required entry visa may be subject to additional requirements, processing delays or other limitations. Plea",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-052",
+   "country": null,
+   "company": "ClickHouse",
+   "text": "- A self-starter with a bias for building. You create the plan when there is none, you ship version one before it is perfect, and you improve it from evidence. - Leads through influence. You can secure sponsorship from VPs, align cross-functional peers, and hold the field to a standard without a reporting line. - Data-driven and operational: comfortable pulling your own CRM and call-intelligence reports, defining KPIs, and deb",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-053",
+   "country": "GB",
+   "company": "HelloFresh",
+   "text": "You will… Support the execution of the consumer GTM, working with Brand Management and Product teams to deliver a series of marketing tactics including partnerships, sponsorships, ATL campaigns and the product marketing calendar. This includes, coordinating marketing inputs across Brand, Partnerships and Growth to support an accurate, cohesive and engaging menu UX, including label and tag creation and a",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-054",
+   "country": null,
+   "company": "SolarWinds",
+   "text": "You will have direct influence over platform modernization, process design, and roadmap prioritization, working closely with executive sponsors and cross-functional procurement and finance leaders. If you thrive at the intersection of business strategy, product management, and Coupa/NetSuite platform expertise, this role offers a rare combination of ownership, impact, and",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-055",
+   "country": "GB",
+   "company": "Monzo",
+   "text": "Drop us your application, we’d love to hear from you! 🙌 What’s in it for you 💰 £80,000 - £100,000 ➕Incentive Awards tied to your performance. ✈️ We’ll help you relocate to the UK. ✅ We can sponsor your visa. 📍This role can be based in our London office, but we're open to distributed working within the UK (with ad hoc meetings in London) ⏰ We offer flexible working hours and trust you to work enough hours to do your job well,",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-056",
+   "country": null,
+   "company": "Webflow Europe UK",
+   "text": "All full-time, permanent, non-commission employees are eligible for our annual WIN bonus program. Temporary employees may be eligible for paid holiday and time off, statutory leaves of absence, and company-sponsored medical benefits depending on their Fixed Term Contract and their country/state of employment. BE YOU, WITH US At Webflow, equality is a core tenet of our culture. We are an Equal Opportunity (EEO)/Veterans/Disable",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-057",
+   "country": null,
+   "company": "Iterable",
+   "text": "ficial LinkedIn Jobs page: https://www.linkedin.com/company/iterable/jobs/ Iterable is not affiliated in any way to these impostors and we hereby confirm that such individuals/entities are not authorized, encouraged, or sponsored to act on behalf of Iterable. Such job opportunities are entirely fake and not valid. Therefore, please disregard any written or oral request for a job offer or an interview that you believe is or mig",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-058",
+   "country": "GB",
+   "company": "Radiant Global Technologies",
+   "text": "This combination of entrepreneurial execution and institutional sponsorship enables Radiant to pursue large-scale GPU and AI infrastructure opportunities globally. ABOUT THE ROLE Location: UK (occasional travel to data centre and test environments, confirm exact cadence) | Employment Type: Full-time, Pe",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-059",
+   "country": null,
+   "company": "Armadin",
+   "text": "Benefits & Perks | FTE 🏥 Full Health, Dental, & Vision Coverage 📈 Meaningful Equity Ownership 🥙 In-Office Meals ✂️ Haircuts at the Office 🎉 Company Sponsored Conferences & Events 💸 401(k), HSA, and FSA Plans 🌴 Flexible PTO",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-060",
+   "country": "GB",
+   "company": "Tower Research Capital",
+   "text": "available in each region Hybrid working opportunities Free breakfast, lunch, and snacks daily In-office wellness experiences and reimbursement for select wellness expenses (e.g., gym, personal training and more) Company-sponsored sports teams and fitness events (JPM Corporate Challenge, Cycle for Survival, Wall Street Rides FAR and more) Volunteer opportunities and charitable giving Social events, happy hours, treats, and cele",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-061",
+   "country": null,
+   "company": "Docker",
+   "text": "elivery across all direct sales workstreams - Be recognized across Docker as both an indispensable technical anchor for Sales Operations and an impactful manager developing the next generation of operational talent Visa sponsorship: Not available for this role. _______________________________________________________________________ COMPENSATION & EQUITY All full-time roles include equity. Final compensation is determined on fa",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-062",
+   "country": "GB",
+   "company": "Ping Identity",
+   "text": "Customer Engagement & Advocacy Build and maintain strong, trust‑based relationships with day‑to‑day contacts, project owners, and business sponsors. Run a structured cadence of check‑ins, workshops, and governance reviews, tailored to customer segment and lifecycle stage. Capture and share customer feedback, ensuring issues are followed through to resolution and learnings are",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-063",
+   "country": "NL",
+   "company": "Flexport",
+   "text": "As a private company in a multi-trillion dollar industry, you have a direct stake in our collective growth and success. Employee Assistance Program through Aetna Resources for Living: Flexport provides an employer-sponsored program at no cost to you and your household members Parental leave benefit: Flexport is here to support you and your families in one of the most important times in life – the birth of a child! Our parental",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-064",
+   "country": "NL",
+   "company": "Modulr",
+   "text": "Modulr hold settlement accounts at the Bank of England. Our payment network connectivity includes CHAPS, Open Banking, SEPA, SWIFT and account issuance in 11 currencies. We are principal issuing members of Visa and Mastercard schemes across UK and Europe. Our regulatory permissions and governance structure are the foundations of our business. We are regulated and supervised as an Authorised Electronic Money Institution (AEMI) ",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-065",
+   "country": "NL",
+   "company": "Reddit",
+   "text": "your lifestyle, from workspace to professional development to caregiving support Family Planning Support Gender-Affirming Care Mental Health & Coaching Benefits Private Pension plan with Employer-matching 100% employer-sponsored group medical plan Income Replacement Programs Flexible Vacation & Paid Volunteer Time Off Generous Paid Parental Leave In select roles and locations, the interviews will be recorded, transcribed and s",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-066",
+   "country": "GB",
+   "company": "Jump Trading",
+   "text": "We sponsor work visas for full-time positions. Benefits include: Private Medical, Vision and Dental Insurance Travel Medical Insurance Group Pension Scheme Group Life Assurance and Income Protection Schemes Paid Parental Leave Parking and Comm",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-067",
+   "country": "GB",
+   "company": "Benchling",
+   "text": "RESPONSIBILITIES - Be the scientific voice in the room. Brief the GM and account teams before key meetings, then join them as a peer to the CSOs and Heads of R&D across the table. Act as senior sponsor on our largest EMEA opportunities, and use account-team introductions to open new R&D relationships. - Lead the 10x conversation. Turn Benchling's vision, from AI agents to Science Foundries, into a credible plan R&D leaders can",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-068",
+   "country": "GB",
+   "company": "Modulr",
+   "text": "ess (payroll, supplier payments, spend management and payment collection) through a single platform, connected to the accounting and payroll systems finance teams already use, and underpinned by principal memberships of Visa and Mastercard and direct access to central bank infrastructure. As a regulated payments provider with over a decade of experience, we're the platform finance teams trust to run mission-critical operations",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-069",
+   "country": null,
+   "company": "Docker",
+   "text": "veloper productivity, with regular technical talks, demos, and knowledge sharing - Define multi-year technical roadmap including advanced platform capabilities, expanded AI tooling, and emerging technology adoption Visa sponsorship: Docker considers visa sponsorship on a case-by-case basis based on business needs. _______________________________________________________________________ COMPENSATION & EQUITY All full-time roles ",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-070",
+   "country": "GB",
+   "company": "Celonis",
+   "text": "Craft board-level executive narratives and lead complex, multi-workstream value workshops. Stakeholder Management: Execute C-level orchestration, cultivating powerful executive sponsorship across the C-suite. Drive lasting adoption by co-owning enterprise-wide change management and building advanced CoE operating models for total self-sufficiency. Program Management: Steer and govern massive, cross-regional transf",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-071",
+   "country": null,
+   "company": "Plentific",
+   "text": "- Based in a country where we currently employ or engage remote engineers — the UK, Germany, Turkey, Poland, Italy, Spain, or Portugal — with the right to work there. - Availability to work with substantial overlap with UK working hours.",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-072",
+   "country": null,
+   "company": "NerdWallet",
+   "text": "For more information, please see: - E-Verify Participation Poster (English+Spanish/Español https://www.e-verify.gov/sites/default/files/everify/posters/EVerifyParticipationPoster.pdf) - Right to Work Poster (English) https://www.uscis.gov/sites/default/files/USCIS/Verification/E-Verify/E-Verify_Native_Documents/OSC_Right_to_Work_Poster.pdf / (Spanish/Español) https://www.uscis.gov/sites/default/files/USCIS/Verification/E-V",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-073",
+   "country": null,
+   "company": "Agility Robotics",
+   "text": "Applicants must have current authorization to work in the United States. Agility Robotics is committed to a work environment in which all individuals are treated with respect and dignity. Each individual has the right to work in a professional atmosphere that promotes equal employment opportunities and prohibits unlawful discriminatory practices, including harassment. Therefore, it is the policy of Agility Robotics to ensure e",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-074",
+   "country": "GB",
+   "company": "Bounteous UK",
+   "text": "Bounteous is willing to sponsor eligible candidates for employment visas.",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-075",
+   "country": "GB",
+   "company": "Swire",
+   "text": "Working knowledge of UK health and safety requirements. Strong organizational and stakeholder management skills. Excellent written and spoken English. Based in the UK with the legal right to work in the UK.",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-076",
+   "country": "NL",
+   "company": "Flow Traders",
+   "text": "partner and first point of contact for employees and managers Manage the full employee lifecycle, including onboarding, offboarding, benefits, leave, promotions, transfers, and HR documentation Support relocation, visa, work permit, recruitment, engagement, and organizational change activities Ensure compliance with labor laws, company policies, data privacy requirements, and HR best practices Data, Analytics & Insights Mainta",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-077",
+   "country": null,
+   "company": "Thriveworks",
+   "text": "Applicants must be legally authorized to work in the United States at the time of hire. This position is not eligible for employment visa sponsorship, either now or in the future. By clicking Apply, you acknowledge that Thriveworks may contact you regarding your application. Originally posted on Himalayas",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-078",
+   "country": null,
+   "company": "Intradiem",
+   "text": "Strong attention to detail and a commitment to delivering high-quality work. Excellent communication and collaboration skills, with the ability to work effectively in a team-oriented environment. Work Authorization: Candidates must have the legal right to work in the country where the role is based at the time of application. Verification of identity and employment eligibility will be required during onboarding. Intradiem is a",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-079",
+   "country": "GB",
+   "company": "HelloFresh",
+   "text": "You must have the right to work full-time in Australia/New Zealand Location: Chippendale Head Office- hybrid working environment Salary: Competitive salary & employee benefits (( #LI-Hybrid))",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-080",
+   "country": null,
+   "company": "Docker",
+   "text": "continue efforts to improve messaging, processes, and daily activities - You will be an accomplished lead qualifier and an expert with tools and processes - You will be ready to operate independently at full speed Visa sponsorship: Not available for this role. _______________________________________________________________________ COMPENSATION & EQUITY All full-time roles include equity. Final compensation is determined on fac",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-081",
+   "country": "GB",
+   "company": "Gallup",
+   "text": "l fluency in English required Experience using AI to enhance productivity, insight generation or sales activities preferred A commitment to working on-site at Gallup’s London office at least three days per week required Eligibility to work in the United Kingdom required; this position is not eligible for employment visa sponsorship What You’ll Experience Mission-driven work: Make a meaningful difference in the world with your ",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-082",
+   "country": null,
+   "company": "Docker",
+   "text": "- You have built the brand of the product legal function as a trusted partner, industry leader, and facilitator of Docker's growth and customer satisfaction. Visa sponsorship: Not available for this role. _______________________________________________________________________ COMPENSATION & EQUITY All full-time roles include equity. Final compensation is determined on factors including but not limite",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-083",
+   "country": "NL",
+   "company": "Schuberg Philis",
+   "text": "Knowing your way around a mission-critical Azure landscape Please note: We are not able to consider candidates who are not living and working in the Netherlands. At this moment we are not providing relocation sponsorships. As an Azure Cloud Engineer, you will be part of a multidisciplinary team that works with and for a customer with a specific Azure focus. All of these teams have different focus areas and different team dynam",
+   "label": "unclear",
+   "confidence": "medium",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-084",
+   "country": "NL",
+   "company": "Futurewhiz",
+   "text": "Tip: wees vooral jezelf. We omarmen de diversiteit van al onze collega’s en zijn oprecht benieuwd naar jouw unieke perspectief. Visa sponsorship voor deze rol is niet van toepassing. Alleen kandidaten met een geldige werkvergunning voor Nederland/EU komen in aanmerking voor deze functie. Upload je motivatie en cv via de sollicitatieknop. We nemen dan zo snel mogelijk con",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-085",
+   "country": "GB",
+   "company": "Jobandtalent UK",
+   "text": "Onsite Coordinator We are looking for an onsite Coordinator to work in our onsite office at our client’s premises in Teesside, TS23 4DU As a onsite Onsite Coordinator you will need to have: Knowledge of right to work policies in the UK Good people management skills Time management skills and the ability to manage own workload Ability to work productively under pressure Positive can do attitude Excellent verbal and written comm",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-086",
+   "country": null,
+   "company": "Horizon3 AI",
+   "text": "- Establish standardized global employee lifecycle processes, including onboarding, role changes, mobility programs, visa sponsorships, and offboarding workflows. - Maintain HR policies, operational procedures, and employee handbooks localized to regional labor laws and data privacy regulations such as GDPR. - Analyze core workforce analytics (turnover, time-t",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-087",
+   "country": "GB",
+   "company": "Prosus",
+   "text": "And presence - to decide how and where Prosus turns up at the industry’s events (HumanX, SXSW, RAISE), and make each appearance feel deliberate and distinctly Prosus rather than another logo on a sponsor wall. The role crosses brand, production, and storytelling. The right person thinks like a brand strategist, plans like a producer. The Problem You’ll Solve Owned Flagship Events - Own the experience and creative concept for P",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (benefits, discrimination notice, a duty of the role, a different meaning of sponsor)."
+  },
+  {
+   "id": "vac-088",
+   "country": "NL",
+   "company": "Riverflex",
+   "text": "You are given the destination and the guardrails, not a task list Available to start at short notice, operating as an independent contractor Fluent English, and the right to work in the EU The following are a plus: Training from a large consultancy or professional services firm Retail, e-commerce, or consumer sector experience Dutch language skills Prior experience in a chief-of-staff or programme supp",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-089",
+   "country": "GB",
+   "company": "ClearBank Group Holdings",
+   "text": "If this sounds like you, then we encourage you to dust off that CV and apply! *Please note that we are not currently able to sponsor applicants for immigration purposes. A little bit more about us! ClearBank is Where You Can belong: At ClearBank we think about Diversity, Equity and Inclusion (DE&I) a lot. Not because we think we should. But because we know we sho",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "vac-090",
+   "country": "NL",
+   "company": "Bdairy",
+   "text": "Do you speak French or Polish? That's a big plus. You're open to traveling and meeting with clients, and therefore have excellent communication skills; You have a valid EU work permit. Why Bdairy? We are a young, dynamic organization and we will give you a lot of freedom and responsibility. Together we can make a real impact. With us, you get the space to grow on a professional and personal level. You can dis",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "vac-091",
+   "country": "NL",
+   "company": "Olyx",
+   "text": "ly regulated market and translate data into opportunities · Entrepreneurial, resilient, and comfortable in a fast-paced, high-performance environment Based in the Netherlands (or willing to relocate) and holding a valid work permit What’s in it for you? Competitive Compensation: Receive a competitive salary, with the opportunity to earn a profit share based on your performance and contributions, and the option to participate i",
+   "label": "unclear",
+   "confidence": "high",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  }
+ ]
+}

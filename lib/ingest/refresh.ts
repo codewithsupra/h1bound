@@ -104,7 +104,7 @@ async function upsertJobs(db: Db, rows: ReturnType<typeof toRow>[]) {
   }
 }
 
-export async function refreshAll(db: Db, opts: { concurrency?: number; shard?: number; of?: number; log?: (s: string) => void } = {}) {
+export async function refreshAll(db: Db, opts: { concurrency?: number; shard?: number; of?: number; log?: (s: string) => void; onFailure?: (board: string, error: string) => void } = {}) {
   const log = opts.log ?? (() => {});
   const boards = (await loadBoards(db)).filter((b) => inShard(b.id, opts.shard ?? 0, opts.of ?? 1));
   const idx = await loadLicenceIndex(db, boards.flatMap((b) => b.names));
@@ -128,6 +128,7 @@ export async function refreshAll(db: Db, opts: { concurrency?: number; shard?: n
         log(`${b.label}: ${rows.length} jobs`);
       } catch (e) {
         failed++;
+        opts.onFailure?.(`${b.kind}/${b.slug}`, (e as Error).message);
         log(`! ${b.kind}/${b.slug}: ${(e as Error).message}`);
       }
     }

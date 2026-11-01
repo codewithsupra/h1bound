@@ -1,0 +1,53 @@
+import { breaches, dailyCost, DEFAULT_THRESHOLDS, summarizeAi, summarizeIngestion, summarizeRuns, type AiRow, type RunRow, type Thresholds } from "./ops";
+
+type Db = { from(table: string): any; rpc?: any }; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+async function all<T>(build: (from: number) => PromiseLike<{ data: unknown; error: { message: string } | null }>): Promise<T[]> {
+  const out: T[] = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await build(from);
+    if (error) throw new Error(error.message);
+    out.push(...(data as T[]));
+    if ((data as T[]).length < 1000) break;
+  }
+  return out;
+}
+
+export type OpsWindow = { since: string; until: string };
+
+/** Everything the ops report and the health check need for one window. Read-only. */
+export async function loadOps(db: Db, w: OpsWindow, thresholds: Thresholds = DEFAULT_THRESHOLDS) {
+  const now = Date.parse(w.until);
+  const windowMs = now - Date.parse(w.since);
+  const [runs, calls, topFailing] = await Promise.all([
+    all<RunRow>((f) => db.from("job_runs").select("job,shard,started_at,finished_at,status,boards,failed,jobs,error").gte("started_at", w.since).lt("started_at", w.until).order("started_at").range(f, f + 999)),
+    all<AiRow>((f) => db.from("ai_calls").select("at,kind,model,ms,input_tokens,output_tokens,cost_usd,ok,error").gte("at", w.since).lt("at", w.until).order("at").range(f, f + 999)),
+    all<{ board: string; error: string; at: string }>((f) => db.from("board_failures").select("board,error,at").gte("at", w.since).lt("at", w.until).order("at").range(f, f + 999)),
+  ]);
+
+  const stale = new Date(now - 48 * 3_600_000).toISOString();
+  const count = async (q: PromiseLike<{ count: number | null }>) => (await q).count ?? 0;
+  const active = await count(db.from("jobs").select("id", { count: "exact", head: true }).eq("active", true));
+  const staleActive = await count(db.from("jobs").select("id", { count: "exact", head: true }).eq("active", true).lt("last_seen", stale));
+  const byCountry: Record<string, number> = {};
+  for (const c of ["GB", "NL", "IE"]) byCountry[c] = await count(db.from("jobs").select("id", { count: "exact", head: true }).eq("active", true).eq("country", c));
+  byCountry.remote = await count(db.from("jobs").select("id", { count: "exact", head: true }).eq("active", true).eq("remote", true).is("country", null));
+
+  const jobs = summarizeRuns(runs, windowMs, now);
+  const ingestion = summarizeIngestion(runs);
+  const ai = summarizeAi(calls);
+  const daily = dailyCost(calls);
+  const staleShare = active ? staleActive / active : null;
+
+  const byBoard = new Map<string, { n: number; last: string; error: string }>();
+  for (const f of topFailing) {
+    const b = byBoard.get(f.board) ?? { n: 0, last: f.at, error: f.error };
+    b.n++; b.last = f.at; b.error = f.error;
+    byBoard.set(f.board, b);
+  }
+  const failingBoards = [...byBoard.entries()].map(([board, v]) => ({ board, ...v })).sort((a, b) => b.n - a.n).slice(0, 15);
+
+  return { window: w, runs, jobs, ingestion, active, staleActive, staleShare, byCountry, ai, daily, failingBoards, problems: breaches({ jobs, ingestion, staleShare, ai, daily }, thresholds) };
+}
+
+export type Ops = Awaited<ReturnType<typeof loadOps>>;

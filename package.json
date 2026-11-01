@@ -9,7 +9,9 @@
     "lint": "eslint",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "verify": "npm run typecheck && npm run lint && npm test"
+    "verify": "npm run typecheck && npm run lint && npm test && npm run eval:check",
+    "eval": "tsx scripts/eval-report.mts",
+    "eval:check": "tsx scripts/eval-report.mts --check"
   },
   "dependencies": {
     "@ai-sdk/react": "^4.0.157",

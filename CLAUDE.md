@@ -109,6 +109,10 @@ Migrations live in `migrations/`. Apply one with `npx -y @insforge/cli db migrat
 - Server actions live in `app/(app)/actions.ts`: stage, reply, notes (encrypted), Your case, settings, and the JSON data export. `/account` redirects to `/settings`; `/privacy` and `/terms` live in `app/(legal)/`.
 - Daily picks run hourly and only send to users whose local `picks_hour` it is (`localHour`). The count is `picks_per_day` (3–15) for paid Pro and is capped at 3 on the trial (`picksToday`).
 
+### Evaluation and operations
+- `tests/eval/` holds frozen, hand-labeled sets and `lib/eval/` the metrics; `docs/EVAL.md` is generated (`npm run eval`) and `npm run eval:check` (part of `verify`) fails if it is stale. Sponsor-record matching (is this employer that register entry? `brandMatches`, `licenceFor`) and vacancy sponsorship (does the posting offer it? `jdSponsorship`) are measured separately on purpose. Labels are by an AI labeler and unverified; the vacancy held-out set must not be tuned against (draw a new one with `scripts/eval-draw-jd.mts`). Floors in `tests/eval.test.ts` are the measured level: raise them when a matcher improves.
+- Scheduled runs are recorded in `job_runs`/`board_failures` and every AI call in `ai_calls` (`lib/server/ops.ts`: `trackRun`, `tracked`, `recordAi`). Telemetry is best-effort and must never fail a job or request. `scripts/ops-report.mts` reports a period; `/api/cron/ops-check` emails `OWNER_EMAIL` on a breach (`lib/ops.ts`). Runbook: `docs/OPERATIONS.md`; failures go in `docs/INCIDENTS.md`.
+
 ## Rules that are easy to break
 - Always set `maxOutputTokens` on AI calls. Without it, providers reserve their maximum, which fails once the OpenRouter key is near its limit.
 

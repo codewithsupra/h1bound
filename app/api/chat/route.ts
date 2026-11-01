@@ -12,6 +12,7 @@ import { trialState } from "@/lib/server/growth";
 import { optStatus, optSummary } from "@/lib/opt";
 import { NextResponse } from "next/server";
 import { chatModel } from "@/lib/ai/models";
+import { recordAi } from "@/lib/server/ops";
 import { mayaSystem } from "@/lib/ai/maya";
 import { buildTools } from "@/lib/ai/tools";
 import { getStore } from "@/lib/server/store";
@@ -47,8 +48,12 @@ export async function POST(req: Request) {
     messages = [message]; // stored history no longer matches current tool schemas: start fresh
   }
 
+  const model = chatModel();
+  const started = Date.now();
   const result = streamText({
-    model: chatModel(),
+    model,
+    onFinish: (e) => { void recordAi({ kind: "chat", model: model.modelId, ms: Date.now() - started, ok: true, usage: e.totalUsage, providerMetadata: e.providerMetadata as Record<string, unknown> | undefined }); },
+    onError: ({ error }) => { void recordAi({ kind: "chat", model: model.modelId, ms: Date.now() - started, ok: false, error }); },
     system: mayaSystem({
       firstName: profile?.details?.name?.split(" ")[0] ?? store.firstName,
       guest: store.kind === "guest",

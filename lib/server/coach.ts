@@ -1,5 +1,6 @@
 import "server-only";
 import { generateText } from "ai";
+import { tracked } from "@/lib/server/ops";
 import { smartModel } from "@/lib/ai/models";
 import type { ProfileDetails } from "./profile";
 import type { Contact } from "./hunter";
@@ -31,7 +32,8 @@ const RULES = `Rules: never invent experience, numbers, employers or skills the 
 
 /** Throws on a cut-off answer, so callers never save it or charge a free review round for it. */
 async function run(system: string, prompt: string, maxOutputTokens = 4000) {
-  const { text, finishReason } = await generateText({ model: smartModel(), system: `${system}\n${RULES}`, prompt, maxOutputTokens });
+  const model = smartModel();
+  const { text, finishReason } = await tracked("coach", model, () => generateText({ model, system: `${system}\n${RULES}`, prompt, maxOutputTokens }));
   if (finishReason !== "stop" || text.trim().length < 200) throw new Error(`incomplete generation (${finishReason})`);
   return text.trim();
 }

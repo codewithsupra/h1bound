@@ -1,5 +1,6 @@
 import "server-only";
 import { generateText, Output } from "ai";
+import { tracked } from "@/lib/server/ops";
 import { z } from "zod";
 import { createAdminInsForge } from "@/lib/insforge/admin";
 import { chatModel, researchModel } from "@/lib/ai/models";
@@ -35,17 +36,19 @@ export async function companyInsight(company: string, where = ""): Promise<Insig
   if ((count ?? 0) >= DAILY_RESEARCH_CAP) return { error: "busy" };
 
   // Step 1: research with web search, as free notes (models ignore length limits here, so no JSON yet).
-  const research = await generateText({ model: researchModel(), prompt: RESEARCH(company, where), maxOutputTokens: 1600, abortSignal: AbortSignal.timeout(40_000) });
+  const researcher = researchModel();
+  const research = await tracked("insight_research", researcher, () => generateText({ model: researcher, prompt: RESEARCH(company, where), maxOutputTokens: 1600, abortSignal: AbortSignal.timeout(40_000) }));
   const cited = research.sources.flatMap((s) => (s.sourceType === "url" ? [{ title: s.title, url: s.url }] : []));
   if (!research.text.trim() || !cited.length) return { error: "not_found" };
   // Step 2: structure the notes. Limits are enforced again in parseInsight (no zod .max(): see CLAUDE.md).
-  const { output } = await generateText({
-    model: chatModel(),
+  const structurer = chatModel();
+  const { output } = await tracked("insight_structure", structurer, () => generateText({
+    model: structurer,
     output: Output.object({ schema: shape }),
     maxOutputTokens: 1500,
     abortSignal: AbortSignal.timeout(20_000),
     prompt: `Turn these research notes about ${company} into the requested fields. Use only what the notes say; drop markdown links, and leave out any rating, percentage or quote attributed to Glassdoor.\n\nNOTES:\n${research.text.slice(0, 6000)}`,
-  });
+  }));
   const insight = parseInsight(JSON.stringify(output), cited);
   if (!insight) return { error: "not_found" };
   await db().from("company_insights").upsert({ key, name: company, insight, fetched_at: new Date().toISOString() }, { onConflict: "key" });

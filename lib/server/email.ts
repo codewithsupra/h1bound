@@ -10,7 +10,8 @@ export async function sendEmail(to: string, subject: string, text: string, unsub
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       from, to, subject, text,
-      headers: { "List-Unsubscribe": `<${oneClickUrl}>, <${unsubscribeUrl}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" },
+      // Operational mail to the owner has no unsubscribe link; leaving the headers off beats sending empty ones.
+      ...(unsubscribeUrl ? { headers: { "List-Unsubscribe": `<${oneClickUrl}>, <${unsubscribeUrl}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } } : {}),
     }),
     signal: AbortSignal.timeout(10_000),
   });

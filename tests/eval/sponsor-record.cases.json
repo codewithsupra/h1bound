@@ -1,0 +1,2962 @@
+{
+ "version": 1,
+ "labeler": "Claude (AI) from register lookups and the job postings; needs spot-checking by a human",
+ "drawnAt": "2026-11-01",
+ "population": {
+  "linkedEmployers": 885,
+  "unlinkedEmployers": 323,
+  "linkedJobs": 8152,
+  "unlinkedJobs": 1124
+ },
+ "brand": [
+  {
+   "id": "brand-001",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Portbase",
+   "registerName": "Portbase B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-002",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Adyen",
+   "registerName": "Adyen N.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-003",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Effectory",
+   "registerName": "Effectory Holding B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-004",
+   "set": "random",
+   "country": "NL",
+   "boardName": "GenScript",
+   "registerName": "Genscript Biotech (Netherlands) B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-005",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Sqills",
+   "registerName": "Sqills Products B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-006",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Brenger",
+   "registerName": "Brenger B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-007",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Triple Jump",
+   "registerName": "Triple Jump B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-008",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Quion Groep",
+   "registerName": "Quion Groep B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-009",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Nice",
+   "registerName": "NICE Netherlands B.V.",
+   "label": "same",
+   "confidence": "medium",
+   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed."
+  },
+  {
+   "id": "brand-010",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Sotheby's",
+   "registerName": "Sotheby's",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Board name equals the register name once legal and regional words are removed."
+  },
+  {
+   "id": "brand-011",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Okx",
+   "registerName": "OKX UK FinTech Company LImited",
+   "label": "same",
+   "confidence": "medium",
+   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed."
+  },
+  {
+   "id": "brand-012",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Keyloop (UK)",
+   "registerName": "Keyloop (UK) Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-013",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Redpanda Data EMEA",
+   "registerName": "Redpanda Data EMEA Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-014",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Cision",
+   "registerName": "Cision Group Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-015",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Apax",
+   "registerName": "Apax Partners UK Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-016",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Claimsorted",
+   "registerName": "Claimsorted Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-017",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Lefebvre Sdu",
+   "registerName": "Lefebvre Sdu B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-018",
+   "set": "random",
+   "country": "GB",
+   "boardName": "FGS Global",
+   "registerName": "FGS Global (UK) Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-019",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Celonis",
+   "registerName": "Celonis Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-020",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Waymo",
+   "registerName": "Waymo UK Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-021",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Nebius",
+   "registerName": "Nebius B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-022",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Samsara",
+   "registerName": "Samsara Nederland B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-023",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Mixpanel",
+   "registerName": "Mixpanel UK Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-024",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Fireblocks",
+   "registerName": "FIREBLOCKS UK INT'L LIMITED",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-025",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Naktuinbouw",
+   "registerName": "Naktuinbouw",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Board name equals the register name once legal and regional words are removed."
+  },
+  {
+   "id": "brand-026",
+   "set": "random",
+   "country": "GB",
+   "boardName": "UiPath",
+   "registerName": "UIPATH UK LIMITED",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-027",
+   "set": "random",
+   "country": "GB",
+   "boardName": "DeciBio Consulting",
+   "registerName": "DeciBio Consulting Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-028",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Cloudinary UK",
+   "registerName": "Cloudinary UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-029",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Rocsys",
+   "registerName": "ROCSYS B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-030",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Lyra Health International",
+   "registerName": "Lyra Health International Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-031",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Kao",
+   "registerName": "Kao (UK) Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-032",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Ping Identity",
+   "registerName": "Ping Identity Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-033",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Conga",
+   "registerName": "CONGA EUROPE LTD",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-034",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Envoy",
+   "registerName": "Envoy EMEA Limited",
+   "label": "same",
+   "confidence": "medium",
+   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed."
+  },
+  {
+   "id": "brand-035",
+   "set": "random",
+   "country": "IE",
+   "boardName": "Okta",
+   "registerName": "Okta Identity Ireland Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-036",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Tower Research Capital",
+   "registerName": "Tower Research Capital Europe Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-037",
+   "set": "random",
+   "country": "NL",
+   "boardName": "QphoX",
+   "registerName": "QphoX B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-038",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Rubrik",
+   "registerName": "Rubrik UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-039",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Ecochain Technologies",
+   "registerName": "EcoChain Technologies B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-040",
+   "set": "random",
+   "country": "GB",
+   "boardName": "New Relic",
+   "registerName": "New Relic UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-041",
+   "set": "random",
+   "country": "NL",
+   "boardName": "GumGum",
+   "registerName": "GumGum Netherlands B.V.",
+   "label": "same",
+   "confidence": "medium",
+   "evidence": "Plausible same organisation (job titles and location fit); not independently confirmed."
+  },
+  {
+   "id": "brand-042",
+   "set": "random",
+   "country": "IE",
+   "boardName": "VOID Interactive",
+   "registerName": "VOID Interactive Ltd.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-043",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Swap Support",
+   "registerName": "SWAP Support B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-044",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Quantium",
+   "registerName": "Quantium Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-045",
+   "set": "random",
+   "country": "NL",
+   "boardName": "StockX",
+   "registerName": "StockX Marketplace NL B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-046",
+   "set": "random",
+   "country": "IE",
+   "boardName": "Anthropic",
+   "registerName": "Anthropic Ireland Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-047",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Nintex",
+   "registerName": "Nintex UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-048",
+   "set": "random",
+   "country": "NL",
+   "boardName": "MisterGreen Products",
+   "registerName": "MisterGreen Products B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-049",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Bdairy",
+   "registerName": "Bdairy B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-050",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Systemiq",
+   "registerName": "SYSTEMIQ Nederland B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-051",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Flo Health",
+   "registerName": "Flo Health UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-052",
+   "set": "random",
+   "country": "GB",
+   "boardName": "VaynerMedia",
+   "registerName": "VAYNERMEDIA LIMITED",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-053",
+   "set": "random",
+   "country": "IE",
+   "boardName": "SolarWinds",
+   "registerName": "SolarWinds Software Europe DAC",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-054",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Celerion",
+   "registerName": "Celerion GB Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-055",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Westfort Vleesproducten",
+   "registerName": "Westfort Vleesproducten B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-056",
+   "set": "random",
+   "country": "GB",
+   "boardName": "PhysicsX",
+   "registerName": "PhysicsX Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-057",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Pai Partners Sas",
+   "registerName": "PAI Partners (UK) Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-058",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Amsterdam Data Collective",
+   "registerName": "Amsterdam Data Collective B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-059",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Baringa",
+   "registerName": "Baringa Partners LLP",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-060",
+   "set": "random",
+   "country": "NL",
+   "boardName": "CROP Accountants & Adviseurs",
+   "registerName": "CROP accountants & adviseurs B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-061",
+   "set": "random",
+   "country": "GB",
+   "boardName": "6sense",
+   "registerName": "6sense Insights UK Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-062",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Wunderkind",
+   "registerName": "Wunderkind Technologies UK Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-063",
+   "set": "random",
+   "country": "NL",
+   "boardName": "FincoEnergies",
+   "registerName": "FincoEnergies B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-064",
+   "set": "random",
+   "country": "NL",
+   "boardName": "SurePay",
+   "registerName": "SurePay B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-065",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Funda",
+   "registerName": "Funda Real Estate B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-066",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Mirakl",
+   "registerName": "Mirakl Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-067",
+   "set": "random",
+   "country": "GB",
+   "boardName": "ClinChoice",
+   "registerName": "CLINCHOICE LIMITED",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-068",
+   "set": "random",
+   "country": "NL",
+   "boardName": "Howden",
+   "registerName": "Howden Thomassen Compressors B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board jobs are Howden Nederland (insurance broker; werkenbij.howdennederland.nl, e.g. 'Acceptant Volmacht Motorrijtuigen en Transport'); the register entry is a compressor manufacturer. 28 active jobs carry this link."
+  },
+  {
+   "id": "brand-069",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Insight",
+   "registerName": "Insight Venture Management UK Limited",
+   "label": "unsure",
+   "confidence": "medium",
+   "evidence": "Board 'Insight' (Greenhouse) could be Insight Partners, Insight Enterprises or others; 4 unrelated register entries share the board."
+  },
+  {
+   "id": "brand-070",
+   "set": "random",
+   "country": "GB",
+   "boardName": "Foundry",
+   "registerName": "Foundry (UK) Ltd",
+   "label": "unsure",
+   "confidence": "medium",
+   "evidence": "Two different companies trade as Foundry (media/IT vs VFX software); the job is a facilities role."
+  },
+  {
+   "id": "brand-071",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "WPP",
+   "registerName": "WPP Brands (UK) Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-072",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "WPP",
+   "registerName": "WPP 2005 Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-073",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Synechron",
+   "registerName": "Synechron Solutions Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-074",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "NTS",
+   "registerName": "NTS Proto Systems B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-075",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "NTS",
+   "registerName": "NTS D&E B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-076",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "NTS",
+   "registerName": "NTS CombiMetaal B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-077",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "NTS",
+   "registerName": "NTS Mechatronics B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-078",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Esri",
+   "registerName": "ESRI Global Inc.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-079",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "DEPT®",
+   "registerName": "Dept NL Holding B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-080",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "DEPT®",
+   "registerName": "Dept Creative & Media B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-081",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "DEPT®",
+   "registerName": "Dept Holding B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-082",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "DEPT®",
+   "registerName": "Dept Design & Technology B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-083",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "E-mergo",
+   "registerName": "E-Mergo",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-084",
+   "set": "stress",
+   "country": "IE",
+   "boardName": "Stripe",
+   "registerName": "Stripe Technology Company Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-085",
+   "set": "stress",
+   "country": "IE",
+   "boardName": "Stripe",
+   "registerName": "Stripe Payments Europe Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-086",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Stripe",
+   "registerName": "Stripe Payments UK Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-087",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "NICE",
+   "registerName": "NICE Systems UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-088",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Allego",
+   "registerName": "Allego Employment B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-089",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Allego",
+   "registerName": "Allego Holding B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-090",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Vitestro",
+   "registerName": "Vitestro International B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-091",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Vitestro",
+   "registerName": "Vitestro Production B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-092",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Xsens",
+   "registerName": "Xsens Holding B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-093",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Xsens",
+   "registerName": "Xsens Technologies B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-094",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Attentive",
+   "registerName": "Attentive Mobile UK Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-095",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Axiom",
+   "registerName": "Axiom Global Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-096",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "ISN Software Corporation",
+   "registerName": "ISN Software UK Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-097",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Travix",
+   "registerName": "Travix International B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-098",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Joulz B.V.",
+   "registerName": "Joulz Meetbedrijf B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-099",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Joulz B.V.",
+   "registerName": "Joulz Infradiensten B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-100",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Rubix",
+   "registerName": "Rubix Group International Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-101",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Rubix",
+   "registerName": "Rubix Industrial Services Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-102",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Youwe",
+   "registerName": "Youwe Online B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-103",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Spire",
+   "registerName": "Spire Global UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-104",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Via",
+   "registerName": "Via Transportation UK Ltd.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-105",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "JetBrains",
+   "registerName": "JetBrains Expo B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-106",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "ASM",
+   "registerName": "ASM International N.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-107",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "ASM",
+   "registerName": "ASM IP Holding B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-108",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "UNIS Group",
+   "registerName": "Unis Group R&D B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-109",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Peloton",
+   "registerName": "Peloton Enterprises UK Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-110",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Peloton",
+   "registerName": "Peloton Interactive UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-111",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Newtone",
+   "registerName": "Newtone Adviseurs & Accountants B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-112",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Newtone",
+   "registerName": "Newtone Audit N.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-113",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Newtone",
+   "registerName": "Newtone Belastingadviseurs B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-114",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Maqqie",
+   "registerName": "MAQQIE Payroll B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-115",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Maqqie",
+   "registerName": "MAQQIE Shared Service Center B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-116",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Asana",
+   "registerName": "Asana Software UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-117",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Prophet",
+   "registerName": "Prophet Brand Strategy Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-118",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Avantium",
+   "registerName": "Avantium Chemicals B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-119",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Avantium",
+   "registerName": "Avantium Renewable Polymers B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-120",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Avantium",
+   "registerName": "Avantium Support B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-121",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "GAC",
+   "registerName": "GAC Logistics (UK) Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-122",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Sweco Nederland",
+   "registerName": "Sweco Holdco B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-123",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Flexport",
+   "registerName": "Flexport Customs B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-124",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Flexport",
+   "registerName": "Flexport International B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-125",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Ripple",
+   "registerName": "Ripple Markets UK Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-126",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "EVENTIM Benelux",
+   "registerName": "EVENTIM Benelux B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-127",
+   "set": "stress",
+   "country": "IE",
+   "boardName": "StepStone Group",
+   "registerName": "Stepstone Group Europe Alternative Investments Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-128",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "ROLLER",
+   "registerName": "ROLLER Networks LTD",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-129",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Alloy",
+   "registerName": "Alloy Therapeutics UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-130",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Dropbox",
+   "registerName": "Dropbox UK Online Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-131",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Inizio",
+   "registerName": "Inizio Services UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-132",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Winton",
+   "registerName": "Winton Capital Management Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-133",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "ViCentra B.V.",
+   "registerName": "ViCentra Manufacturing B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-134",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Symphony Communication Services",
+   "registerName": "Symphony Communication Services UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-135",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Allinq",
+   "registerName": "Allinq Insite B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-136",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Brave",
+   "registerName": "Brave Software Europe Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-137",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Teneo",
+   "registerName": "Teneo Strategy Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-138",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "VIRO Group",
+   "registerName": "VIRO Arnhem B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-139",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Qualinx",
+   "registerName": "Qualinx Holding B.V.",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-140",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Corendon",
+   "registerName": "Corendon International Travel B.V.",
+   "label": "same",
+   "confidence": "medium",
+   "evidence": "Plausibly the same group (sister entity); not independently confirmed."
+  },
+  {
+   "id": "brand-141",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "IMC",
+   "registerName": "IMC Trading B.V.",
+   "label": "same",
+   "confidence": "medium",
+   "evidence": "Plausibly the same group (sister entity); not independently confirmed."
+  },
+  {
+   "id": "brand-142",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "IMC",
+   "registerName": "IMC Netherlands Services B.V.",
+   "label": "same",
+   "confidence": "medium",
+   "evidence": "Plausibly the same group (sister entity); not independently confirmed."
+  },
+  {
+   "id": "brand-143",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "OLIVER",
+   "registerName": "Oliver Marketing",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-144",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "impact.com",
+   "registerName": "Impact Radius Ltd",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-145",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Coalition, Inc.",
+   "registerName": "Coalition Risk Solutions Ltd.",
+   "label": "same",
+   "confidence": "medium",
+   "evidence": "Plausibly the same group (sister entity); not independently confirmed."
+  },
+  {
+   "id": "brand-146",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "GREY",
+   "registerName": "Grey Advertising Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-147",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "GREY",
+   "registerName": "Grey Communications Group Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-148",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Axon",
+   "registerName": "Axon Public Safety UK Limited",
+   "label": "same",
+   "confidence": "high",
+   "evidence": "Same organisation: the register entry is this company's own legal entity or a sister entity of the same group."
+  },
+  {
+   "id": "brand-149",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Sedna",
+   "registerName": "Sedna Systems Europe Limited",
+   "label": "same",
+   "confidence": "medium",
+   "evidence": "Plausibly the same group (sister entity); not independently confirmed."
+  },
+  {
+   "id": "brand-150",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Source.ag",
+   "registerName": "Source Payroll Services B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is Source.ag (agtech); the register entry is a different company that only shares the word 'Source'."
+  },
+  {
+   "id": "brand-151",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Source.ag",
+   "registerName": "Source Engineering Services B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is Source.ag (agtech); the register entry is a different company that only shares the word 'Source'."
+  },
+  {
+   "id": "brand-152",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Source.ag",
+   "registerName": "Source Flex Solutions B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is Source.ag (agtech); the register entry is a different company that only shares the word 'Source'."
+  },
+  {
+   "id": "brand-153",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "ACE Company BV",
+   "registerName": "ACE Incubator B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'."
+  },
+  {
+   "id": "brand-154",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "ACE Company BV",
+   "registerName": "ACE Management Consulting B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'."
+  },
+  {
+   "id": "brand-155",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "ACE Company BV",
+   "registerName": "Ace and Tate Holding B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'."
+  },
+  {
+   "id": "brand-156",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "ACE Company BV",
+   "registerName": "Ace Tankers C.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'."
+  },
+  {
+   "id": "brand-157",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "ACE Company BV",
+   "registerName": "Ace Solutions B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is 'ACE Company BV'; this entry is an unrelated company that only shares the word 'ACE'."
+  },
+  {
+   "id": "brand-158",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Quality B.V.",
+   "registerName": "Quality Produce International (Q.P.I.) B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'."
+  },
+  {
+   "id": "brand-159",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Quality B.V.",
+   "registerName": "Quality Inspection Services B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'."
+  },
+  {
+   "id": "brand-160",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Quality B.V.",
+   "registerName": "Quality by Design B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'."
+  },
+  {
+   "id": "brand-161",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Quality B.V.",
+   "registerName": "Quality Positioning Services (Q.P.S.) B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'."
+  },
+  {
+   "id": "brand-162",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Quality B.V.",
+   "registerName": "Quality Royal B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is 'Quality B.V.'; this entry is an unrelated company with a longer trading name starting with 'Quality'."
+  },
+  {
+   "id": "brand-163",
+   "set": "stress",
+   "country": "IE",
+   "boardName": "OLIVER",
+   "registerName": "Oliver Conroy (Pallets) Limited",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is OLIVER (creative agency); this entry is a different business that only shares the first name."
+  },
+  {
+   "id": "brand-164",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "OLIVER",
+   "registerName": "Oliver Wyman Limited",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is OLIVER (creative agency); this entry is a different business that only shares the first name."
+  },
+  {
+   "id": "brand-165",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "OLIVER",
+   "registerName": "Oliver James Associates Limited",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is OLIVER (creative agency); this entry is a different business that only shares the first name."
+  },
+  {
+   "id": "brand-166",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "NICE",
+   "registerName": "Nice to Meat B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is NICE (software); the entry is a Dutch meat/food company."
+  },
+  {
+   "id": "brand-167",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "VIKTOR",
+   "registerName": "Viktor & Rolf B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is VIKTOR (engineering software); Viktor & Rolf is a fashion house."
+  },
+  {
+   "id": "brand-168",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Appian Corporation",
+   "registerName": "Appian Base Metals Management Limited",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is Appian Corporation (software); the entry is Appian Capital's metals management company."
+  },
+  {
+   "id": "brand-169",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Alpine Nederland B.V",
+   "registerName": "Alpine Grove (Netherlands) B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is Alpine Nederland B.V (the register also lists exactly that); this entry is a different company."
+  },
+  {
+   "id": "brand-170",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "impact.com",
+   "registerName": "Impact IT Solutions (UK) Ltd",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is impact.com (formerly Impact Radius); this entry is an unrelated IT services firm."
+  },
+  {
+   "id": "brand-171",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Coalition, Inc.",
+   "registerName": "Coalition for Epidemic Preparedness Innovations UK Limited",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is Coalition, Inc. (cyber insurance); this entry is an unrelated organisation."
+  },
+  {
+   "id": "brand-172",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Coalition, Inc.",
+   "registerName": "Coalition Development Ltd",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board is Coalition, Inc. (cyber insurance); this entry is an unrelated organisation."
+  },
+  {
+   "id": "brand-173",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "ASM",
+   "registerName": "ASM Maritime B.V.",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board ASM is ASM International (semiconductors); ASM Maritime is a shipping company."
+  },
+  {
+   "id": "brand-174",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Pay.",
+   "registerName": "Pay for People Contracting B.V.",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-175",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Pay.",
+   "registerName": "Pay to Payroll B.V.",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-176",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "T.E.S",
+   "registerName": "TES Global Limited",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-177",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Proton",
+   "registerName": "Proton Technologies Ltd",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-178",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Universal",
+   "registerName": "Universal Music Operations Ltd",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-179",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Universal",
+   "registerName": "Universal Design Studio Limited",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-180",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Universal",
+   "registerName": "Universal Components UK Limited",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-181",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Insight",
+   "registerName": "Insight Direct (UK) Ltd",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-182",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Insight",
+   "registerName": "Insight Analytics Solutions Limited",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-183",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "ABACUS",
+   "registerName": "Abacus Cambridge Partners Ltd",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-184",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "ABACUS",
+   "registerName": "Abacus Information Technology UK Limited",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-185",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Lighthouse",
+   "registerName": "Lighthouse Global Europe Limited",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-186",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Euro",
+   "registerName": "Euro Pool System UK Ltd",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-187",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Ember",
+   "registerName": "Ember Core Ltd",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-188",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Hanover",
+   "registerName": "Hanover Communications",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-189",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Airborne",
+   "registerName": "Airborne Composites Automation B.V.",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-190",
+   "set": "stress",
+   "country": "NL",
+   "boardName": "Vesper",
+   "registerName": "Vesper Management B.V.",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-191",
+   "set": "stress",
+   "country": "IE",
+   "boardName": "ASM",
+   "registerName": "ASM Service Support Ireland Ltd",
+   "label": "unsure",
+   "confidence": "high",
+   "evidence": "Several unrelated register entries share this board's name and the board's jobs don't say which one is the employer."
+  },
+  {
+   "id": "brand-192",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Verve",
+   "registerName": "Verve the Live Agency Limited",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board Verve is the ad-tech group; 'Verve the Live Agency' is an events agency."
+  },
+  {
+   "id": "brand-193",
+   "set": "stress",
+   "country": "GB",
+   "boardName": "Axiom",
+   "registerName": "Axiom Manufacturing Services Limited",
+   "label": "different",
+   "confidence": "high",
+   "evidence": "Board Axiom is the legal-services firm; this entry is a manufacturer."
+  }
+ ],
+ "name": [
+  {
+   "id": "name-001",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Seedtag",
+   "candidates": [
+    "Seedtag Advertising"
+   ],
+   "expect": "Seedtag Advertising",
+   "confidence": "high",
+   "evidence": "Seedtag (Madrid ad-tech) sponsors UK roles as 'Seedtag Advertising'; same brand, longer legal name."
+  },
+  {
+   "id": "name-002",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "Consult Group",
+   "candidates": [
+    "Consult&Co B.V."
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: Consult&Co B.V.."
+  },
+  {
+   "id": "name-003",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Airborne",
+   "candidates": [
+    "AIRBORNE ROBOTICS Ltd",
+    "Airborne Representation Ltd t/a Skybreak",
+    "Airborne Capital (UK) Limited",
+    "AIRBORNE ENVIRONMENTAL CONSULTANTS LTD"
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: AIRBORNE ROBOTICS Ltd; Airborne Representation Ltd t/a Skybreak; Airborne Capital (UK) Limited."
+  },
+  {
+   "id": "name-004",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Dojo",
+   "candidates": [
+    "DOJO CONSTRUCTION LIMITED"
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: DOJO CONSTRUCTION LIMITED."
+  },
+  {
+   "id": "name-005",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Linq App",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-006",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Catawiki",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-007",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Infomedia",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-008",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Sumo Logic",
+   "candidates": [
+    "SUMO FOOD LTD",
+    "Sumo Digital Limited",
+    "Sumo Optimus Ltd",
+    "Sumologic Limited"
+   ],
+   "expect": "Sumologic Limited",
+   "confidence": "high",
+   "evidence": "Sumo Logic's UK entity is registered as one word, 'Sumologic Limited'."
+  },
+  {
+   "id": "name-009",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "Taboola",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-010",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "Imi",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-011",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Sensiba",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-012",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "WhiteTech",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-013",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "InterSystems",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-014",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "AppTweak",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-015",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "GiveDirectly",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-016",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "Anduril Industries",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-017",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Verve",
+   "candidates": [
+    "Verve Marketing Limited"
+   ],
+   "expect": null,
+   "unsure": true,
+   "confidence": "medium",
+   "evidence": "A register entry shares the name but I could not confirm it is the same organisation."
+  },
+  {
+   "id": "name-018",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Pattern",
+   "candidates": [
+    "Pattern Trading Ltd"
+   ],
+   "expect": null,
+   "unsure": true,
+   "confidence": "medium",
+   "evidence": "A register entry shares the name but I could not confirm it is the same organisation."
+  },
+  {
+   "id": "name-019",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "WorldQuant",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-020",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "OpenUp",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-021",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "RCK Partners",
+   "candidates": [
+    "RCK Investments Limited"
+   ],
+   "expect": null,
+   "unsure": true,
+   "confidence": "medium",
+   "evidence": "A register entry shares the name but I could not confirm it is the same organisation."
+  },
+  {
+   "id": "name-022",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "StackandCo",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-023",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "Cogstate",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-024",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "The Trainee Company",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-025",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "DoiT International",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-026",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Vald",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-027",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Numerix",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-028",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Bjak",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-029",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Toast",
+   "candidates": [
+    "TOAST'D BAKERY LTD",
+    "Toast Direct Ltd",
+    "Toast (Mail Order) Limited",
+    "Toasttab UK Limited T/A Toast"
+   ],
+   "expect": "Toasttab UK Limited T/A Toast",
+   "confidence": "high",
+   "evidence": "Toast Inc.'s UK entity is Toasttab UK Limited, trading as Toast."
+  },
+  {
+   "id": "name-030",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Peterson",
+   "candidates": [
+    "PETERSON LAW ASSOCIATES LIMITED",
+    "Peterson (United Kingdom) Limited"
+   ],
+   "expect": null,
+   "unsure": true,
+   "confidence": "medium",
+   "evidence": "A register entry shares the name but I could not confirm it is the same organisation."
+  },
+  {
+   "id": "name-031",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Hunter Douglas",
+   "candidates": [
+    "Hunter Healthcare Resourcing Ltd",
+    "Hunter Gee Holroyd Limited",
+    "HUNTER & RABBIT PARTNERS LTD",
+    "Hunter Douglas UK Retail Limited",
+    "Hunter Boot Ltd",
+    "Hunter Financial"
+   ],
+   "expect": "Hunter Douglas UK Retail Limited",
+   "confidence": "medium",
+   "evidence": "Hunter Douglas group's UK entity; the job is at the group."
+  },
+  {
+   "id": "name-032",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Virtu Financial",
+   "candidates": [
+    "Virtu Europe Trading Limited"
+   ],
+   "expect": "Virtu Europe Trading Limited",
+   "confidence": "medium",
+   "evidence": "Virtu Financial's European trading arm."
+  },
+  {
+   "id": "name-033",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "DoiT International",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-034",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Getty Images (UK)",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-035",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "RBL Labs",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-036",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "Kong",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-037",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "zaimler",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-038",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Payoneer",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-039",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Anrok",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-040",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Xperteez Technology",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-041",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Atari",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-042",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Pmg",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-043",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "IXL Learning",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-044",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Rubrik Job Board",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-045",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Quantifind",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-046",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "Cribl",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-047",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Fivetran",
+   "candidates": [
+    "Fivetran Data Pipeline Limited"
+   ],
+   "expect": "Fivetran Data Pipeline Limited",
+   "confidence": "high",
+   "evidence": "Fivetran's Irish entity."
+  },
+  {
+   "id": "name-048",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "MinIO",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-049",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "Revolution Medicines",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-050",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Globalization Partners",
+   "candidates": [
+    "Globalization Partners International Ireland Ltd"
+   ],
+   "expect": "Globalization Partners International Ireland Ltd",
+   "confidence": "high",
+   "evidence": "Same company, Irish entity."
+  },
+  {
+   "id": "name-051",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Swish Analytics",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-052",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Plaud",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-053",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Quince",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-054",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "iwell",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-055",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Luma AI",
+   "candidates": [
+    "LUMA HOMECARE LTD"
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: LUMA HOMECARE LTD."
+  },
+  {
+   "id": "name-056",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Pearmill",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-057",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Matrix Global",
+   "candidates": [
+    "MATRIX INFORMATICS LTD",
+    "Matrix Staffing Solutions Limited",
+    "MATRIX INT LTD",
+    "Matrix Academy Trust",
+    "Matrix APA (UK) Ltd",
+    "Matrix Support Services UK LTD"
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: MATRIX INFORMATICS LTD; Matrix Staffing Solutions Limited; MATRIX INT LTD."
+  },
+  {
+   "id": "name-058",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Prosus",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-059",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Asana",
+   "candidates": [
+    "Asana foods limited"
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: Asana foods limited."
+  },
+  {
+   "id": "name-060",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "SmartBear",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-061",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "Veeva Systems",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-062",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Vitesse Group",
+   "candidates": [
+    "Vitesse PSP"
+   ],
+   "expect": null,
+   "unsure": true,
+   "confidence": "medium",
+   "evidence": "A register entry shares the name but I could not confirm it is the same organisation."
+  },
+  {
+   "id": "name-063",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "Elastic",
+   "candidates": [
+    "elasticsearch B.V."
+   ],
+   "expect": "elasticsearch B.V.",
+   "confidence": "high",
+   "evidence": "Elastic's Dutch entity is Elasticsearch B.V."
+  },
+  {
+   "id": "name-064",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Yubico",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-065",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Ensemble Health Partners",
+   "candidates": [
+    "Ensemble Productions Ltd",
+    "ENSEMBLE SOFTWARE (UK) LIMITED"
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: Ensemble Productions Ltd; ENSEMBLE SOFTWARE (UK) LIMITED."
+  },
+  {
+   "id": "name-066",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Druva",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-067",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Campfire Software",
+   "candidates": [
+    "Campfire Agency Ltd"
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: Campfire Agency Ltd."
+  },
+  {
+   "id": "name-068",
+   "stratum": "unlinked",
+   "country": "IE",
+   "company": "dunnhumby",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-069",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "team.blue",
+   "candidates": [
+    "PA Team Software Consulting Ltd.",
+    "Team Rockstars Data",
+    "team.blue nl B.V.",
+    "Team Rockstars IT B.V.",
+    "Team Industrial Services Europe B.V.",
+    "Team Reptile B.V."
+   ],
+   "expect": "team.blue nl B.V.",
+   "confidence": "high",
+   "evidence": "Same brand with a country suffix."
+  },
+  {
+   "id": "name-070",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Envipco",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-071",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Phorest Salon Software",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-072",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Octagon",
+   "candidates": [
+    "Octagon I/O Ltd"
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: Octagon I/O Ltd."
+  },
+  {
+   "id": "name-073",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Spruce Technology",
+   "candidates": [
+    "Spruce Energy Limited"
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: Spruce Energy Limited."
+  },
+  {
+   "id": "name-074",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "FalconX",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-075",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "Masters Career Consultancy Pte",
+   "candidates": [
+    "Masters in Finance B.V."
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: Masters in Finance B.V.."
+  },
+  {
+   "id": "name-076",
+   "stratum": "unlinked",
+   "country": "NL",
+   "company": "Roblox",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-077",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "My Money Matters",
+   "candidates": [
+    "My World Estates",
+    "My Homecare Bexley & Greenwich",
+    "MY CITY DEVELOPER LTD",
+    "My Horizon Care Ltd",
+    "My cave Ltd",
+    "MY COLLEGE LIMITED"
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: My World Estates; My Homecare Bexley & Greenwich; MY CITY DEVELOPER LTD."
+  },
+  {
+   "id": "name-078",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "SB Technology",
+   "candidates": [
+    "SB CARE LTD",
+    "SB Squared Holding Ltd",
+    "SB STONEY LTD",
+    "SB West Drayton Ltd",
+    "SB Waste Management Limited",
+    "SB Power Contractors Ltd"
+   ],
+   "expect": null,
+   "confidence": "medium",
+   "evidence": "Register entries share a word but are different organisations: SB CARE LTD; SB Squared Holding Ltd; SB STONEY LTD."
+  },
+  {
+   "id": "name-079",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Bobyard",
+   "candidates": [],
+   "expect": null,
+   "confidence": "high",
+   "evidence": "No register entry in this country matches the name."
+  },
+  {
+   "id": "name-080",
+   "stratum": "unlinked",
+   "country": "GB",
+   "company": "Nomios",
+   "candidates": [
+    "Nomios UK&I Limited"
+   ],
+   "expect": "Nomios UK&I Limited",
+   "confidence": "high",
+   "evidence": "Same company, UK and Ireland entity."
+  },
+  {
+   "id": "name-081",
+   "stratum": "linked",
+   "country": "GB",
+   "company": "UiPath",
+   "candidates": [
+    "UIPATH UK LIMITED"
+   ],
+   "expect": "UIPATH UK LIMITED",
+   "confidence": "high",
+   "evidence": "Employer name equals the register name once legal and regional words are removed."
+  },
+  {
+   "id": "name-082",
+   "stratum": "linked",
+   "country": "GB",
+   "company": "DeciBio Consulting",
+   "candidates": [
+    "DeciBio Consulting Ltd"
+   ],
+   "expect": "DeciBio Consulting Ltd",
+   "confidence": "high",
+   "evidence": "Employer name equals the register name once legal and regional words are removed."
+  },
+  {
+   "id": "name-083",
+   "stratum": "linked",
+   "country": "IE",
+   "company": "VOID Interactive",
+   "candidates": [
+    "VOID Interactive Ltd."
+   ],
+   "expect": "VOID Interactive Ltd.",
+   "confidence": "high",
+   "evidence": "Employer name equals the register name once legal and regional words are removed."
+  },
+  {
+   "id": "name-084",
+   "stratum": "linked",
+   "country": "GB",
+   "company": "Celerion",
+   "candidates": [
+    "Celerion GB Ltd"
+   ],
+   "expect": "Celerion GB Ltd",
+   "confidence": "high",
+   "evidence": "Employer name equals the register name once legal and regional words are removed."
+  },
+  {
+   "id": "name-085",
+   "stratum": "linked",
+   "country": "GB",
+   "company": "PhysicsX",
+   "candidates": [
+    "PhysicsX Limited"
+   ],
+   "expect": "PhysicsX Limited",
+   "confidence": "high",
+   "evidence": "Employer name equals the register name once legal and regional words are removed."
+  },
+  {
+   "id": "name-086",
+   "stratum": "linked",
+   "country": "GB",
+   "company": "Cloudinary UK",
+   "candidates": [
+    "Cloudinary UK Limited"
+   ],
+   "expect": "Cloudinary UK Limited",
+   "confidence": "high",
+   "evidence": "Employer name equals the register name once legal and regional words are removed."
+  },
+  {
+   "id": "name-087",
+   "stratum": "linked",
+   "country": "GB",
+   "company": "Keyloop (UK)",
+   "candidates": [
+    "Keyloop (UK) Limited"
+   ],
+   "expect": "Keyloop (UK) Limited",
+   "confidence": "high",
+   "evidence": "Employer name equals the register name once legal and regional words are removed."
+  },
+  {
+   "id": "name-088",
+   "stratum": "linked",
+   "country": "GB",
+   "company": "Claimsorted",
+   "candidates": [
+    "Claimsorted Ltd"
+   ],
+   "expect": "Claimsorted Ltd",
+   "confidence": "high",
+   "evidence": "Employer name equals the register name once legal and regional words are removed."
+  },
+  {
+   "id": "name-089",
+   "stratum": "linked",
+   "country": "NL",
+   "company": "Portbase",
+   "candidates": [
+    "Portbase B.V."
+   ],
+   "expect": "Portbase B.V.",
+   "confidence": "high",
+   "evidence": "Employer name equals the register name once legal and regional words are removed."
+  },
+  {
+   "id": "name-090",
+   "stratum": "linked",
+   "country": "NL",
+   "company": "Adyen",
+   "candidates": [
+    "Adyen N.V."
+   ],
+   "expect": "Adyen N.V.",
+   "confidence": "high",
+   "evidence": "Employer name equals the register name once legal and regional words are removed."
+  }
+ ]
+}

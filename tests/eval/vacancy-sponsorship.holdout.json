@@ -1,0 +1,438 @@
+{
+ "version": 1,
+ "labeler": "Claude (AI) reading each excerpt before the matcher was run on it; needs spot-checking by a human",
+ "drawnAt": "2026-11-01",
+ "heldOut": true,
+ "cases": [
+  {
+   "id": "hold-001",
+   "country": "GB",
+   "company": "Graphcore",
+   "text": "We’re an equal opportunity employer and recognise that everyone brings different strengths and perspectives. If you need any adjustments during the interview process, just let us know - we’re happy to support you. Sponsorship Applicants must have the legal right to work in the UK. Unfortunately, we are unable to provide visa sponsorship or support visa applications for this role. Join the Team at Graphcore Graphcore is one of ",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-002",
+   "country": null,
+   "company": "Affirm",
+   "text": "USA On Target Earnings (CA, WA, NY, NJ, CT) per year: $125,000 - $187,500 USA On Target Earnings (all other U.S. states) per year: $110,000 - $172,500 Please note that visa sponsorship is not available for this position. #LI-Remote Remote-first with flexibility built in Affirm is proud to be a remote-first company. Most roles can be done from almost anywhere within the country of employment. Some positions may",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-003",
+   "country": "GB",
+   "company": "Antithesis UK",
+   "text": "internship experience or coding experience - 1+ years of sales experience or sales certification - 1+ years cold calling experience - 1+ years Salesforce experience - 1+ years Google Workspaces products experience Visa Sponsorship: We are unable to provide visa sponsorship or immigration support for this position. Candidates must be authorized to work in the applicable country without current or future sponsorship requirements",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-004",
+   "country": "GB",
+   "company": "Ultralytics",
+   "text": "Applicants must have legal authorization to work in the UK, as Ultralytics does not provide visa sponsorship. 🚀 What you'll do As an LLM Engineer at Ultralytics, you will spearhead the development and integration of advanced language model capabilities across our ecosystem. You will work on cutting-edge projects that merge the power o",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-005",
+   "country": "GB",
+   "company": "Aibidia UK",
+   "text": "We are committed to fostering an inclusive culture that celebrates diversity, we want you to bring you, no matter your background, gender, race or sexual orientation! Please note, we’re unable to provide visa sponsorship for this role. To be considered, you’ll need to show proof of your eligibility to work in the country.",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-006",
+   "country": null,
+   "company": "Affirm",
+   "text": "ds for health, wellness and tech spending, and benefits (including 100% subsidized medical coverage, dental and vision for you and your dependents.) USA base pay range per year: $340,000 - $380,000 Please note that visa sponsorship is not available for this position. #LI-Remote Remote-first with flexibility built in Affirm is proud to be a remote-first company. Most roles can be done from almost anywhere within the country of ",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-007",
+   "country": null,
+   "company": "Woolpert",
+   "text": "We are unable to provide visa sponsorship for this position. Applicants must already possess work authorization in the country the job is located. What You Will Do: Build strategic relationships with the Google Cloud team, C-level executives, and key business leaders to",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-008",
+   "country": "GB",
+   "company": "OpenTable",
+   "text": "Attendance on these days is a requirement of the role, and we're unable to offer alternative hybrid arrangements at this time. Applicants must also have the existing right to work in the UK, as we're unable to provide visa sponsorship for this position. Inclusion We’re committed to creating a workplace where everyone feels they belong and can thrive. We know the best ideas come when we bring different v",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-009",
+   "country": null,
+   "company": "Affirm",
+   "text": "erage, dental and vision for you and your dependents.) USA base pay range (CA, WA, NY, NJ, CT) per year: $115,000 - $165,000 USA base pay range (all other U.S. states) per year: $101,000 - $151,000 Please note that visa sponsorship is not available for this position. #LI-Remote Remote-first with flexibility built in Affirm is proud to be a remote-first company. Most roles can be done from almost anywhere within the country of ",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-010",
+   "country": "GB",
+   "company": "Convene Hospitality Group",
+   "text": "Conference and Events Supervisor- Full-Time Please note: candidate must currently reside in the UK and be able to work in the UK without sponsorship. If you’re the kind of person who finds genuine joy in the \"perfect flow\" of a room and treats every guest like a VIP, you’ll fit right in here. At Convene, we’re all about the human side of hospitality, and as our Conference &",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-011",
+   "country": "GB",
+   "company": "Guidepoint",
+   "text": "The Associate will be responsible for assisting in building a pipeline of prospects across a variety of industries. This is a hybrid position out of our London office . All applicants must have the right to work in the UK. What You’ll Do: Identify prospect clients and communicate Guidepoint's value proposition via email and telephone Build relationships and schedule meetings with clients and senior sales managers Map companies",
+   "label": "unclear",
+   "confidence": "medium",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "hold-012",
+   "country": "NL",
+   "company": "Sytac - Openings",
+   "text": "Proactive Learner : A team-first mindset with a drive to stay ahead of rapidly evolving AI trends. Fluent in English + EU residency (no sponsorship). Tooling (must understand and use in practice): Databricks (Spark/SQL), Azure Cloud, Python, Delta Lake, and Git. Nice to have Azure AI Stack : Experience with Azure OpenAI and Azure Machine Learning services. LLM Toolkits : Fa",
+   "label": "no",
+   "confidence": "medium"
+  },
+  {
+   "id": "hold-013",
+   "country": "GB",
+   "company": "Kaluza",
+   "text": ": Platform Engineer (Mid level) Location: London or Bristol (Including Hybrid) Salary: £41,600 - £62,000 Team: Platform Engineering Reporting To: Engineering Manager This role is based in the UK and requires an existing right to work in the UK. At this time, we are not able to offer visa sponsorship for this role. We are committed to building a diverse, global team and our sponsorship policy is evaluated on a role-by-role basi",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-014",
+   "country": "GB",
+   "company": "Monzo",
+   "text": "learning about new technologies and have a passion for problem-solving You are available full-time for a minimum of 12 weeks between June and September 2027, we will have two June start dates to choose from You have the right to work in the UK without restrictions for the full 12-week internship and would not require visa sponsorship if offered a permanent position You can work from our London office on a hybrid basis to colla",
+   "label": "no",
+   "confidence": "medium"
+  },
+  {
+   "id": "hold-015",
+   "country": "NL",
+   "company": "Gerimedica",
+   "text": "We're big enough to have real impact on Dutch healthcare and small enough that your ideas are heard and your work is visible. Joining us from abroad? We offer visa sponsorship. Why an open application? New roles open throughout the year, across development, product, sales and marketing, support, customer advisory, data, finance and more. If you don't see the right vacancy today but you know you'd like",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-016",
+   "country": "GB",
+   "company": "Marktlink",
+   "text": "Please note: For this role we don't provide visa sponsorship or relocation assistance. Why us? At Marktlink, we’re not just dealmakers, we’re future-shapers. With a strong focus on tech, data, and AI, we’re redefining the world of M&A. Here’s what you can expect when you join our fast-gro",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-017",
+   "country": "GB",
+   "company": "Roller",
+   "text": "Perks! Attractive compensation package. We offer visa sponsorship support for qualified candidates, where required. You get to work on a category-leading product that customers love in a fun, high-growth industry! Check our Capterra and G2 reviews. 20 days of paid time off (PTO), 10 sick days,",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-018",
+   "country": "GB",
+   "company": "Doppel",
+   "text": "We are hiring in select territories across the United States. Candidates must be authorized to work in the territory in which they're working. We are not currently able to sponsor visas. The base salary range for this role is $150,000–$160,000, with an on-target earnings (OTE) range of $300,000–$320,000. We are an Equal Opportunity Employer and consider all applicants without regard to race, color, religion,",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-019",
+   "country": "GB",
+   "company": "Monzo",
+   "text": "What’s in it for you: 💰 £121,600-164,600 + Incentive Awards tied to your performance and benefits ✈️ We can help you relocate to the UK ✅ We can sponsor visas 📍This role can be based in our London office, but we're open to distributed working within the UK (with ad hoc meetings in London). ⏰ We offer flexible working hours and trust you to work enough hours to do your job well, at",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-020",
+   "country": "NL",
+   "company": "Riverflex",
+   "text": "the latest tools: ChatGPT Pro, Claude, Notion, Sembly, SlideHub and Riverflex's in-house developed software Equity share scheme for long-term team members EU-eligible or open to a Dutch highly skilled migrant visa - we sponsor. 30% ruling support available. Why join now? Riverflex is at an inflection point. We've built trusted relationships with some of Europe's most complex organisations, and demand for strategy and transform",
+   "label": "yes",
+   "confidence": "medium"
+  },
+  {
+   "id": "hold-021",
+   "country": "GB",
+   "company": "Neo4j",
+   "text": "The role is based in London, UK and requires significant in-office presence. Neo4j can provide visa support for exceptional international applications. Why Join Neo4j? Neo4j is, without question, the most popular graph intelligence platform in the world. We have customers in every industry globally, and our products are a proven prod",
+   "label": "unclear",
+   "confidence": "medium",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "hold-022",
+   "country": null,
+   "company": "Inferact",
+   "text": "We're timezone-flexible but expect regular overlap with Pacific Time for critical syncs. - Compensation: We offer competitive compensations (salary + equity) compared to the local market conditions. - Visa sponsorship: We sponsor visas on a case-by-case basis. - Benefits: Inferact offers competitive benefits appropriate to your location, including health coverage where applicable.",
+   "label": "unclear",
+   "confidence": "medium",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "hold-023",
+   "country": "NL",
+   "company": "Fidamy",
+   "text": "WHY JOIN US? - Competitive compensation - Latest MacBook Pro and equipment - Paid licences for Claude Code, AI agents, and leading development tools - Flexible hybrid work (2–3 days in the office) - Visa sponsorship available (including takeover of an existing Dutch visa; no relocation support) - Beautiful Amsterdam office - High ownership and direct influence on architecture and product - Opportunity for fast-track career gro",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-024",
+   "country": "GB",
+   "company": "Monzo",
+   "text": "We’re not about selling products - we want to solve problems and change lives through Monzo ❤️ 📍 London, Barcelona, or UK Remote | 💰 £150,900 to £204,100 + stock options & benefits | ✅ Visa sponsorship & relocation available About our Data Discipline We have a strong culture of data-driven decision making across the whole company. Data is central to how we understand our customers, shape our products, manage risk and grow Monz",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-025",
+   "country": null,
+   "company": "EvolutionIQ",
+   "text": "Growth & Training: $1,000/year for each employee for professional development, as well opportunities for tuition reimbursement. Sponsorship: We are open to sponsoring candidates currently in the U.S. who need to transfer their active visa. Please check with our Recruiting team if your visa is applicable for transfer. EvolutionIQ appreciates your interest in our comp",
+   "label": "unclear",
+   "confidence": "medium",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "hold-026",
+   "country": "NL",
+   "company": "Flexport",
+   "text": "You're part of PSI: the platform, security, and infrastructure teams work hand in hand at Flexport. We value engineering quality and treat security as infrastructure, not just policy. We sponsor visas for the right candidate. What's in it for you An opportunity to contribute to one of the fastest-growing companies, where you'll have the chance to create a global impact while being part of a thriving multinational environmen",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-027",
+   "country": "GB",
+   "company": "Anthropic",
+   "text": "Commitment: Full-time role for the duration of the residency. Compensation: £265,000 to £375,000/year pro-rated for the duration of the residency + benefits Visa sponsorship: We sponsor visas for placements of three months or longer. For six-week placements we encourage remote participation from a country where Anthropic can hire. Applicants may also be considered for the Anthropic Fellows Program .",
+   "label": "yes",
+   "confidence": "medium"
+  },
+  {
+   "id": "hold-028",
+   "country": "GB",
+   "company": "Monzo",
+   "text": "peak commuting times or gym slots, appointments, or supporting your family in an emergency. 🕒✨ Work the way that works for you with Monzo! 💼 What’s in it for you ✈️ We can help you relocate to the UK or Spain ✅ We can sponsor visas for the UK (not Spain) 📍This role can be based in our London office, but we're open to distributed working within the UK (with ad hoc meetings in London). ⏰ We offer flexible working hours and trust",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-029",
+   "country": "GB",
+   "company": "Wheely",
+   "text": "ntal insurance Life and critical illness cover Latest-generation MacBook Pro and 4k display Monthly credit towards Wheely journeys Cycle to Work scheme Professional development stipend Relocation support, including visa sponsorship and allowance All of your personal information will be collected stored and processed in accordance with Wheely’s Candidate Privacy Notice",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-030",
+   "country": "GB",
+   "company": "Verkada",
+   "text": "charge through our paid holidays, firmwide extended holidays, flexible PTO and personal sick time Commuter benefits Kitchen filled with drinks and snacks & daily food allowance at the office Additional Information We do sponsor and take over sponsorship of employment visas for this role. If we make you an offer, we will make every reasonable effort to get you a visa. Annual Pay Range At Verkada, we want to attract and retain t",
+   "label": "yes",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-031",
+   "country": null,
+   "company": "Toshiba Global Commerce Solutions - External",
+   "text": "This job opening is not eligible for immigration/work visa sponsorship POSITION SUMMARY: The Service Delivery Manager is responsible for the seamless delivery of maintenance and services to Toshiba clients. The Service Delivery Manager will be responsible for personnel management of a team, on aver",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-032",
+   "country": "GB",
+   "company": "Lincoln International",
+   "text": "ucts Strong communication skills and experience interacting with teammates and clients Additional Information: Lincoln International is not currently hiring individuals for this position who now or in the future require sponsorship for employment visa status. This job may also be eligible for discretionary bonus pay.** We offer a comprehensive package of benefits including medical, dental and vision insurance, and retirement b",
+   "label": "no",
+   "confidence": "high"
+  },
+  {
+   "id": "hold-033",
+   "country": "IE",
+   "company": "StackandCo",
+   "text": "s Experience in UI/Front End Development Experience in at least one JS framework ( Angular preferred) Experience in Unit Testing tools such as Jasmine, Karma or Protractor Experience/Knowledge of Agile You must have the right to work in Ireland Originally posted on Himalayas",
+   "label": "unclear",
+   "confidence": "medium",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "hold-034",
+   "country": "GB",
+   "company": "Picsart",
+   "text": "Picsart, Inc. is an E-Verify Employer in the US. Please click here for the E-Verify Poster in English or Spanish . For information regarding your Right To Work, please click here for English or Spanish . For Applicants Based in California - California Job Applicant Privacy Notice ( https://rb.gy/lqu5mv) ABOUT US Picsart is the world’s largest digital creation platform and a top 20 mo",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-035",
+   "country": "NL",
+   "company": "Anduril Industries",
+   "text": "rong cross-cultural communication and negotiation skills Native or fluent English; a second European language (Dutch, German, French) or Arabic is a plus Willingness to travel up to 50% across Europe and the Middle East Right to work in the EU; eligible to obtain and maintain EU and/or NATO-level security clearances Preferred Qualifications Prior operational or industry experience in C4ISR, JADC2, or tactical communications — ",
+   "label": "unclear",
+   "confidence": "medium",
+   "note": "Implied or conditional wording: excluded from the metrics."
+  },
+  {
+   "id": "hold-036",
+   "country": null,
+   "company": "SpringML",
+   "text": "This role is open to candidates located in the United States who do not need sponsorship of a work visa and are ideally located in the Pacific time zone. Remote work is available, but the role requires significant client-facing travel within the region as required by client engagements. Compensation & Benefits: This",
+   "label": "no",
+   "confidence": "medium"
+  },
+  {
+   "id": "hold-037",
+   "country": null,
+   "company": "CrossCountry Consulting",
+   "text": "CrossCountry Consulting is the transformation partner for the Office of the CFO. As a trusted advisor to Fortune 500 companies, emerging growth market leaders, and private equity sponsors, we combine deep domain expertise with the power of data, AI, and technology to modernize workflows, drive human-centered change, and maximize transaction value. Grounded in our Core Values, we are committed to solving today's most",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-038",
+   "country": "GB",
+   "company": "Asana",
+   "text": "You will design and lead structured, time-bound engagements from onboarding through workflow launch, guiding teams and AI agents to execute work together seamlessly. Partnering closely with executive sponsors and frontline teams, you will navigate ambiguity, create operational clarity, and connect AI capabilities directly to meaningful business outcomes. This role is based in our London office with an office-centric hybrid sch",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-039",
+   "country": null,
+   "company": "Vestmark",
+   "text": "The VAS Trader is primarily responsible for implementing trades to Manager Models. The models are proprietary and 3rd party. This position supports SMA, MSP, and Model Only/UMA sponsors and managers and maintaining the underlying accounts. In addition, this role handles trade order management, pre- and post-trade servicing, and ensuring trades are submitted and executed. Responsibilities: Proactively identify oppo",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-040",
+   "country": "GB",
+   "company": "AvePoint",
+   "text": "Lead and coordinate virtual account teams to create pipeline, progress opportunities and close complex enterprise sales opportunities. Build executive sponsorship and multi-threaded relationships across customer stakeholders to accelerate deal progression and long-term account growth. Work closely with Microsoft, Systems Integrators and channel partners to accelerate pipeline creation, cu",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-041",
+   "country": null,
+   "company": "Therapymatch",
+   "text": "- Drive process improvements and automation initiatives across the accounting function, leveraging tools like Netsuite, Workday, and Ramp to reduce manual work and improve controls. - Lead or sponsor strategic accounting projects, coordinating cross-functional partners and delivering measurable business impact. YOU'D BE GREAT FOR THIS ROLE IF YOU HAVE: - 10+ years of accounting and/or audit experience, including at least 5 yea",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-042",
+   "country": null,
+   "company": "Demandbase",
+   "text": "- Identify new areas for collaboration across product innovation, AI initiatives, data partnerships, cloud infrastructure, and services. - Develop joint business plans with clear KPIs and executive sponsorship. - Act as the primary point of coordination across internal stakeholders to ensure successful execution. PRODUCT & TECHNICAL ALIGNMENT - Partner closely with Product Management and Engineering to influence Demandbase's p",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-043",
+   "country": "GB",
+   "company": "Reformation",
+   "text": "Our total rewards package also includes benefits, perks, and opportunities for growth that contribute to overall compensation. Benefits & Perks: Eligible employees get employer-sponsored private medical, dental, and vision insurance, as well as commuter benefits to help support your travel to and from work. We offer competitive paid time off policies including vacation, sick leave, and company holidays for eligibl",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-044",
+   "country": "GB",
+   "company": "OpenAI UK",
+   "text": "You will serve as an executive technical sponsor for critical engagements, a senior voice of the customer inside OpenAI, and a cross-functional leader who can move confidently between regional strategy, executive decision-making, architectural depth, and hands-on coaching. This ro",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-045",
+   "country": null,
+   "company": "Summit Therapeutics",
+   "text": "graduate degree preferred Minimum of 10+ years of experience in a Procurement/Vendor Management or Finance environment in a pharmaceutical, CRO/ biotech company or worked in a clinical R&D operations setting with a CRO/Sponsor company Good understanding of the drug development R&D process is important In-depth understanding of clinical trial-related execution of large global studies, including CROs, central labs, imaging, drug",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-046",
+   "country": "GB",
+   "company": "Blockchain.com",
+   "text": "References will be checked as part of the recruitment process. WHAT YOU WILL DO Travel & Logistics Research, plan and coordinate domestic and international travel, including flights, hotels, ground transportation and visas. Prepare detailed travel itineraries, boarding passes and other relevant documentation. Coordinate with the security team and other stakeholders to ensure smooth travel arrangements. Handle last-minute chang",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-047",
+   "country": "GB",
+   "company": "Alo",
+   "text": "It also covers employment structuring for market entry, such as local entities, employer of record arrangements, and branch registrations. Advise on right-to-work checks and sponsor license obligations. Coordinate on immigration and posted-worker matters for employees moving between European countries. Manage and coordinate external employment counsel across European countries, plus benefits, payroll, and pensi",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-048",
+   "country": null,
+   "company": "CrossCountry Consulting",
+   "text": "By joining our rapidly growing Private Equity practice, you will serve as a trusted partner to private equity sponsors, portfolio company executives, and CFOs executing acquisition and buy-and-build strategies. You will bring first-hand Finance leadership experience, unique perspectives, and functional expertise to deliver tailored solutions that a",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-049",
+   "country": null,
+   "company": "Ping Identity",
+   "text": "Strategic engagement and collaboration agreements Build a deliberate, multi-threaded engagement model with Accenture’s global leadership, practice executives, industry leaders, regional sponsors, account executives, and delivery leaders. Create executive alignment around a small number of strategic priorities, including the business case, mutual value, investment requirements, customer outcomes, and path to scale. Develop,",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-050",
+   "country": "GB",
+   "company": "Datadog",
+   "text": "Lead executive-level recruiting and build a leadership pipeline from within, developing managers who can in turn scale their own teams. Serve as executive sponsor for strategic EMEA accounts, engaging at the C-suite level to reinforce value, resolve escalations, and identify expansion opportunities. Partner with global TPS, Product, Sales Engineering, CS, and Enablement to standardize and evo",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  },
+  {
+   "id": "hold-051",
+   "country": "GB",
+   "company": "Quantifind",
+   "text": "Build a pipeline of strategic opportunities across major European financial institutions and personally lead significant deals and executive relationships Navigate complex enterprise buying processes involving business sponsors, technology, procurement, legal, information security, and third-party risk Expand successful deployments into new use cases and business units with Customer Success and Product, positioning Quantifind ",
+   "label": "none",
+   "confidence": "high",
+   "note": "Visa words appear but nothing about sponsoring (a duty of the role, a different meaning of sponsor, benefits)."
+  }
+ ]
+}

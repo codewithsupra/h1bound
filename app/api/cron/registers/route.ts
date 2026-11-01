@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createAdminInsForge } from "@/lib/insforge/admin";
 import { downloadRegister, upsertLicences } from "@/lib/ingest/load-registers";
+import { trackRun } from "@/lib/server/ops";
 
 export const maxDuration = 300;
 
@@ -12,7 +13,10 @@ export async function POST(req: NextRequest) {
   if (req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const country = req.nextUrl.searchParams.get("country");
   if (country !== "GB" && country !== "NL") return NextResponse.json({ error: "country must be GB or NL" }, { status: 400 });
-  const { licences, date } = await downloadRegister(country);
-  const slugged = await upsertLicences(createAdminInsForge().database, country, licences, date);
-  return NextResponse.json({ country, employers: licences.length, date, newSlugs: slugged });
+  const out = await trackRun(`registers-${country.toLowerCase()}`, {}, async () => {
+    const { licences, date } = await downloadRegister(country);
+    const slugged = await upsertLicences(createAdminInsForge().database, country, licences, date);
+    return { country, employers: licences.length, date, newSlugs: slugged };
+  }, (r) => ({ stats: r }));
+  return NextResponse.json(out);
 }

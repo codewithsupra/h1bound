@@ -1,5 +1,6 @@
 import "server-only";
 import { generateText, Output } from "ai";
+import { tracked } from "@/lib/server/ops";
 import { z } from "zod";
 import { extractText } from "unpdf";
 import mammoth from "mammoth";
@@ -35,15 +36,16 @@ const parsedSchema = z.object({
 export type ParsedResume = z.infer<typeof parsedSchema>;
 
 export async function parseResume(text: string): Promise<ParsedResume> {
-  const { output } = await generateText({
-    model: smartModel(),
+  const model = smartModel();
+  const { output } = await tracked("resume", model, () => generateText({
+    model,
     output: Output.object({ schema: parsedSchema }),
     // Always cap output: without it providers reserve their maximum, which fails on a near-limit key.
     maxOutputTokens: 6000,
     system:
       "You extract structured data from resumes, CVs, transcripts and biodata. Only use what the document says; never invent employers, dates or skills. If the document is a transcript, infer skills from courses.",
     prompt: text.slice(0, 30_000),
-  });
+  }));
   // Anthropic structured output rejects maxItems, so limits are enforced here instead of in the schema.
   return {
     ...output,

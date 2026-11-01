@@ -1,5 +1,6 @@
 import "server-only";
 import { generateText, Output } from "ai";
+import { tracked } from "@/lib/server/ops";
 import { z } from "zod";
 import { chatModel } from "@/lib/ai/models";
 import { cleanRerank, type RerankVerdict } from "@/lib/match";
@@ -25,15 +26,16 @@ export async function rerank(resume: string, prefs: string, jobs: RerankJob[], t
   if (!resume.trim() || jobs.length < 2) return new Map();
   const list = jobs.map((j, i) => `#${i + 1} ${j.title} at ${j.company} (${j.location})\n${j.description.replace(/\s+/g, " ").slice(0, 900)}`).join("\n\n");
   try {
-    const { output } = await generateText({
-      model: chatModel(),
+    const model = chatModel();
+    const { output } = await tracked("rerank", model, () => generateText({
+      model,
       output: Output.object({ schema }),
       maxOutputTokens: 3000,
       abortSignal: AbortSignal.timeout(timeoutMs),
       system:
         "You are a strict technical recruiter. Judge each job for THIS candidate: required skills they actually have (from the resume, not guesses), seniority match (penalize roles needing far more experience), domain fit, and preferences. Only cite experience the resume shows. Be calibrated: most jobs are 40-75; reserve 85+ for near-perfect fits.",
       prompt: `CANDIDATE PREFERENCES: ${prefs}\n\nRESUME:\n${resume.slice(0, 6000)}\n\nJOBS:\n${list}\n\nReturn one verdict per job.`,
-    });
+    }));
     return cleanRerank(output.verdicts, jobs.map((j) => j.id));
   } catch {
     return new Map();
