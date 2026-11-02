@@ -44,14 +44,22 @@ export async function POST(req: Request) {
   if (!(claimed as unknown[] | null)?.length) return NextResponse.json({ error: "already_sent" }, { status: 409 });
 
   const name = (decryptJson<{ senderName?: string }>(row.body_enc).senderName ?? user.name ?? null) || null;
+  let sent: { id: string; from: string };
   try {
-    const sent = await sendGmail(user.id, { to, subject, body, fromName: name });
-    await db.from("outreach").update({ gmail_message_id: sent.id }).eq("id", outreachId);
-    await db.from("matches").update({ status: "emailed", status_at: now }).eq("user_id", user.id).eq("job_id", row.job_id).in("status", ["shown", "saved", "applied"]);
-    return NextResponse.json({ ok: true, from: sent.from });
+    sent = await sendGmail(user.id, { to, subject, body, fromName: name });
   } catch (e) {
+    // Nothing went out: release the claim so the user can retry.
     await db.from("outreach").update({ sent_at: null }).eq("id", outreachId);
     const msg = (e as Error).message;
     return NextResponse.json({ error: msg === "not_connected" ? "not_connected" : "send_failed" }, { status: msg === "not_connected" ? 412 : 502 });
   }
+  // The email is out. From here the claim must never be released, or a retry would send it twice;
+  // a failed bookkeeping write only loses the message id and the status change.
+  try {
+    await db.from("outreach").update({ gmail_message_id: sent.id }).eq("id", outreachId);
+    await db.from("matches").update({ status: "emailed", status_at: now }).eq("user_id", user.id).eq("job_id", row.job_id).in("status", ["shown", "saved", "applied"]);
+  } catch (e) {
+    console.error(`[outreach] sent ${outreachId} but could not record it: ${(e as Error).message}`);
+  }
+  return NextResponse.json({ ok: true, from: sent.from });
 }

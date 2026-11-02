@@ -6,6 +6,15 @@ How to read the **Detected by** line: *monitoring* means the system told us; *ma
 
 ---
 
+## 2026-11-02: A sent email could be sent again if recording it failed (found while writing tests)
+
+- **Impact:** none observed (Gmail sending has never been used in production). In principle: if Gmail accepted the message and the database write that records it then failed, the route released the draft's "sent" claim, so a retry would have emailed the hiring manager a second time.
+- **Detected by:** manual, in an audit of the send route; no test existed for the route at all.
+- **Root cause:** the claim release lived in the same `catch` as the Gmail call, so any later error (recording the message id, updating the job's status) was treated as "nothing was sent".
+- **Fix:** the Gmail call has its own `try`; a failure there releases the claim, but once the message is out the claim is never released and a bookkeeping failure is only logged.
+- **Prevention:** `tests/outreach-send.test.ts` (16 tests) covers authentication, ownership, one-send-per-draft under a simultaneous double click, release-on-failure and retry, the 4-day follow-up rule, and this case; the double-send test was confirmed to fail against the old code.
+- **Status:** fixed in code; live after the next deploy.
+
 ## 2026-11-01: "We can't offer visa sponsorship" shown as an offer
 
 - **Impact:** the vacancy matcher read postings that say "We can't offer visa sponsorship" (curly apostrophe) or "We are not currently able to sponsor visas" as *offering* sponsorship. In the labeled sample, 3 of 8 "yes" answers were wrong. A false "yes" lets a role from an unlicensed employer through as "risky" instead of blocking it, so a student could be told a role sponsors when it does not. Number of real users affected: not recorded (no users yet); at least 8 live UK postings carried the Kaluza sentence.

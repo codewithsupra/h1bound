@@ -18,7 +18,7 @@ const vac = runVacancyEval(vacancy);
 const hold = runVacancyEval(holdout);
 
 const rate = (num: number, den: number) => (den ? `${pct(num / den)} (${num}/${den}${wilson(num, den) ? `, 95% CI ${pct(wilson(num, den)![0])}–${pct(wilson(num, den)![1])}` : ""})` : "n/a");
-const row = (name: string, c: { tp: number; fp: number; fn: number; tn: number }, p: number | null, r: number | null) =>
+const row = (name: string, c: { tp: number; fp: number; fn: number; tn: number }) =>
   `| ${name} | ${rate(c.tp, c.tp + c.fp)} | ${rate(c.tp, c.tp + c.fn)} | ${c.tp} | ${c.fp} | ${c.fn} | ${c.tn} |`;
 const fails = (f: Failure[], max = 40) => (f.length ? f.slice(0, max).map((x) => `- \`${x.id}\` **${x.kind.replace("_", " ")}**: ${x.summary}\n  - ${x.evidence}`).join("\n") + (f.length > max ? `\n- …and ${f.length - max} more` : "") : "_None._");
 
@@ -59,8 +59,8 @@ A job board's company name is attached to a register entry, and every job on tha
 
 | Set | Precision | Recall | TP | FP | FN | TN |
 |---|---|---|---|---|---|---|
-${row(`Random sample of linked employers (${bc(rand)} pairs)`, rand, null, null)}
-${row(`Stress set: brand collisions, enriched on purpose (${bc(b.bySet.stress.confusion)} pairs)`, b.bySet.stress.confusion, null, null)}
+${row(`Random sample of linked employers (${bc(rand)} pairs)`, rand)}
+${row(`Stress set: brand collisions, enriched on purpose (${bc(b.bySet.stress.confusion)} pairs)`, b.bySet.stress.confusion)}
 
 - The **random sample** is the honest estimate of how often a board link is right across all linked employers: ${describe("correct", rand.tp, rand.tp + rand.fp)}.
 - The **stress set** is drawn from the boards whose brand is a prefix of several register entries (441 of 882 board links were prefix-only when drawn; 137 of those have rivals). Its precision is deliberately pessimistic and is not a population rate. It shows what kind of company the rule lets through.
@@ -73,8 +73,8 @@ A link is **confirmed** only when it is exact, or unique (no other register entr
 
 | Set | Precision | Recall | TP | FP | FN | TN |
 |---|---|---|---|---|---|---|
-${row(`Random sample (${bc(b.confirmed.bySet.random.confusion)} pairs)`, b.confirmed.bySet.random.confusion, null, null)}
-${row(`Stress set (${bc(b.confirmed.bySet.stress.confusion)} pairs)`, b.confirmed.bySet.stress.confusion, null, null)}
+${row(`Random sample (${bc(b.confirmed.bySet.random.confusion)} pairs)`, b.confirmed.bySet.random.confusion)}
+${row(`Stress set (${bc(b.confirmed.bySet.stress.confusion)} pairs)`, b.confirmed.bySet.stress.confusion)}
 
 - **Before** (any prefix accepted): random 98.5% (67/68), stress 75% (79/105).
 - **After**: no wrong organisation is confirmed in either set. The cost is demotion: of the ${b.confirmed.ambiguous.same + b.confirmed.ambiguous.different} pairs that become "possible", ${b.confirmed.ambiguous.same} really are the same organisation (mostly sister entities of one group such as NTS, Stripe, WPP) and ${b.confirmed.ambiguous.different} are different companies. On the random sample only ${b.confirmed.bySet.random.confusion.fn} of ${b.confirmed.bySet.random.confusion.tp + b.confirmed.bySet.random.confusion.fn} correct links lose "confirmed"; in the stress set, recall of confirmed claims is low by construction.
@@ -115,10 +115,10 @@ Two sets, because the matcher was changed after the first one was scored:
 
 | Set / class | Precision | Recall | TP | FP | FN | TN |
 |---|---|---|---|---|---|---|
-${row('Held-out, "yes" (offers sponsorship)', hold.perClass.yes.confusion, hold.perClass.yes.precision, hold.perClass.yes.recall)}
-${row('Held-out, "no" (rules it out)', hold.perClass.no.confusion, hold.perClass.no.precision, hold.perClass.no.recall)}
-${row('Tuned, "yes" (offers sponsorship)', vac.perClass.yes.confusion, vac.perClass.yes.precision, vac.perClass.yes.recall)}
-${row('Tuned, "no" (rules it out)', vac.perClass.no.confusion, vac.perClass.no.precision, vac.perClass.no.recall)}
+${row('Held-out, "yes" (offers sponsorship)', hold.perClass.yes.confusion)}
+${row('Held-out, "no" (rules it out)', hold.perClass.no.confusion)}
+${row('Tuned, "yes" (offers sponsorship)', vac.perClass.yes.confusion)}
+${row('Tuned, "no" (rules it out)', vac.perClass.no.confusion)}
 
 ${describe("Held-out: when a posting states a position, the matcher gets it right", hold.accuracyWhenStated.correct, hold.accuracyWhenStated.total)}. ${describe("Tuned set", vac.accuracyWhenStated.correct, vac.accuracyWhenStated.total)}. Excluded as unclear: ${hold.excludedUnclear} held-out, ${vac.excludedUnclear} tuned.
 
