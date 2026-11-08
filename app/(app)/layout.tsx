@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getSessionUser } from "@/lib/insforge/server";
+import { getSessionUser } from "@/lib/supabase/server";
 import { loadShell } from "@/lib/server/pipeline";
 import { loadChat } from "@/lib/server/chat-store";
 import { Workspace } from "@/components/app/workspace";

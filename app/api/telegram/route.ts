@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { escapeHtml, parseUpdate, type TgUpdate } from "@/lib/telegram";
 import { claimLink, sendText, stopChat, tg, userForChat } from "@/lib/server/telegram";
 import { companyInsight } from "@/lib/server/insight";
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       await sendText(ev.chatId, `I send picks here; the full chat with me lives at ${SITE_URL}/chat`);
     } else if (ev.kind === "action") {
       const userId = await userForChat(ev.chatId);
-      const db = createAdminInsForge().database;
+      const db = adminDb();
       // Only act on jobs that were actually shown to this account.
       const { data } = userId ? await db.from("matches").select("job_id,jobs(company,country)").eq("user_id", userId).eq("job_id", ev.jobId).maybeSingle() : { data: null };
       const job = (data as { jobs: { company: string; country: string | null } | null } | null)?.jobs;

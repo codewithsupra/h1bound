@@ -12,7 +12,7 @@ AS $$
   SELECT
     c.user_id,
     u.email,
-    nullif(split_part(coalesce(u.profile ->> 'name', ''), ' ', 1), ''),
+    nullif(split_part(coalesce(u.raw_user_meta_data ->> 'name', ''), ' ', 1), ''),
     c.unsubscribe_token,
     coalesce(p.target_families, '{}'),
     coalesce((SELECT array_agg(n.sent_at) FROM public.nudge_log n WHERE n.user_id = c.user_id AND n.sent_at > now() - interval '30 days'), '{}'),

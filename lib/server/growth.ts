@@ -1,6 +1,6 @@
 import "server-only";
 import { createHmac, hkdfSync } from "node:crypto";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { encrypt } from "@/lib/crypto";
 import { REFERRAL, TRIAL } from "@/lib/quota";
 import { loadProfile } from "./profile";
@@ -10,7 +10,7 @@ import { loadProfile } from "./profile";
  * WhatsApp waitlist. Everything here runs with the admin key; clients can only read their own rows.
  */
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 
 /** Referral codes are public by design (they're in share links), so the cookie only needs a format check. */
 export const REF_COOKIE = "h1b_ref";

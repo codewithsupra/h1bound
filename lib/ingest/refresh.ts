@@ -2,6 +2,7 @@ import { fetchBoard, keepJob, MARKET_COUNTRIES, type AtsKind, type NormalizedJob
 import { fetchHimalayas, fetchRemoteOk } from "./feeds";
 import { licenceKey } from "./registers";
 import { pickBoardEntry, type LinkMatch } from "./boards";
+import { fetchAll } from "../supabase/page";
 import { titleFamily } from "../titles";
 import { prettyCompany } from "../employer";
 
@@ -14,11 +15,19 @@ import { prettyCompany } from "../employer";
 type Db = { from(table: string): any }; // eslint-disable-line @typescript-eslint/no-explicit-any
 export type JobLink = { companyId: string | null; licenceId: string | null; licenceMatch?: LinkMatch | null };
 
+/**
+ * How much of a posting's text is stored. Postings are the biggest thing in the database and the free
+ * plan holds 500 MB, so keep what the product reads: the drawer shows 6,000 characters, ranking reads
+ * the first 900, and the sponsorship signals are computed on the full text before this cut. The legacy
+ * US jobs only feed keyword matching, so they keep much less.
+ */
+export const DESCRIPTION_CAP = { market: 4000, us: 600 } as const;
+
 export function toRow(j: NormalizedJob, link: JobLink, now: string) {
   return {
     source: j.source, source_id: j.sourceId, company_id: link.companyId, licence_id: link.licenceId, licence_match: link.licenceId ? link.licenceMatch ?? null : null, company: prettyCompany(j.company), title: j.title,
     family: titleFamily(j.title), location: j.location, remote: j.remote, is_us: j.isUs, country: j.country, remote_scope: j.remoteScope,
-    seniority: j.seniority, url: j.url, description: j.description, posted_at: j.postedAt, jd_sponsorship: j.jdSponsorship, active: true, last_seen: now,
+    seniority: j.seniority, url: j.url, description: j.description.slice(0, j.isUs ? DESCRIPTION_CAP.us : DESCRIPTION_CAP.market), posted_at: j.postedAt, jd_sponsorship: j.jdSponsorship, active: true, last_seen: now,
   };
 }
 
@@ -87,8 +96,8 @@ type Board = { id: string; kind: AtsKind; slug: string; label: string; names: st
  */
 async function loadBoards(db: Db): Promise<Board[]> {
   const out = new Map<string, Board>();
-  const { data: us, error } = await db.from("companies").select("id,board_kind,board_slug,display_name,name").not("board_kind", "is", null);
-  if (error) throw new Error(error.message);
+  const us = await fetchAll<{ id: string; board_kind: AtsKind; board_slug: string; display_name: string | null; name: string }>((a, b) =>
+    db.from("companies").select("id,board_kind,board_slug,display_name,name").not("board_kind", "is", null).order("id").range(a, b));
   for (const c of us as { id: string; board_kind: AtsKind; board_slug: string; display_name: string | null; name: string }[]) {
     out.set(`${c.board_kind}:${c.board_slug}`, { id: c.id, kind: c.board_kind, slug: c.board_slug, label: c.display_name ?? c.name, names: [c.name, c.display_name ?? ""].filter(Boolean), companyId: c.id, licences: new Map() });
   }

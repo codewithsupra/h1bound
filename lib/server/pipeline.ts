@@ -1,5 +1,5 @@
 import "server-only";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { cache } from "react";
 import { decrypt } from "@/lib/crypto";
 import { isPro, loadProfile } from "@/lib/server/profile";
@@ -9,7 +9,7 @@ import type { LinkMatch } from "@/lib/ingest/boards";
 import type { Contact } from "@/lib/server/hunter";
 import type { MatchStatus, PipelineRow } from "@/lib/pipeline";
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 
 type MatchRow = {
   job_id: string; score: number; why: string | null; status: MatchStatus; shown_at: string; status_at: string;

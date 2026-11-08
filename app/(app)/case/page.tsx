@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getSessionUser } from "@/lib/insforge/server";
+import { getSessionUser } from "@/lib/supabase/server";
 import { loadProfile } from "@/lib/server/profile";
 import { SITE_NAME } from "@/lib/site";
 import { CaseView } from "@/components/app/case-view";

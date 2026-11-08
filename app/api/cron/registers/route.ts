@@ -1,12 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { downloadRegister, upsertLicences } from "@/lib/ingest/load-registers";
 import { trackRun } from "@/lib/server/ops";
 
 export const maxDuration = 300;
 
 /**
- * Weekly refresh of the UK and Dutch sponsor registers (InsForge schedule, Bearer CRON_SECRET).
+ * Weekly refresh of the UK and Dutch sponsor registers (scheduled workflow, Bearer CRON_SECRET).
  * `?country=GB|NL`, one per call so each fits in maxDuration. Ireland's monthly xlsx is loaded by script.
  */
 export async function POST(req: NextRequest) {
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   if (country !== "GB" && country !== "NL") return NextResponse.json({ error: "country must be GB or NL" }, { status: 400 });
   const out = await trackRun(`registers-${country.toLowerCase()}`, {}, async () => {
     const { licences, date } = await downloadRegister(country);
-    const slugged = await upsertLicences(createAdminInsForge().database, country, licences, date);
+    const slugged = await upsertLicences(adminDb(), country, licences, date);
     return { country, employers: licences.length, date, newSlugs: slugged };
   }, (r) => ({ stats: r }));
   return NextResponse.json(out);

@@ -3,12 +3,12 @@
  * firm than "Headway Technologies". Keep a board only if its US job locations overlap the states
  * where that employer files H-1Bs. Usage: npx tsx --env-file=.env.local scripts/verify-boards.mts [--apply]
  */
-import { createAdminClient } from "@insforge/sdk";
+import { scriptDb } from "../lib/supabase/script";
 import { fetchBoard, type AtsKind } from "../lib/ingest/ats";
 import { statesIn } from "../lib/geo";
 
 const apply = process.argv.includes("--apply");
-const db = createAdminClient({ baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL!, apiKey: process.env.INSFORGE_API_KEY! }).database;
+const db = scriptDb();
 const { data } = await db.from("companies").select("id,name,top_states,board_kind,board_slug").in("board_kind", ["lever", "ashby"]);
 let dropped = 0;
 for (const c of (data ?? []) as { id: string; name: string; top_states: string[]; board_kind: AtsKind; board_slug: string }[]) {

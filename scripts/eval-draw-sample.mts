@@ -4,13 +4,13 @@
  * Usage: npx tsx --env-file=.env.local scripts/eval-draw-sample.mts [--unlinked N] [--out file.json]
  */
 import { writeFileSync } from "node:fs";
-import { createAdminClient } from "@insforge/sdk";
+import { scriptDb } from "../lib/supabase/script";
 import { licenceKey } from "../lib/ingest/registers";
 
 const args = process.argv.slice(2);
 const flag = (n: string, d: string) => args[args.indexOf(`--${n}`) + 1] ?? d;
 const N = Number(flag("unlinked", "70"));
-const db = createAdminClient({ baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL!, apiKey: process.env.INSFORGE_API_KEY! }).database;
+const db = scriptDb();
 
 type Lic = { id: string; country: string; key: string; name: string; board_kind: string | null; board_slug: string | null; display_name: string | null };
 const all: Lic[] = [];

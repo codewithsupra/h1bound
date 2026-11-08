@@ -28,7 +28,7 @@ export type AiRow = {
   error: string | null;
 };
 
-/** Scheduled runs per day, from the InsForge schedules. */
+/** Scheduled runs per day, from the scheduled workflows (.github/workflows/cron.yml). */
 export const EXPECTED_PER_DAY: Record<string, number> = {
   "refresh-jobs": 4,      // four shards
   "refresh-feeds": 1,
@@ -103,11 +103,13 @@ export function dailyCost(rows: AiRow[]): { day: string; costUsd: number; calls:
   return [...by.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([day, v]) => ({ day, ...v }));
 }
 
-export type Thresholds = { minCompletion: number; maxBoardFailureRate: number; maxStaleShare: number; maxAiErrorRate: number; maxDailyCostUsd: number | null };
-export const DEFAULT_THRESHOLDS: Thresholds = { minCompletion: 0.9, maxBoardFailureRate: 0.1, maxStaleShare: 0.05, maxAiErrorRate: 0.05, maxDailyCostUsd: null };
+export type DbSize = { bytes: number; limitBytes: number };
+
+export type Thresholds = { minCompletion: number; maxBoardFailureRate: number; maxStaleShare: number; maxAiErrorRate: number; maxDailyCostUsd: number | null; maxDbShare: number };
+export const DEFAULT_THRESHOLDS: Thresholds = { minCompletion: 0.9, maxBoardFailureRate: 0.1, maxStaleShare: 0.05, maxAiErrorRate: 0.05, maxDailyCostUsd: null, maxDbShare: 0.8 };
 
 /** What is currently wrong, in words. Empty means healthy. */
-export function breaches(input: { jobs: JobSummary[]; ingestion: Ingestion; staleShare: number | null; ai: AiSummary[]; daily: { day: string; costUsd: number }[] }, t: Thresholds = DEFAULT_THRESHOLDS): string[] {
+export function breaches(input: { jobs: JobSummary[]; ingestion: Ingestion; staleShare: number | null; ai: AiSummary[]; daily: { day: string; costUsd: number }[]; db?: DbSize | null }, t: Thresholds = DEFAULT_THRESHOLDS): string[] {
   const out: string[] = [];
   for (const j of input.jobs) {
     if (j.expected >= 2 && j.completion !== null && j.completion < t.minCompletion) out.push(`${j.job}: only ${Math.round(j.completion * 100)}% of expected runs completed (${j.ok + j.partial}/${j.expected})`);
@@ -116,6 +118,10 @@ export function breaches(input: { jobs: JobSummary[]; ingestion: Ingestion; stal
   if (input.ingestion.failureRate !== null && input.ingestion.failureRate > t.maxBoardFailureRate) out.push(`ingestion: ${Math.round(input.ingestion.failureRate * 100)}% of boards failed (${input.ingestion.boardsFailed}/${input.ingestion.boardsAttempted})`);
   if (input.staleShare !== null && input.staleShare > t.maxStaleShare) out.push(`${Math.round(input.staleShare * 100)}% of active jobs were not refreshed in the last 48 hours`);
   for (const a of input.ai) if (a.calls >= 5 && a.errorRate > t.maxAiErrorRate) out.push(`AI ${a.kind}: ${Math.round(a.errorRate * 100)}% of ${a.calls} calls failed`);
+  if (input.db && input.db.limitBytes > 0 && input.db.bytes / input.db.limitBytes > t.maxDbShare) {
+    const mb = (b: number) => Math.round(b / 1_048_576);
+    out.push(`database is ${mb(input.db.bytes)} MB of ${mb(input.db.limitBytes)} MB (${Math.round((input.db.bytes / input.db.limitBytes) * 100)}%): the free plan pauses the project at the limit`);
+  }
   const last = input.daily[input.daily.length - 1];
   if (t.maxDailyCostUsd !== null && last && last.costUsd > t.maxDailyCostUsd) out.push(`AI spend on ${last.day} was $${last.costUsd.toFixed(2)} (limit $${t.maxDailyCostUsd})`);
   return out;

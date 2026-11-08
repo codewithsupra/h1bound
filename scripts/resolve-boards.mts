@@ -4,12 +4,12 @@
  * slugs are only trusted when they come from the full company name (not a lone first word).
  * Usage: npx tsx --env-file=.env.local scripts/resolve-boards.mts 3000
  */
-import { createAdminClient } from "@insforge/sdk";
+import { scriptDb } from "../lib/supabase/script";
 import { boardSlugs, BOARD_URL, type AtsKind } from "../lib/ingest/ats";
 import { coreEmployer, sameCompany } from "../lib/employer";
 
 const N = Number(process.argv[2] ?? 3000);
-const db = createAdminClient({ baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL!, apiKey: process.env.INSFORGE_API_KEY! }).database;
+const db = scriptDb();
 
 type Co = { id: string; name: string; dba: string | null };
 const companies: Co[] = [];

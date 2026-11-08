@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getSessionUser } from "@/lib/insforge/server";
+import { getSessionUser } from "@/lib/supabase/server";
 import { joinWaitlist, startTrial } from "@/lib/server/growth";
 
 export type TrialResult = { ok: true; endsAt: string } | { ok: false; error: string };

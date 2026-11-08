@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getSessionUser } from "@/lib/insforge/server";
+import { getSessionUser } from "@/lib/supabase/server";
 import { linkUrl, telegramConfigured } from "@/lib/server/telegram";
 
 /** "Connect Telegram": sends the signed-in user to the bot with a one-time link token. */

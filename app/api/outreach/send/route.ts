@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getSessionUser } from "@/lib/insforge/server";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { getSessionUser } from "@/lib/supabase/server";
+import { adminDb } from "@/lib/supabase/admin";
 import { decryptJson } from "@/lib/crypto";
 import { isEmail } from "@/lib/email-draft";
 import { sendGmail } from "@/lib/server/gmail";
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: "bad_request" }, { status: 400 });
   const { outreachId, to, subject, body } = parsed.data;
 
-  const db = createAdminInsForge().database;
+  const db = adminDb();
   const { data } = await db.from("outreach").select("id,job_id,kind,sent_at,body_enc").eq("id", outreachId).eq("user_id", user.id).maybeSingle();
   const row = data as { id: string; job_id: string; kind: string; sent_at: string | null; body_enc: string } | null;
   if (!row || (row.kind !== "cold_email" && row.kind !== "follow_up")) return NextResponse.json({ error: "not_found" }, { status: 404 });

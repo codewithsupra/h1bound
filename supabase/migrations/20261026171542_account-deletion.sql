@@ -1,6 +1,6 @@
 -- "Delete all my data": removing the auth user cascades to every personal table
 -- (profiles, matches, reviews, outreach, chat_messages, consents, nudge_log, billing_entitlements).
--- Admin-only; called from the server after the user confirms. Stripe's payments.* ledger is kept (tax law).
+-- Admin-only; called from the server after the user confirms. Payment records held by Stripe itself are kept (tax law).
 CREATE OR REPLACE FUNCTION public.delete_user_account(p_user uuid)
 RETURNS boolean
 LANGUAGE plpgsql

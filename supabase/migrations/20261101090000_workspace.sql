@@ -28,7 +28,7 @@ SECURITY DEFINER
 SET search_path = ''
 AS $$
   SELECT
-    c.user_id, u.email, nullif(u.profile ->> 'name', ''), c.unsubscribe_token, c.email_updates,
+    c.user_id, u.email, nullif(u.raw_user_meta_data ->> 'name', ''), c.unsubscribe_token, c.email_updates,
     c.telegram_updates AND c.telegram_chat_enc IS NOT NULL, c.telegram_chat_enc,
     (SELECT max(n.sent_at) FROM public.nudge_log n WHERE n.user_id = c.user_id AND n.kind = 'daily_picks'),
     p.picks_per_day, p.picks_hour, p.timezone, p.visa_ends_on

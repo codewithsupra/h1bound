@@ -6,6 +6,17 @@ How to read the **Detected by** line: *monitoring* means the system told us; *ma
 
 ---
 
+## 2026-11-08: Backend paused at the free plan's database limit (found a week later)
+
+- **Impact:** every database-backed feature stopped: sign-in, chat, the pipeline, search, the sponsor pages (which returned 404 instead of an error), the daily jobs and the ops telemetry. Cached pages such as the home page kept loading. `lull`, on the same account, stopped too. Start date: not recorded (the schedule history sits on the paused backend); it was working on 2026-11-02 and down on 2026-11-08. The site could also not be redeployed: the build fetched live data and failed. Real users affected: none (no users yet).
+- **Detected by:** manual, while generating the first weekly ops report. Nothing alerted: the health check ran on the same backend that was down.
+- **Root cause:** the InsForge free plan allows 512 MB of database across the organization. `h1bound` (about 481 MB) plus `lull` (about 17 MB) reached it, InsForge blocked the organization, and restoring required upgrading to a paid plan. The size came mostly from storing every posting's full description, including about 42,000 legacy US jobs. Nothing measured or capped the database size.
+- **Fix:** moved the app to Supabase (free plan, 500 MB). To keep it from recurring: stored job text is capped (4,000 characters for UK/NL/IE and remote, 600 for legacy US jobs; the sponsorship signals are computed before the cut); expired, unsaved jobs are purged after 30 days (`purge_stale_jobs`, which never deletes anything a user saved); the health check warns at 80% of the database limit; scheduled jobs moved to GitHub Actions, where a failed run emails the repo owner independently of the app; the build and the public pages now survive a database outage (an honest "temporarily unavailable" page, and a 503-style error, never a 404).
+- **Found while fixing:** Supabase silently caps any API read at 1,000 rows, so the three reads that could exceed that now page (`fetchAll`), and a regression test pins it.
+- **Prevention:** `tests/supabase-page.test.ts`, the size alert in `lib/ops.ts`, the migration check `scripts/check-migrations.sh`, and the cron workflow.
+- **Not fixed:** paid checkout, which ran on InsForge's managed Stripe integration, is not live (a direct Stripe integration is still to be built). The old project's data stays downloadable from the InsForge dashboard for up to 90 days after the pause; the application data is rebuilt from public sources.
+- **Status:** code complete and tested; live after the Supabase project is created, the migrations applied, the data loaded and the environment variables set.
+
 ## 2026-11-02: A sent email could be sent again if recording it failed (found while writing tests)
 
 - **Impact:** none observed (Gmail sending has never been used in production). In principle: if Gmail accepted the message and the database write that records it then failed, the route released the draft's "sent" claim, so a retry would have emailed the hiring manager a second time.

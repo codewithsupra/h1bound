@@ -1,13 +1,13 @@
 import "server-only";
 import type { UIMessage } from "ai";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { decryptJson, encryptJson } from "@/lib/crypto";
 
 /** Chat history, one encrypted row per UI message. Only the last HISTORY messages are replayed to the model. */
 export const HISTORY = 40;
 export const DAILY_MESSAGE_CAP = 150;
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 
 export async function loadChat(userId: string, limit = HISTORY): Promise<UIMessage[]> {
   const { data } = await db().from("chat_messages").select("message_enc,created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(limit);

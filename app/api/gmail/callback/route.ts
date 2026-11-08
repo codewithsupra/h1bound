@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getSessionUser } from "@/lib/insforge/server";
+import { getSessionUser } from "@/lib/supabase/server";
 import { checkState, connectGmail, GMAIL_STATE_COOKIE } from "@/lib/server/gmail";
 
 export async function GET(req: NextRequest) {

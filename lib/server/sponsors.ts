@@ -1,6 +1,7 @@
+import { fetchAll } from "@/lib/supabase/page";
 import "server-only";
 import { cache } from "react";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import type { SponsorStats } from "@/lib/sponsor";
 
 /** Reads behind the public sponsor pages (/sponsors, /sponsors/<slug>) and the sitemap. Public DOL data only. */
@@ -25,7 +26,7 @@ const PAGE = 1000;
 /** Sponsors below this many filings stay reachable but out of the sitemap (thin pages). */
 export const SITEMAP_MIN_FILINGS = 10;
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 
 export const statsOf = (r: SponsorRow): SponsorStats => ({ fiscalYear: r.fiscal_year, total: r.total_filings, byFamily: r.by_family, lastFiled: r.last_filed });
 
@@ -34,10 +35,9 @@ export const statsOf = (r: SponsorRow): SponsorStats => ({ fiscalYear: r.fiscal_
  * Those are false matches, so their brand name and job count aren't credited to anyone.
  */
 const sharedBoards = cache(async (): Promise<Set<string>> => {
-  const { data, error } = await db().from("companies").select("board_kind,board_slug").not("board_slug", "is", null);
-  if (error) throw new Error(error.message);
+  const boards = await fetchAll<{ board_kind: string; board_slug: string }>((a, b) => db().from("companies").select("board_kind,board_slug").not("board_slug", "is", null).order("id").range(a, b));
   const seen = new Map<string, number>();
-  for (const b of data as { board_kind: string; board_slug: string }[]) seen.set(`${b.board_kind}:${b.board_slug}`, (seen.get(`${b.board_kind}:${b.board_slug}`) ?? 0) + 1);
+  for (const b of boards) seen.set(`${b.board_kind}:${b.board_slug}`, (seen.get(`${b.board_kind}:${b.board_slug}`) ?? 0) + 1);
   return new Set([...seen].filter(([, n]) => n > 1).map(([k]) => k));
 });
 
@@ -48,7 +48,9 @@ async function withoutFalseBoards(rows: SponsorRow[]): Promise<SponsorRow[]> {
 
 /** Cached per request so generateMetadata and the page share one query. */
 export const getSponsor = cache(async (slug: string): Promise<SponsorRow | null> => {
-  const { data } = await db().from("companies").select(COLS).eq("slug", slug).maybeSingle();
+  const { data, error } = await db().from("companies").select(COLS).eq("slug", slug).maybeSingle();
+  // A database error must not read as "no such company": that would show a 404 for a page that exists.
+  if (error) throw new Error(`sponsor lookup: ${error.message}`);
   return data ? (await withoutFalseBoards([data as SponsorRow]))[0] : null;
 });
 

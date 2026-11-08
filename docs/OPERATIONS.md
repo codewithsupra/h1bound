@@ -2,7 +2,7 @@
 
 What runs, how to tell it is healthy, and what to do when it is not. Numbers here come from `job_runs`, `board_failures` and `ai_calls` (migration `20261101120000_ops-telemetry.sql`); nothing is estimated.
 
-## What runs on a schedule (InsForge schedules, `Authorization: Bearer $CRON_SECRET`)
+## What runs on a schedule (`.github/workflows/cron.yml`, `Authorization: Bearer $CRON_SECRET`)
 
 | Job | Schedule (UTC) | Route | Expected per day |
 |---|---|---|---|
@@ -33,13 +33,13 @@ A run that appears as "never finished" was killed by the 300-second function lim
 1. Add an entry to `docs/INCIDENTS.md` first (impact, how it was detected), then diagnose.
 2. Ingestion failing: `board_failures` lists the board and error. A single board failing is normal (companies change boards); a whole shard failing points at the database or a timeout.
 3. AI errors: `ai_calls.error` has the provider's message. A 402 means the OpenRouter key limit; raise it at openrouter.ai/settings/keys.
-4. Bad migration: migrations are applied by hand with `insforge db migrations up <file>`; each is additive (`IF NOT EXISTS`) so a re-run is safe. There is no automatic rollback: write the reverse SQL in the same PR for anything destructive.
+4. Bad migration: `scripts/db-migrate.mts` runs each file in one transaction and skips applied ones, so a failure leaves the database as it was; try changes first with `scripts/check-migrations.sh`. There is no automatic rollback: write the reverse SQL in the same PR for anything destructive.
 5. Bad deploy: Vercel → Deployments → promote the previous production deployment (instant rollback).
 6. Finish by recording the fix and the prevention in the incident entry.
 
 ## Not in place yet
 
-- A database backup/restore procedure that has been tested. InsForge backups exist but a restore has not been rehearsed.
+- A database backup/restore procedure that has been tested. Check what backups your Supabase plan includes (scheduled backups are a paid feature at the time of writing) and export with `pg_dump` (via `SUPABASE_DB_URL`) before risky changes.
 - Paging: the only alert is email from `ops-check`, once configured.
 - A budget for AI spend (`maxDailyCostUsd` is unset).
 - Match-quality reports from users ("wrong sponsor") feeding the evaluation sets.

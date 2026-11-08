@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-vi.mock("@/lib/insforge/admin", () => ({ createAdminInsForge: () => ({}) }));
+vi.mock("@/lib/supabase/admin", () => ({ adminDb: () => ({}) }));
 import { keywordTerms } from "@/lib/server/jobs";
 
 describe("keywordTerms", () => {

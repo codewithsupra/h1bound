@@ -1,7 +1,7 @@
 import "server-only";
 import { tool } from "ai";
 import { z } from "zod";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { encrypt } from "@/lib/crypto";
 import { buildEmployerIndex, matchEmployer, normalizeEmployer } from "@/lib/employer";
 import { canReview, canUse, upsellLine } from "@/lib/quota";
@@ -25,7 +25,7 @@ import { gmailAccount, gmailConfigured } from "@/lib/server/gmail";
 const VISA = ["f1_opt", "f1_stem_opt", "f1_student", "h1b", "h4_ead", "outside_us", "citizen_or_gc", "other"] as const;
 const NO_SPONSOR_NEEDED = new Set(["citizen_or_gc", "h4_ead"]);
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 
 /**
  * Tools close over the caller's Store (a signed-in user or a verified guest); the model can never

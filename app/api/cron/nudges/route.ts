@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { chooseNudge, nudgeCopy, type NudgeKind } from "@/lib/nudge";
 import { FREE_LIMITS } from "@/lib/quota";
 import { sendEmail } from "@/lib/server/email";
@@ -8,10 +8,10 @@ export const maxDuration = 300;
 
 type Candidate = { user_id: string; email: string; first_name: string | null; unsubscribe_token: string; families: string[]; sent_at: string[]; sent_kinds: NudgeKind[]; stale_applications: number; jobs_shown: number; last_nudge: string | null };
 
-/** Daily, via InsForge schedule with `Authorization: Bearer ${CRON_SECRET}`. Opted-in users only. */
+/** Daily, via the scheduled workflow with `Authorization: Bearer ${CRON_SECRET}`. Opted-in users only. */
 export async function POST(req: NextRequest) {
   if (req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  const db = createAdminInsForge().database;
+  const db = adminDb();
   const app = process.env.NEXT_PUBLIC_APP_URL ?? req.nextUrl.origin;
   await db.rpc("expire_guest_sessions"); // housekeeping: guest previews live 7 days
   const { data, error } = await db.rpc("nudge_candidates");

@@ -9,7 +9,7 @@ import { describe, expect, it } from "vitest";
  * Postgres; it proves nobody has written a migration that obviously weakens them.
  */
 
-const dir = new URL("../migrations/", import.meta.url);
+const dir = new URL("../supabase/migrations/", import.meta.url);
 const sql = readdirSync(dir).filter((f) => f.endsWith(".sql")).sort().map((f) => readFileSync(new URL(f, dir), "utf8")).join("\n");
 
 type Policy = { table: string; name: string; cmd: string; roles: string; using: string };

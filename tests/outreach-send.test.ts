@@ -6,8 +6,8 @@ let db: FakeDb;
 let session: { id: string; email: string; name: string | null } | null;
 const sendGmail = vi.fn();
 
-vi.mock("@/lib/insforge/server", () => ({ getSessionUser: async () => session }));
-vi.mock("@/lib/insforge/admin", () => ({ createAdminInsForge: () => ({ database: db.database }) }));
+vi.mock("@/lib/supabase/server", () => ({ getSessionUser: async () => session }));
+vi.mock("@/lib/supabase/admin", () => ({ adminDb: () => db.database }));
 vi.mock("@/lib/server/gmail", () => ({ sendGmail: (...a: unknown[]) => sendGmail(...a) }));
 
 const { POST } = await import("@/app/api/outreach/send/route");

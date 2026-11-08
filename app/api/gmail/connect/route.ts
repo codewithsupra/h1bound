@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getSessionUser } from "@/lib/insforge/server";
+import { getSessionUser } from "@/lib/supabase/server";
 import { authUrl, GMAIL_STATE_COOKIE, gmailConfigured, newState } from "@/lib/server/gmail";
 
 /** Starts Google OAuth for gmail.send. Signed-in users only. */

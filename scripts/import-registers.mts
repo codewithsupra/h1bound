@@ -4,7 +4,7 @@
  * GB and NL also refresh weekly via /api/cron/registers; IE (monthly xlsx) only through this script.
  */
 import ExcelJS from "exceljs";
-import { createAdminClient } from "@insforge/sdk";
+import { scriptDb } from "../lib/supabase/script";
 import { mergeYears, parseIePermits, type Country, type Licence } from "../lib/ingest/registers";
 import { downloadRegister, upsertLicences } from "../lib/ingest/load-registers";
 
@@ -12,7 +12,7 @@ const args = process.argv.slice(2);
 const dry = args.includes("--dry");
 const wanted = (args.filter((a) => !a.startsWith("--")) as Country[]).filter((c) => ["GB", "NL", "IE"].includes(c));
 const countries: Country[] = wanted.length ? wanted : ["GB", "NL", "IE"];
-const db = createAdminClient({ baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL!, apiKey: process.env.INSFORGE_API_KEY! }).database;
+const db = scriptDb();
 
 const IE_STATS = (year: number) => `https://enterprise.gov.ie/en/publications/employment-permit-statistics-${year}.html`;
 

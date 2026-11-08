@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/insforge/server";
+import { getSessionUser } from "@/lib/supabase/server";
 import { gmailAccount, gmailConfigured } from "@/lib/server/gmail";
 
 /** Whether the signed-in user has Gmail connected (never returns the address or token). */

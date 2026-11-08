@@ -1,5 +1,5 @@
 import "server-only";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { rankJobs, type JobLite, type Scored } from "@/lib/match";
 import { canShowJobs, type Usage } from "@/lib/quota";
 import type { Store } from "./store";
@@ -35,7 +35,7 @@ export type JobCard = {
 type JobRow = { id: string; title: string; company: string; company_id: string | null; location: string; remote: boolean; url: string; description: string; posted_at: string | null; jd_sponsorship: JdSponsorship; family: string };
 type CompanyRow = { id: string; fiscal_year: number; total_filings: number; by_family: SponsorStats["byFamily"]; last_filed: string | null };
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 
 export const statsOf = (c: CompanyRow | undefined): SponsorStats | null =>
   c ? { fiscalYear: c.fiscal_year, total: c.total_filings, byFamily: c.by_family, lastFiled: c.last_filed } : null;

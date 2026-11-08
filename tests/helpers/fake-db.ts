@@ -1,5 +1,5 @@
 /**
- * A tiny in-memory stand-in for the InsForge database client, covering the query shapes the app's
+ * A tiny in-memory stand-in for the Supabase database client, covering the query shapes the app's
  * server code uses (select/insert/update/delete with eq/neq/is/not/in/gte/lt/order/limit and
  * maybeSingle/single). Each awaited query runs synchronously against the tables, so conditional
  * updates behave atomically like a single SQL statement. Not a SQL engine: it exists so tests can

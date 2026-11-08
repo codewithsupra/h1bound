@@ -1,6 +1,6 @@
 import "server-only";
 import { createHmac, hkdfSync, randomBytes, timingSafeEqual } from "node:crypto";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { decrypt, encrypt } from "@/lib/crypto";
 import { buildMime, type Mime } from "@/lib/email-draft";
 import { SITE_URL } from "@/lib/site";
@@ -13,7 +13,7 @@ import { SITE_URL } from "@/lib/site";
 const SCOPES = ["https://www.googleapis.com/auth/gmail.send", "openid", "email"];
 export const GMAIL_STATE_COOKIE = "h1b_gmail_state";
 const REDIRECT = () => `${SITE_URL}/api/gmail/callback`;
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 
 export const gmailConfigured = () => Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 

@@ -16,7 +16,13 @@ export const revalidate = 86400;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  return (await topSponsors(500)).map((r) => ({ slug: r.slug }));
+  // Pages are also generated on first request, so a database outage at build time must not fail the build.
+  try {
+    return (await topSponsors(500)).map((r) => ({ slug: r.slug }));
+  } catch (e) {
+    console.error(`[build] sponsor pages not pre-rendered: ${(e as Error).message}`);
+    return [];
+  }
 }
 
 const num = (n: number) => n.toLocaleString("en-US");

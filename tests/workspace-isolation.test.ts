@@ -8,8 +8,8 @@ const redirect = vi.fn((to: string) => { throw new Error(`REDIRECT ${to}`); });
 
 vi.mock("next/navigation", () => ({ redirect: (to: string) => redirect(to) }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
-vi.mock("@/lib/insforge/server", () => ({ getSessionUser: async () => session }));
-vi.mock("@/lib/insforge/admin", () => ({ createAdminInsForge: () => ({ database: db.database }) }));
+vi.mock("@/lib/supabase/server", () => ({ getSessionUser: async () => session }));
+vi.mock("@/lib/supabase/admin", () => ({ adminDb: () => db.database }));
 
 const actions = await import("@/app/(app)/actions");
 

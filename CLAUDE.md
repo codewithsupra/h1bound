@@ -10,7 +10,7 @@ Sponsorbound (formerly H1Bound; the name lives in `SITE_NAME`, `lib/site.ts`): a
 
 The original US H-1B product still exists (US sponsor pages under `/sponsors/<slug>`, `/opt-clock`, and US-visa users get the US prompt). It's kept for SEO, not the pitch.
 
-Live at https://h1bound.vercel.app. A push to `main` deploys through Vercel. Backend is InsForge project `h1bound`.
+Live at https://h1bound.vercel.app. A push to `main` deploys through Vercel. Backend is Supabase (Postgres + Auth); it moved there from InsForge on 2026-11 after the InsForge free plan paused the project at its 512 MB database limit (see `docs/INCIDENTS.md`).
 
 ## Commands
 
@@ -28,7 +28,7 @@ Data pipeline scripts live in `scripts/*.mts` and run with `npx tsx --env-file=.
 - `scripts/refresh-jobs.mts [--feeds]` pulls all boards, or with `--feeds` the remote feeds.
 - The US pipeline (import LCA, load sponsors, resolve and verify boards) is in the README.
 
-Migrations live in `migrations/`. Apply one with `npx -y @insforge/cli db migrations up <filename>`, which needs the explicit filename. After a schema change, run `npx -y @insforge/cli advisor scan`. It should stay at 0 critical and 0 warnings.
+Migrations live in `supabase/migrations/`. Apply them with `npx tsx --env-file=.env.local scripts/db-migrate.mts` (needs `SUPABASE_DB_URL`; skips what is applied; one transaction per file). Validate a change before it touches the real database with `scripts/check-migrations.sh`, which applies everything to a throwaway local Postgres and checks RLS and behaviour. Supabase caps any API read at 1,000 rows silently: read anything larger with `fetchAll` (`lib/supabase/page.ts`).
 
 ## Architecture
 
@@ -42,7 +42,7 @@ Migrations live in `migrations/`. Apply one with `npx -y @insforge/cli db migrat
   - ATS boards from both `companies` (US sponsors) and `sponsor_licences`: Greenhouse, Lever, Ashby, Recruitee;
   - remote feeds from `lib/ingest/feeds.ts`: Himalayas and Remote OK. Their terms require a visible credit link; Remotive is excluded because its terms forbid sign-up gating.
 - **Refresh:** `lib/ingest/refresh.ts` keeps US, GB/NL/IE and Europe-or-worldwide remote jobs. It sets `country`, `remote_scope` and `seniority`, and links `licence_id` by name match. Stale jobs are deactivated per board (`source_id` prefix).
-- **Cron:** the refresh runs from `POST /api/cron/refresh-jobs?shard=i&of=4` (plus `?feeds=1`), called by InsForge schedules with `Authorization: Bearer $CRON_SECRET`.
+- **Cron:** the refresh runs from `POST /api/cron/refresh-jobs?shard=i&of=4` (plus `?feeds=1`), called by `.github/workflows/cron.yml` with `Authorization: Bearer $CRON_SECRET` (needs the `CRON_SECRET` repo secret).
 - **Posting text:** `lib/jd-signals.ts` reads US and UK/EU wording such as "unable to offer sponsorship" or "Skilled Worker visa". That text overrides the register.
 
 **Visa logic (`lib/visa.ts`, pure).**
@@ -53,12 +53,12 @@ Migrations live in `migrations/`. Apply one with `npx -y @insforge/cli db migrat
 - `lib/*.ts` at the top level is pure and unit-tested: matching, quota, OPT clock, sponsor scoring, slugs.
 - Anything touching the DB, secrets or cookies lives in `lib/server/` and imports `"server-only"`. Vitest stubs `server-only` (see `vitest.config.mts`), so tests target the pure modules.
 
-**InsForge clients.**
-- **`lib/insforge/client.ts`:** browser client.
-- **`lib/insforge/server.ts`:** session-aware server client; also provides `getSessionUser`.
-- **`lib/insforge/admin.ts`:** full-access admin client.
+**Supabase clients.**
+- **`lib/supabase/server.ts`:** cookie-bound client for the signed-in user; `getSessionUser` verifies the user with Supabase Auth.
+- **`lib/supabase/admin.ts`:** `adminDb()`, the service-role client (bypasses RLS; server-only).
+- **`lib/supabase/script.ts`:** `scriptDb()` for scripts.
 - RLS makes personal tables **SELECT-only** for users. Every write goes through a server route or action that checks auth and quota first, then uses the admin client.
-- `proxy.ts` (the Next 16 replacement for middleware) refreshes the InsForge session.
+- `proxy.ts` (the Next 16 replacement for middleware) refreshes the Supabase session.
 
 **Store abstraction (`lib/server/store.ts`).**
 - Maya serves two kinds of people: signed-in users and cookie-identified guests. Guests use the signed `h1b_guest` cookie and a `guest_sessions` row.
@@ -110,7 +110,7 @@ Migrations live in `migrations/`. Apply one with `npx -y @insforge/cli db migrat
 - Daily picks run hourly and only send to users whose local `picks_hour` it is (`localHour`). The count is `picks_per_day` (3–15) for paid Pro and is capped at 3 on the trial (`picksToday`).
 
 ### Testing server code
-- `tests/helpers/fake-db.ts` is an in-memory stand-in for the InsForge client (eq/is/not/in/order/limit/maybeSingle/insert/update/upsert/delete, with `failNext` to inject errors). Route and action tests mock `@/lib/insforge/server` (session) and `@/lib/insforge/admin` (this fake) and assert WHICH rows are touched: user isolation, claim-before-send. `tests/rls-migrations.test.ts` replays the migrations and fails on a table without RLS or a policy that lets a browser role write or read other users' rows. When you add a security test, break the code on purpose once to confirm the test can fail.
+- `tests/helpers/fake-db.ts` is an in-memory stand-in for the Supabase client (eq/is/not/in/order/limit/maybeSingle/insert/update/upsert/delete, with `failNext` to inject errors). Route and action tests mock `@/lib/insforge/server` (session) and `@/lib/insforge/admin` (this fake) and assert WHICH rows are touched: user isolation, claim-before-send. `tests/rls-migrations.test.ts` replays the migrations and fails on a table without RLS or a policy that lets a browser role write or read other users' rows. When you add a security test, break the code on purpose once to confirm the test can fail.
 
 ### Evaluation and operations
 - `tests/eval/` holds frozen, hand-labeled sets and `lib/eval/` the metrics; `docs/EVAL.md` is generated (`npm run eval`) and `npm run eval:check` (part of `verify`) fails if it is stale. Sponsor-record matching (is this employer that register entry? `brandMatches`, `licenceFor`) and vacancy sponsorship (does the posting offer it? `jdSponsorship`) are measured separately on purpose. Labels are by an AI labeler and unverified; the vacancy held-out set must not be tuned against (draw a new one with `scripts/eval-draw-jd.mts`). Floors in `tests/eval.test.ts` are the measured level: raise them when a matcher improves.

@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { storeForUser } from "@/lib/server/store";
 import { findJobs } from "@/lib/server/jobs";
 import { localHour, picksEmail, picksToday } from "@/lib/picks";
@@ -17,13 +17,13 @@ type Candidate = {
 };
 
 /**
- * Daily picks (InsForge schedule, hourly, Bearer CRON_SECRET): the best new matches for each opted-in
+ * Daily picks (scheduled workflow, hourly, Bearer CRON_SECRET): the best new matches for each opted-in
  * user whose chosen delivery hour it is in their timezone, by Telegram and/or email. Each pick is
  * recorded as shown, so it counts like any match. `?all=1` ignores the hour (manual runs).
  */
 export async function POST(req: NextRequest) {
   if (req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  const db = createAdminInsForge().database;
+  const db = adminDb();
   const app = process.env.NEXT_PUBLIC_APP_URL ?? req.nextUrl.origin;
   const { data, error } = await db.rpc("daily_pick_candidates");
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

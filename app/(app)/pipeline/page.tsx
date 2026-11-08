@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getSessionUser } from "@/lib/insforge/server";
+import { getSessionUser } from "@/lib/supabase/server";
 import { loadPipeline, loadShell } from "@/lib/server/pipeline";
 import { SITE_NAME } from "@/lib/site";
 import { Pipeline } from "@/components/app/pipeline";

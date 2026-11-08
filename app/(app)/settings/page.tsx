@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
-import { getSessionUser } from "@/lib/insforge/server";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { getSessionUser } from "@/lib/supabase/server";
+import { adminDb } from "@/lib/supabase/admin";
 import { loadProfile } from "@/lib/server/profile";
 import { loadShell } from "@/lib/server/pipeline";
 import { hasPaidPlan, referralInfo, trialState } from "@/lib/server/growth";
@@ -20,7 +20,7 @@ export default async function SettingsPage() {
   const [shell, profile, consent, paid, trial, ref, h] = await Promise.all([
     loadShell(user),
     loadProfile(user.id),
-    createAdminInsForge().database.from("consents").select("*").eq("user_id", user.id).maybeSingle(),
+    adminDb().from("consents").select("*").eq("user_id", user.id).maybeSingle(),
     hasPaidPlan(user.id),
     trialState(user.id),
     referralInfo(user.id),

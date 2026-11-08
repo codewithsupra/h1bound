@@ -2,12 +2,12 @@ import "server-only";
 import { generateText, Output } from "ai";
 import { tracked } from "@/lib/server/ops";
 import { z } from "zod";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { chatModel, researchModel } from "@/lib/ai/models";
 import { licenceKey } from "@/lib/ingest/registers";
 import { parseInsight, type Insight } from "@/lib/insight";
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 const FRESH_DAYS = 30;
 /** Web-search calls cost money; a runaway loop or abuse can't spend more than this per day. */
 export const DAILY_RESEARCH_CAP = 150;

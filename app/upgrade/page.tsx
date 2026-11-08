@@ -2,7 +2,7 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/site/site-header";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getSessionUser } from "@/lib/insforge/server";
+import { getSessionUser } from "@/lib/supabase/server";
 import { priceForCountry } from "@/lib/billing";
 import { hasPaidPlan, trialState } from "@/lib/server/growth";
 import { TrialButton } from "@/components/growth/trial-button";

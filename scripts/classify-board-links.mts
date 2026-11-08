@@ -5,11 +5,11 @@
  * After applying, the next job refresh stamps jobs.licence_match (run scripts/refresh-jobs.mts to do it now).
  * Usage: npx tsx --env-file=.env.local scripts/classify-board-links.mts [--apply]
  */
-import { createAdminClient } from "@insforge/sdk";
+import { scriptDb } from "../lib/supabase/script";
 import { linkMatch, rivalsOf, type LinkMatch } from "../lib/ingest/boards";
 
 const apply = process.argv.includes("--apply");
-const db = createAdminClient({ baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL!, apiKey: process.env.INSFORGE_API_KEY! }).database;
+const db = scriptDb();
 
 type E = { id: string; country: string; key: string; name: string; display_name: string | null; board_kind: string | null; board_match: LinkMatch | null };
 const all: E[] = [];

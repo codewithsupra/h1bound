@@ -2,8 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createAdminInsForge } from "@/lib/insforge/admin";
-import { getSessionUser } from "@/lib/insforge/server";
+import { adminDb } from "@/lib/supabase/admin";
+import { getSessionUser } from "@/lib/supabase/server";
 import { encrypt } from "@/lib/crypto";
 import { decrypt } from "@/lib/crypto";
 import { loadJobDetail, type JobDetail } from "@/lib/server/pipeline";
@@ -14,7 +14,7 @@ import { clampPicks } from "@/lib/picks";
 import { MARKETS } from "@/lib/visa";
 import { TITLE_FAMILIES, type TitleFamily } from "@/lib/titles";
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 
 async function me() {
   const user = await getSessionUser();

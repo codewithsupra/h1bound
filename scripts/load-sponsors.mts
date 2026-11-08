@@ -3,13 +3,13 @@
  * Usage: npx tsx --env-file=.env.local scripts/load-sponsors.mts 2026
  */
 import { readFileSync } from "node:fs";
-import { createAdminClient } from "@insforge/sdk";
+import { scriptDb } from "../lib/supabase/script";
 import type { EmployerOut } from "../lib/ingest/lca";
 import { fillMissingSlugs } from "../lib/ingest/slugs";
 
 const fy = process.argv[2];
 if (!fy) throw new Error("usage: load-sponsors.mts <fiscalYear>");
-const db = createAdminClient({ baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL!, apiKey: process.env.INSFORGE_API_KEY! }).database;
+const db = scriptDb();
 
 const rows: EmployerOut[] = JSON.parse(readFileSync(`data/out/sponsors-FY${fy}.json`, "utf8"));
 const BATCH = 1000;

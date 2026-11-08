@@ -18,12 +18,23 @@ import { landingLicences, licenceHref, licenceName } from "@/lib/server/licences
 import { licenceLine } from "@/lib/visa";
 import { SITE_NAME } from "@/lib/site";
 
-export const revalidate = 86400;
+// Hourly, not daily: if the database is down at build time the page renders without live numbers, and this lets it heal within an hour.
+export const revalidate = 3600;
 
 const longDate = (iso: string) => new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
+/** The landing data, or an empty shell when the database can't be reached, so the page (and the build) still work. */
+async function landing() {
+  try {
+    return { ...(await landingLicences()), degraded: false };
+  } catch (e) {
+    console.error(`[landing] database unavailable, rendering without live numbers: ${(e as Error).message}`);
+    return { lights: [], idle: [], feature: null, sponsors: { GB: 0, NL: 0, IE: 0 }, jobs: 0, linkedJobs: 0, degraded: true };
+  }
+}
+
 async function load() {
-  const d = await landingLicences();
+  const d = await landing();
   const f = d.feature;
   const demo = f ? { company: licenceName(f.licence), role: f.role, city: f.city, badge: { level: "strong" as const, label: "Licensed sponsor", detail: licenceLine(f.licence) } } : null;
   const record = f
@@ -81,14 +92,14 @@ export default async function Home() {
         </div>
       </HeroAndBoard>
 
-      <Numbers
+      {!d.degraded && <Numbers
         figures={[
           { value: d.sponsors.GB, label: "UK employers licensed to sponsor work visas", note: "UK Home Office register" },
           { value: d.sponsors.NL, label: "recognised sponsors in the Netherlands", note: "Dutch IND register" },
           { value: d.sponsors.IE, label: "employers granted Irish work permits since last year", note: "Irish Dept. of Enterprise" },
           { value: d.jobs, label: "open jobs in the UK, NL, Ireland and remote, refreshed every morning" },
         ]}
-      />
+      />}
       {d.demo && <Story company={d.demo.company} badge={d.demo.badge} role={d.demo.role} city={d.demo.city} />}
       {d.record && <Record r={d.record} />}
       <RightsSection />

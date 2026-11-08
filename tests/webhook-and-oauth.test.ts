@@ -6,8 +6,8 @@ const connectGmail = vi.fn();
 const claimLink = vi.fn();
 const sendText = vi.fn();
 
-vi.mock("@/lib/insforge/server", () => ({ getSessionUser: async () => session }));
-vi.mock("@/lib/insforge/admin", () => ({ createAdminInsForge: () => ({ database: { from: () => ({}) } }) }));
+vi.mock("@/lib/supabase/server", () => ({ getSessionUser: async () => session }));
+vi.mock("@/lib/supabase/admin", () => ({ adminDb: () => ({ from: () => ({}) }) }));
 vi.mock("@/lib/server/telegram", () => ({
   claimLink: (...a: unknown[]) => claimLink(...a), sendText: (...a: unknown[]) => sendText(...a),
   stopChat: vi.fn(), tg: vi.fn(), userForChat: vi.fn(),

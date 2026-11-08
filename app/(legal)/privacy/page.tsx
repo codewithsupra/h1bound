@@ -40,7 +40,7 @@ export default function PrivacyPage() {
 
       <h2>Who processes it</h2>
       <ul>
-        <li><strong>InsForge</strong>: database, authentication and storage.</li>
+        <li><strong>Supabase</strong>: database and authentication.</li>
         <li><strong>Vercel</strong>: hosting.</li>
         <li><strong>OpenRouter</strong>, routed to providers with zero data retention: the AI behind Maya. Your data is not used to train models.</li>
         <li><strong>Hunter</strong>: finding a likely hiring contact&apos;s public work email. We send it the company name only, never your data.</li>

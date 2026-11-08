@@ -1,6 +1,6 @@
 import "server-only";
 import { createHmac, hkdfSync, randomBytes } from "node:crypto";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { decrypt, encrypt } from "@/lib/crypto";
 
 /**
@@ -8,7 +8,7 @@ import { decrypt, encrypt } from "@/lib/crypto";
  * signed-in user generated; the chat id is stored encrypted, with a keyed hash for webhook lookups.
  */
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 export const telegramConfigured = () => Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_BOT_USERNAME && process.env.TELEGRAM_WEBHOOK_SECRET);
 
 let key: Buffer | null = null;

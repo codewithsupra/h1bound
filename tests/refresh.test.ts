@@ -52,3 +52,13 @@ describe("boardPattern", () => {
     expect(boardPattern("my_co%")).toBe("my\\_co\\%:%");
   });
 });
+
+import { DESCRIPTION_CAP, toRow } from "@/lib/ingest/refresh";
+describe("toRow description cap", () => {
+  const job = (isUs: boolean, description: string) => ({ source: "greenhouse", sourceId: "x:1", company: "Acme", title: "Engineer", location: "London", remote: false, isUs, country: "GB", remoteScope: null, seniority: "junior", url: "https://x", description, postedAt: null, jdSponsorship: "no" }) as never;
+  it("keeps market jobs to 4,000 characters and legacy US jobs to 600, and keeps the sponsorship signal", () => {
+    expect(toRow(job(false, "x".repeat(9000)), { companyId: null, licenceId: null }, "t").description).toHaveLength(DESCRIPTION_CAP.market);
+    expect(toRow(job(true, "x".repeat(9000)), { companyId: null, licenceId: null }, "t").description).toHaveLength(DESCRIPTION_CAP.us);
+    expect(toRow(job(false, "short"), { companyId: null, licenceId: null }, "t")).toMatchObject({ description: "short", jd_sponsorship: "no" });
+  });
+});

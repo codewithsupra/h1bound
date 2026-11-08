@@ -1,15 +1,16 @@
 import "server-only";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { licenceKey } from "@/lib/ingest/registers";
 import { companyLabel } from "@/lib/employer";
 import { CITY_COORDS, locate } from "@/lib/eu-geo";
+import { fetchAll } from "@/lib/supabase/page";
 import { COUNTRY_PATH, licenceFlap, licenceLine, permitTotal, type Market } from "@/lib/visa";
 import type { BoardRow } from "@/components/landing/flap-board";
 import type { Light } from "@/components/landing/night-map";
 
 /** Reads over sponsor_licences for the landing page, the public lookup and /sponsors/{uk,nl,ie}/<slug>. */
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 
 export type LicenceRow = {
   id: string; country: Market; key: string; name: string; display_name: string | null; city: string | null; region: string | null;
@@ -21,7 +22,9 @@ export const licenceName = (l: Pick<LicenceRow, "name" | "display_name">) => com
 export const licenceHref = (l: Pick<LicenceRow, "country" | "slug">) => (l.slug ? `/sponsors/${COUNTRY_PATH[l.country]}/${l.slug}` : null);
 
 export async function licenceBySlug(country: Market, slug: string): Promise<LicenceRow | null> {
-  const { data } = await db().from("sponsor_licences").select(COLS).eq("country", country).eq("slug", slug).maybeSingle();
+  const { data, error } = await db().from("sponsor_licences").select(COLS).eq("country", country).eq("slug", slug).maybeSingle();
+  // A database error must not read as "no such employer": that would show a 404 for a page that exists.
+  if (error) throw new Error(`licence lookup: ${error.message}`);
   return (data as LicenceRow | null) ?? null;
 }
 
@@ -86,7 +89,8 @@ export async function landingLicences() {
     pages("GB", 2400, KNOWN_UK_CITIES),
     pages("NL", 700),
     pages("IE", 700),
-    db().from("jobs").select("licence_id").eq("active", true).not("licence_id", "is", null).or(NOT_AMBIGUOUS).limit(20_000),
+    fetchAll<{ licence_id: string }>((a, b) => db().from("jobs").select("licence_id").eq("active", true).not("licence_id", "is", null).or(NOT_AMBIGUOUS).order("id").range(a, b), 30_000)
+      .then((data) => ({ data, error: null }), (e: Error) => ({ data: null, error: { message: e.message } })),
     db().from("jobs").select("id", { count: "exact", head: true }).eq("active", true).or("country.in.(GB,NL,IE),remote_scope.in.(anywhere,europe)"),
     Promise.all((["GB", "NL", "IE"] as Market[]).map((c) => db().from("sponsor_licences").select("id", { count: "exact", head: true }).eq("country", c).eq("listed", true))),
   ]);

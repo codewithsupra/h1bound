@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeDb, type FakeDb } from "./helpers/fake-db";
 
 let db: FakeDb;
-vi.mock("@/lib/insforge/admin", () => ({ createAdminInsForge: () => ({ database: db.database }) }));
+vi.mock("@/lib/supabase/admin", () => ({ adminDb: () => db.database }));
 
 const coldEmail = vi.fn();
 const interviewPlan = vi.fn();

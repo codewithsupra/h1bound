@@ -4,7 +4,7 @@
  * name where the ATS reports one, and (b) it lists jobs in the employer's own country.
  * Usage: npx tsx --env-file=.env.local scripts/resolve-licence-boards.mts [GB|NL|IE ...] [--limit N] [--match <name>]
  */
-import { createAdminClient } from "@insforge/sdk";
+import { scriptDb } from "../lib/supabase/script";
 import { boardSlugs, BOARD_URL, fetchBoard, type AtsKind } from "../lib/ingest/ats";
 import { coreEmployer } from "../lib/employer";
 import { licenceKey } from "../lib/ingest/registers";
@@ -14,7 +14,7 @@ const args = process.argv.slice(2);
 const limit = Number(args[args.indexOf("--limit") + 1]) || 100_000;
 const wanted = args.filter((a) => ["GB", "NL", "IE"].includes(a));
 const countries = wanted.length ? wanted : ["IE", "GB", "NL"];
-const db = createAdminClient({ baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL!, apiKey: process.env.INSFORGE_API_KEY! }).database;
+const db = scriptDb();
 
 type Lic = { id: string; country: string; name: string; permits: Record<string, number> };
 const COLS = "id,country,name,permits";

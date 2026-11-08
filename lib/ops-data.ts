@@ -1,6 +1,10 @@
 import { breaches, dailyCost, DEFAULT_THRESHOLDS, summarizeAi, summarizeIngestion, summarizeRuns, type AiRow, type RunRow, type Thresholds } from "./ops";
 
-type Db = { from(table: string): any; rpc?: any }; // eslint-disable-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Db = { from(table: string): any; rpc?: any };
+
+/** Free plan size; set DB_LIMIT_MB on a paid plan. */
+const limitBytes = () => (Number(process.env.DB_LIMIT_MB) || 500) * 1_048_576;
 
 async function all<T>(build: (from: number) => PromiseLike<{ data: unknown; error: { message: string } | null }>): Promise<T[]> {
   const out: T[] = [];
@@ -33,6 +37,8 @@ export async function loadOps(db: Db, w: OpsWindow, thresholds: Thresholds = DEF
   for (const c of ["GB", "NL", "IE"]) byCountry[c] = await count(db.from("jobs").select("id", { count: "exact", head: true }).eq("active", true).eq("country", c));
   byCountry.remote = await count(db.from("jobs").select("id", { count: "exact", head: true }).eq("active", true).eq("remote", true).is("country", null));
 
+  const size = db.rpc ? await db.rpc("db_size_bytes").then((r: { data: unknown }) => (typeof r.data === "number" || typeof r.data === "string" ? Number(r.data) : null), () => null) : null;
+  const dbSize = size !== null && Number.isFinite(size) ? { bytes: size, limitBytes: limitBytes() } : null;
   const jobs = summarizeRuns(runs, windowMs, now);
   const ingestion = summarizeIngestion(runs);
   const ai = summarizeAi(calls);
@@ -47,7 +53,7 @@ export async function loadOps(db: Db, w: OpsWindow, thresholds: Thresholds = DEF
   }
   const failingBoards = [...byBoard.entries()].map(([board, v]) => ({ board, ...v })).sort((a, b) => b.n - a.n).slice(0, 15);
 
-  return { window: w, runs, jobs, ingestion, active, staleActive, staleShare, byCountry, ai, daily, failingBoards, problems: breaches({ jobs, ingestion, staleShare, ai, daily }, thresholds) };
+  return { window: w, runs, jobs, ingestion, active, staleActive, staleShare, byCountry, ai, daily, failingBoards, dbSize, problems: breaches({ jobs, ingestion, staleShare, ai, daily, db: dbSize }, thresholds) };
 }
 
 export type Ops = Awaited<ReturnType<typeof loadOps>>;

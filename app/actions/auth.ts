@@ -2,7 +2,7 @@
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { createAuthActions } from "@insforge/sdk/ssr";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { claimGuest } from "@/lib/server/store";
 import { claimReferral, REF_COOKIE } from "@/lib/server/growth";
 
@@ -21,9 +21,9 @@ async function appOrigin() {
 const field = (f: FormData, k: string) => String(f.get(k) ?? "").trim();
 
 export async function signIn(_prev: AuthState, formData: FormData): Promise<AuthState> {
-  const auth = createAuthActions({ cookies: await cookies() });
-  const { data, error } = await auth.signInWithPassword({ email: field(formData, "email"), password: String(formData.get("password") ?? "") });
-  if (error || !data?.user) return { error: error?.message ?? "Sign in failed. Check your email and password." };
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.auth.signInWithPassword({ email: field(formData, "email"), password: String(formData.get("password") ?? "") });
+  if (error || !data?.user) return { error: "Sign in failed. Check your email and password." };
   await claimGuest(data.user.id);
   redirect(AFTER_SIGN_IN);
 }
@@ -31,16 +31,17 @@ export async function signIn(_prev: AuthState, formData: FormData): Promise<Auth
 export async function signUp(_prev: AuthState, formData: FormData): Promise<AuthState> {
   const password = String(formData.get("password") ?? "");
   if (password.length < 6) return { error: "Use at least 6 characters for your password." };
-  const auth = createAuthActions({ cookies: await cookies() });
-  const { data, error } = await auth.signUp({
+  const supabase = await createSupabaseServerClient();
+  const name = field(formData, "name") || undefined;
+  const { data, error } = await supabase.auth.signUp({
     email: field(formData, "email"),
     password,
-    name: field(formData, "name") || undefined,
-    redirectTo: `${await appOrigin()}/login`,
+    options: { data: name ? { name } : {}, emailRedirectTo: `${await appOrigin()}/api/auth/callback` },
   });
   if (error) return { error: error.message ?? "Could not create your account." };
-  if (data?.requireEmailVerification) return { error: "Check your inbox to verify your email, then sign in." };
-  if (data?.user) {
+  // With "Confirm email" on, Supabase creates the user but returns no session until the link is clicked.
+  if (data.user && !data.session) return { error: "Check your inbox to verify your email, then sign in." };
+  if (data.user) {
     await claimGuest(data.user.id);
     const jar = await cookies();
     await claimReferral(data.user.id, jar.get(REF_COOKIE)?.value);
@@ -50,16 +51,15 @@ export async function signUp(_prev: AuthState, formData: FormData): Promise<Auth
 }
 
 export async function signInWithProvider(provider: "google" | "github") {
-  const cookieStore = await cookies();
-  const auth = createAuthActions({ cookies: cookieStore });
-  const { data, error } = await auth.signInWithOAuth(provider, { redirectTo: `${await appOrigin()}/api/auth/callback`, skipBrowserRedirect: true });
-  if (error || !data?.url || !data.codeVerifier) redirect("/login?error=oauth_failed");
-  cookieStore.set("insforge_code_verifier", data.codeVerifier, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 600 });
+  const supabase = await createSupabaseServerClient();
+  // The PKCE verifier is stored in a cookie by the Supabase client; the callback route reads it back.
+  const { data, error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: `${await appOrigin()}/api/auth/callback`, skipBrowserRedirect: true } });
+  if (error || !data?.url) redirect("/login?error=oauth_failed");
   redirect(data.url);
 }
 
 export async function signOut() {
-  const auth = createAuthActions({ cookies: await cookies() });
-  await auth.signOut();
+  const supabase = await createSupabaseServerClient();
+  await supabase.auth.signOut();
   redirect("/");
 }

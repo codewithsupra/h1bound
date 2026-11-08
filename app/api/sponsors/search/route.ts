@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { coreEmployer, normalizeEmployer, companyLabel } from "@/lib/employer";
 import { sponsorBadge, type SponsorStats } from "@/lib/sponsor";
 import { titleFamily } from "@/lib/titles";
@@ -22,8 +22,7 @@ export async function GET(req: NextRequest) {
   if (key.length < 2) return NextResponse.json({ results: [] });
   const core = coreEmployer(q) || key;
 
-  const { data } = await createAdminInsForge()
-    .database.from("companies")
+  const { data } = await adminDb().from("companies")
     .select("slug,name,display_name,top_states,fiscal_year,total_filings,by_family,last_filed")
     .like("key", `${core.replace(/[%_]/g, "")}%`)
     .order("total_filings", { ascending: false })

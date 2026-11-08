@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteFooter, SiteHeader } from "@/app/sponsors/_components/site-chrome";
 import { companyLabel } from "@/lib/employer";
+import { Unavailable } from "@/components/site/unavailable";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { sponsorName } from "@/lib/slug";
 import { topSponsors, type SponsorRow } from "@/lib/server/sponsors";
 import { topFamily } from "@/lib/sponsor";
 import { FAMILY_LABEL, TITLE_FAMILIES, type TitleFamily } from "@/lib/titles";
 
-export const revalidate = 86400;
+// Hourly: if the database is down at build time this renders the "unavailable" page, which then heals.
+export const revalidate = 3600;
 
 const TOP = 200;
 
@@ -19,7 +21,13 @@ export const metadata: Metadata = {
 };
 
 export default async function SponsorsIndex() {
-  const rows = await topSponsors(TOP);
+  let rows: SponsorRow[];
+  try {
+    rows = await topSponsors(TOP);
+  } catch (e) {
+    console.error(`[sponsors] database unavailable: ${(e as Error).message}`);
+    return <Unavailable what="The sponsor list" />;
+  }
   const groups = new Map<TitleFamily, SponsorRow[]>();
   for (const r of rows) {
     const f = topFamily(r.by_family);

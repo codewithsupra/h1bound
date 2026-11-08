@@ -4,13 +4,13 @@
  * Usage: npx tsx --env-file=.env.local scripts/eval-draw-jd.mts [--n 90] --out file.json
  */
 import { writeFileSync } from "node:fs";
-import { createAdminClient } from "@insforge/sdk";
+import { scriptDb } from "../lib/supabase/script";
 import { jdSponsorship } from "../lib/jd-signals";
 
 const args = process.argv.slice(2);
 const flag = (n: string, d: string) => args[args.indexOf(`--${n}`) + 1] ?? d;
 const N = Number(flag("n", "90"));
-const db = createAdminClient({ baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL!, apiKey: process.env.INSFORGE_API_KEY! }).database;
+const db = scriptDb();
 
 const KEYWORD = /sponsor|visa|right to work|work permit|work authori[sz]ation|eligib\w+ to work|immigration|relocation|kennismigrant|employment permit/i;
 

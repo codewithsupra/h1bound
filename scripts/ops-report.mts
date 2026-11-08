@@ -6,7 +6,7 @@
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { createAdminClient } from "@insforge/sdk";
+import { scriptDb } from "../lib/supabase/script";
 import { loadOps } from "../lib/ops-data";
 import { pct } from "../lib/eval/metrics";
 
@@ -14,7 +14,7 @@ const args = process.argv.slice(2);
 const flag = (n: string) => (args.includes(`--${n}`) ? args[args.indexOf(`--${n}`) + 1] : undefined);
 const until = flag("until") ? new Date(`${flag("until")}T00:00:00Z`).toISOString() : new Date().toISOString();
 const since = flag("since") ? new Date(`${flag("since")}T00:00:00Z`).toISOString() : new Date(Date.parse(until) - 7 * 86_400_000).toISOString();
-const db = createAdminClient({ baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL!, apiKey: process.env.INSFORGE_API_KEY! }).database;
+const db = scriptDb();
 
 const o = await loadOps(db, { since, until });
 const days = ((Date.parse(until) - Date.parse(since)) / 86_400_000).toFixed(1);
@@ -41,6 +41,7 @@ ${o.jobs.map((j) => `| ${j.job} | ${j.expected} | ${j.started} | ${j.ok} | ${j.p
 
 - Finished runs: ${o.ingestion.runs}; boards attempted ${o.ingestion.boardsAttempted}; boards failed ${o.ingestion.boardsFailed} (${pct(o.ingestion.failureRate, 1)}); jobs upserted ${o.ingestion.jobsUpserted}.
 - Active jobs now: ${o.active} (UK ${o.byCountry.GB}, NL ${o.byCountry.NL}, IE ${o.byCountry.IE}, remote-anywhere/Europe ${o.byCountry.remote}).
+- **Database size:** ${o.dbSize ? `${Math.round(o.dbSize.bytes / 1_048_576)} MB of ${Math.round(o.dbSize.limitBytes / 1_048_576)} MB (${pct(o.dbSize.bytes / o.dbSize.limitBytes)})` : "unknown"}.
 - **Stale** (active but not seen for 48 hours): ${o.staleActive} (${pct(o.staleShare, 1)}).
 
 Boards that failed most in the period:

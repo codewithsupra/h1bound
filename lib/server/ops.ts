@@ -1,5 +1,5 @@
 import "server-only";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 
 /**
  * Telemetry for scheduled runs and AI calls. Everything here is best-effort: a missing table or a
@@ -7,7 +7,7 @@ import { createAdminInsForge } from "@/lib/insforge/admin";
  * the user's request it describes.
  */
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 const swallow = (what: string) => (e: unknown) => console.error(`[ops] ${what}: ${(e as Error)?.message ?? e}`);
 
 export type RunPatch = { boards?: number; failed?: number; jobs?: number; stats?: Record<string, unknown>; status?: "ok" | "partial" | "failed" };

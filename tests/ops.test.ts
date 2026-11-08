@@ -47,6 +47,16 @@ describe("AI summaries", () => {
   });
 });
 
+describe("database size", () => {
+  const base = { jobs: [], ingestion: summarizeIngestion([]), staleShare: null, ai: [], daily: [] };
+  const mb = (n: number) => n * 1_048_576;
+  it("warns before the free plan's limit, not after", () => {
+    expect(breaches({ ...base, db: { bytes: mb(300), limitBytes: mb(500) } })).toEqual([]);
+    expect(breaches({ ...base, db: { bytes: mb(420), limitBytes: mb(500) } }).join()).toMatch(/420 MB of 500 MB \(84%\)/);
+    expect(breaches({ ...base, db: null })).toEqual([]);
+  });
+});
+
 describe("breaches", () => {
   const healthy = { jobs: summarizeRuns([run(), run(), run(), run()], 86_400_000, now).filter((j) => j.job === "refresh-jobs"), ingestion: summarizeIngestion([run()]), staleShare: 0.01, ai: summarizeAi([ai()]), daily: [] };
   it("is quiet when healthy", () => expect(breaches(healthy)).toEqual([]));
@@ -58,7 +68,7 @@ describe("breaches", () => {
       ai: summarizeAi(Array.from({ length: 10 }, (_, i) => ai({ ok: i > 2 }))),
       daily: [{ day: "2026-11-07", costUsd: 9 }],
     };
-    const out = breaches(bad, { minCompletion: 0.9, maxBoardFailureRate: 0.1, maxStaleShare: 0.05, maxAiErrorRate: 0.05, maxDailyCostUsd: 5 });
+    const out = breaches(bad, { minCompletion: 0.9, maxBoardFailureRate: 0.1, maxStaleShare: 0.05, maxAiErrorRate: 0.05, maxDailyCostUsd: 5, maxDbShare: 0.8 });
     expect(out.join("\n")).toMatch(/refresh-jobs: only 0%/);
     expect(out.join("\n")).toMatch(/30% of boards failed/);
     expect(out.join("\n")).toMatch(/20% of active jobs/);

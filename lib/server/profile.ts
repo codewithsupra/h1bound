@@ -1,5 +1,5 @@
 import "server-only";
-import { createAdminInsForge } from "@/lib/insforge/admin";
+import { adminDb } from "@/lib/supabase/admin";
 import { decryptJson, encryptJson } from "@/lib/crypto";
 import type { Profile } from "@/lib/match";
 import type { TitleFamily } from "@/lib/titles";
@@ -62,7 +62,7 @@ export type ProfileRow = {
   visa_ends_on?: string | null;
 };
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 
 export async function loadProfile(userId: string): Promise<{ row: ProfileRow; details: ProfileDetails | null } | null> {
   const { data } = await db().from("profiles").select("*").eq("user_id", userId).maybeSingle();

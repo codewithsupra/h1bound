@@ -1,0 +1,64 @@
+name: Scheduled jobs
+
+# Replaces the InsForge schedules. Each run calls one cron route on the deployed app with the shared
+# secret. A failing run turns the workflow red and GitHub emails the repo owner, which is the alert that
+# still works when the database or the app is down. Free for a public repository.
+#
+# One-time setup: Settings -> Secrets and variables -> Actions: secret CRON_SECRET (same value as in
+# Vercel); optional variable APP_URL (defaults to https://h1bound.vercel.app).
+
+on:
+  schedule:
+    - cron: "0 10 * * *"    # job boards, shard 0 (also purges expired jobs)
+    - cron: "10 10 * * *"   # shard 1
+    - cron: "20 10 * * *"   # shard 2
+    - cron: "30 10 * * *"   # shard 3
+    - cron: "40 10 * * *"   # remote-job feeds
+    - cron: "0 3 * * 1"     # UK register (weekly)
+    - cron: "20 3 * * 1"    # Dutch register (weekly)
+    - cron: "0 * * * *"     # daily picks: each user's chosen local hour
+    - cron: "0 15 * * *"    # nudges
+    - cron: "30 8 * * *"    # health check (emails the owner only on a problem)
+  workflow_dispatch:
+    inputs:
+      route:
+        description: "Route to call, e.g. /api/cron/ops-check"
+        required: true
+
+concurrency:
+  group: cron-${{ github.event.schedule || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  call:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Call the route
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          APP_URL: ${{ vars.APP_URL || 'https://h1bound.vercel.app' }}
+          SCHEDULE: ${{ github.event.schedule }}
+          DISPATCH_ROUTE: ${{ github.event.inputs.route }}
+        run: |
+          set -euo pipefail
+          if [ -z "${CRON_SECRET:-}" ]; then echo "::error::CRON_SECRET is not set as a repository secret"; exit 1; fi
+          if [ -n "${DISPATCH_ROUTE:-}" ]; then route="$DISPATCH_ROUTE"; else
+            case "$SCHEDULE" in
+              "0 10 * * *")  route="/api/cron/refresh-jobs?shard=0&of=4" ;;
+              "10 10 * * *") route="/api/cron/refresh-jobs?shard=1&of=4" ;;
+              "20 10 * * *") route="/api/cron/refresh-jobs?shard=2&of=4" ;;
+              "30 10 * * *") route="/api/cron/refresh-jobs?shard=3&of=4" ;;
+              "40 10 * * *") route="/api/cron/refresh-jobs?feeds=1" ;;
+              "0 3 * * 1")   route="/api/cron/registers?country=GB" ;;
+              "20 3 * * 1")  route="/api/cron/registers?country=NL" ;;
+              "0 * * * *")   route="/api/cron/daily-picks" ;;
+              "0 15 * * *")  route="/api/cron/nudges" ;;
+              "30 8 * * *")  route="/api/cron/ops-check" ;;
+              *) echo "::error::unknown schedule '$SCHEDULE'"; exit 1 ;;
+            esac
+          fi
+          echo "POST $route"
+          status=$(curl -sS -o response.json -w "%{http_code}" -m 290 -X POST -H "Authorization: Bearer $CRON_SECRET" "$APP_URL$route")
+          echo "HTTP $status"; head -c 600 response.json; echo
+          [ "$status" -ge 200 ] && [ "$status" -lt 300 ]

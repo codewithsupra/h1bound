@@ -28,13 +28,13 @@ Job boards (Greenhouse, Lever, Ashby, Recruitee) through their public APIs, plus
 
 ## Stack
 
-Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · InsForge (Postgres with row-level security, auth, payments, schedules) · Vercel AI SDK v7 with Claude via OpenRouter on zero-data-retention routes · Vercel · Stripe · Resend · Telegram Bot API · Hunter (contact lookup) · Vitest.
+Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · Supabase (Postgres with row-level security, auth) · GitHub Actions (scheduled jobs) · Vercel AI SDK v7 with Claude via OpenRouter on zero-data-retention routes · Vercel · Stripe · Resend · Telegram Bot API · Hunter (contact lookup) · Vitest.
 
 Privacy: the uploaded CV file is parsed in memory and dropped. The parsed CV text, chats, notes, drafts and the Gmail and Telegram tokens are AES-256-GCM encrypted (`lib/crypto.ts`). Personal tables are readable only by their owner; every write goes through the server after an auth and quota check.
 
 ## Status
 
-Early and deployed, with no real users yet. Gmail sending, Telegram, daily-pick email and billing are implemented but need credentials configured (see `.env.example`); until then they stay off. Google must also verify the Gmail scope before anyone outside the test users can connect it.
+Early and deployed, with no real users yet. Gmail sending, Telegram and daily-pick email are implemented but need credentials configured, and paid checkout is not built yet (see Plans) (see `.env.example`); until then they stay off. Google must also verify the Gmail scope before anyone outside the test users can connect it.
 
 ## Commands
 
@@ -50,11 +50,11 @@ npx tsx --env-file=.env.local scripts/refresh-jobs.mts [--feeds]           # pul
 npx tsx --env-file=.env.local scripts/ops-report.mts --since 2026-11-02 --until 2026-11-09   # runs, failures, staleness, AI cost
 ```
 
-Scheduled in production (InsForge schedules, `Authorization: Bearer $CRON_SECRET`): job refresh in 4 shards, remote feeds, weekly UK and NL registers, hourly daily-picks, nudges. Details and what to do when something breaks: [`docs/OPERATIONS.md`](docs/OPERATIONS.md). The US sponsor pages and OPT clock from the earlier H-1B version are kept for search traffic; their data comes from the DOL LCA importer (`scripts/import-lca.mts`).
+Scheduled in production (`.github/workflows/cron.yml` calls the cron routes with `Authorization: Bearer $CRON_SECRET`; a failing run emails the repo owner): job refresh in 4 shards, remote feeds, weekly UK and NL registers, hourly daily-picks, nudges. Details and what to do when something breaks: [`docs/OPERATIONS.md`](docs/OPERATIONS.md). The US sponsor pages and OPT clock from the earlier H-1B version are kept for search traffic; their data comes from the DOL LCA importer (`scripts/import-lca.mts`).
 
 ## Plans
 
-Free: 10 matched jobs, CV reviews on 5 of them. Pro ($12 / €10 / ₹399 a month by country, 7-day trial): unlimited matches, up to 15 daily picks, hiring-manager contacts, drafted emails, interview plans and tailoring.
+Free: 10 matched jobs, CV reviews on 5 of them. Pro (the plan and its limits are in the code; **paid checkout is not live**: it ran on a managed Stripe integration that went away with the move to Supabase, and a direct Stripe integration is still to be built; the 7-day trial works) ($12 / €10 / ₹399 a month by country, 7-day trial): unlimited matches, up to 15 daily picks, hiring-manager contacts, drafted emails, interview plans and tailoring.
 
 ## Layout
 
@@ -63,4 +63,4 @@ Free: 10 matched jobs, CV reviews on 5 of them. Pro ($12 / €10 / ₹399 a mont
 - `lib/ai/`, `lib/server/`: agent tools, models, Gmail, Telegram, insights, telemetry
 - `app/(app)/`: the signed-in workspace; `app/sponsors/`: public register pages
 - `tests/`, `tests/eval/`, `lib/eval/`: unit tests and the labeled evaluation sets
-- `migrations/`: SQL, applied by hand with `insforge db migrations up`
+- `supabase/migrations/`: SQL, applied with `npx tsx --env-file=.env.local scripts/db-migrate.mts` (tracks what is applied; validated on a throwaway Postgres by `scripts/check-migrations.sh`)

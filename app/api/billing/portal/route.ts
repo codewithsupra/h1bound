@@ -1,16 +1,9 @@
-import { NextResponse, type NextRequest } from "next/server";
-import { createInsForgeServerClient, getSessionUser } from "@/lib/insforge/server";
-import { PAYMENTS_ENV } from "@/lib/billing";
+import { NextResponse } from "next/server";
+import { getSessionUser } from "@/lib/supabase/server";
 
-export async function POST(request: NextRequest) {
+/** Opens the Stripe customer portal. Not live yet: see the checkout route. */
+export async function POST() {
   const user = await getSessionUser();
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  const insforge = await createInsForgeServerClient();
-  const { data, error } = await insforge.payments.stripe.createCustomerPortalSession(PAYMENTS_ENV, {
-    subject: { type: "user", id: user.id },
-    returnUrl: `${request.nextUrl.origin}/settings`,
-  });
-  const url = data?.customerPortalSession?.url;
-  if (error || !url) return NextResponse.json({ error: "No subscription to manage yet." }, { status: 404 });
-  return NextResponse.json({ url });
+  return NextResponse.json({ error: "No subscription to manage yet." }, { status: 404 });
 }

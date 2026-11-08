@@ -5,13 +5,13 @@
  * Usage: npx tsx --env-file=.env.local scripts/eval-add-rivals.mts
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { createAdminClient } from "@insforge/sdk";
+import { scriptDb } from "../lib/supabase/script";
 import { rivalsOf } from "../lib/ingest/boards";
 import type { SponsorRecordCases } from "../lib/eval/sponsor-record";
 
 const file = new URL("../tests/eval/sponsor-record.cases.json", import.meta.url);
 const cases = JSON.parse(readFileSync(file, "utf8")) as SponsorRecordCases;
-const db = createAdminClient({ baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL!, apiKey: process.env.INSFORGE_API_KEY! }).database;
+const db = scriptDb();
 
 type E = { id: string; country: string; key: string; name: string };
 const all: E[] = [];

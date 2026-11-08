@@ -1,8 +1,8 @@
 import "server-only";
 import { cookies, headers } from "next/headers";
 import type { UIMessage } from "ai";
-import { createAdminInsForge } from "@/lib/insforge/admin";
-import { getSessionUser } from "@/lib/insforge/server";
+import { adminDb } from "@/lib/supabase/admin";
+import { getSessionUser } from "@/lib/supabase/server";
 import { decryptJson, encryptJson } from "@/lib/crypto";
 import { freeJobLimit, GUEST_LIMITS, type Usage } from "@/lib/quota";
 import { GUEST_COOKIE, GUEST_MAX_AGE, hashIp, signGuest, verifyGuest } from "./guest-cookie";
@@ -38,7 +38,7 @@ export type Store = {
   messagesToday(): Promise<number>;
 };
 
-const db = () => createAdminInsForge().database;
+const db = () => adminDb();
 
 function userStore(id: string, name: string | null, referrals: number): Store {
   return {
