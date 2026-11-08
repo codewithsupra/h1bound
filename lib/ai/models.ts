@@ -18,4 +18,6 @@ export const smartModel = () => openrouter.chat(process.env.SMART_MODEL ?? "anth
  * company name (no personal data), so it may go to the search engine; the prompt stays ZDR-routed.
  */
 export const researchModel = () =>
-  openrouter.chat(process.env.CHAT_MODEL ?? "anthropic/claude-haiku-5.5", { ...PRIVATE, plugins: [{ id: "web", max_results: 6, engine: "exa" }] });
+  // Low reasoning effort: hidden thinking counts toward the output cap, and at the default it can use the whole budget,
+  // leaving a cut-off or empty answer.
+  openrouter.chat(process.env.CHAT_MODEL ?? "anthropic/claude-haiku-5.5", { ...PRIVATE, reasoning: { effort: "low" }, plugins: [{ id: "web", max_results: 6, engine: "exa" }] });

@@ -6,6 +6,15 @@ How to read the **Detected by** line: *monitoring* means the system told us; *ma
 
 ---
 
+## 2026-11-08: Culture summaries empty and chat replies cut off mid-sentence (found in end-to-end testing)
+
+- **Impact:** asking Maya about a well-known company (Monzo) returned "couldn't find enough public information", and a long reply stopped mid-sentence. Real users affected: none.
+- **Detected by:** manual, in the end-to-end test after the Supabase move. The recorded AI calls (`ai_calls`) showed the research call had run to exactly its 1,600-token output cap.
+- **Root cause:** hidden reasoning tokens count toward `maxOutputTokens`. At the model's default reasoning effort they used most or all of the small caps added after the 2026-10-31 key-limit incident, leaving a truncated or empty visible answer (`finishReason: length`).
+- **Fix:** the research model runs at low reasoning effort with a 3,000-token cap; the chat cap is 1,400. Re-tested: Monzo returns a sourced, structured summary.
+- **Prevention:** every call records its finish state, tokens and cost, so a call that hits its cap is visible. Not done: an alert on a rising share of `length` finishes (the health check only watches error rates).
+- **Status:** fixed.
+
 ## 2026-11-08: Backend paused at the free plan's database limit (found a week later)
 
 - **Impact:** every database-backed feature stopped: sign-in, chat, the pipeline, search, the sponsor pages (which returned 404 instead of an error), the daily jobs and the ops telemetry. Cached pages such as the home page kept loading. `lull`, on the same account, stopped too. Start date: not recorded (the schedule history sits on the paused backend); it was working on 2026-11-02 and down on 2026-11-08. The site could also not be redeployed: the build fetched live data and failed. Real users affected: none (no users yet).

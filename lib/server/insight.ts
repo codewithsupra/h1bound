@@ -37,7 +37,7 @@ export async function companyInsight(company: string, where = ""): Promise<Insig
 
   // Step 1: research with web search, as free notes (models ignore length limits here, so no JSON yet).
   const researcher = researchModel();
-  const research = await tracked("insight_research", researcher, () => generateText({ model: researcher, prompt: RESEARCH(company, where), maxOutputTokens: 1600, abortSignal: AbortSignal.timeout(40_000) }));
+  const research = await tracked("insight_research", researcher, () => generateText({ model: researcher, prompt: RESEARCH(company, where), maxOutputTokens: 3000, abortSignal: AbortSignal.timeout(50_000) }));
   const cited = research.sources.flatMap((s) => (s.sourceType === "url" ? [{ title: s.title, url: s.url }] : []));
   if (!research.text.trim() || !cited.length) return { error: "not_found" };
   // Step 2: structure the notes. Limits are enforced again in parseInsight (no zod .max(): see CLAUDE.md).

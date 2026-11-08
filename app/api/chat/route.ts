@@ -80,7 +80,8 @@ export async function POST(req: Request) {
     messages: await convertToModelMessages(messages),
     tools,
     stopWhen: stepCountIs(6),
-    maxOutputTokens: 700,
+    // Room for a reply plus its tool calls: hidden reasoning counts toward this, and a low cap cuts answers off mid-sentence.
+    maxOutputTokens: 1400,
   });
   // Finish (and save) the reply even if the browser disconnects mid-stream.
   result.consumeStream();
