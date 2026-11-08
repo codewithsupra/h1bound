@@ -3,7 +3,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/supabase/server";
-import { priceForCountry } from "@/lib/billing";
+import { PAYMENTS_LIVE, priceForCountry } from "@/lib/billing";
 import { hasPaidPlan, trialState } from "@/lib/server/growth";
 import { TrialButton } from "@/components/growth/trial-button";
 import { CheckoutButton } from "./checkout-button";
@@ -34,7 +34,7 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
     </SiteHeader>
     <main className="rise mx-auto w-full max-w-xl flex-1 px-4 py-10">
             <h1 className="mt-4 font-display text-4xl font-bold tracking-[-0.01em]">{SITE_NAME} Pro</h1>
-      <p className="mt-2 text-lg text-slate">{price.label}. Cancel anytime from your account.</p>
+      <p className="mt-2 text-lg text-slate">{PAYMENTS_LIVE ? `${price.label}. Cancel anytime from your account.` : `Planned price: ${price.label}.`}</p>
       {trial.active && trial.endsAt && (
         <p className="mt-4 rounded-lg border border-green/30 bg-green/[0.06] p-3 text-sm">You&apos;re on the free trial until {new Date(trial.endsAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}. Upgrade any time to keep Pro after that.</p>
       )}
@@ -54,7 +54,16 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
           </div>
         ))}
       </dl>
-      <CheckoutButton label={`Upgrade for ${price.label}`} />
+      {PAYMENTS_LIVE ? (
+        <CheckoutButton label={`Upgrade for ${price.label}`} />
+      ) : (
+        <div className="mt-8 rounded-2xl border border-line bg-card p-4">
+          <p className="font-display font-semibold">Paid plans open soon</p>
+          <p className="mt-1 text-sm text-slate">
+            Pro will be {price.label}. Until then the free trial includes everything above. It ends after 7 days and nothing renews, so there is nothing to cancel.
+          </p>
+        </div>
+      )}
       <p className="mt-4 text-sm text-slate">Maya can&apos;t promise interviews or visas. Pro gets you better aim and less busywork.</p>
     </main>
     </>

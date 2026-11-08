@@ -11,7 +11,7 @@ import { PICKS_MAX, PICKS_MIN, TRIAL_PICKS } from "@/lib/picks";
 import { Card, Row } from "./ui";
 
 type S = { signOff: string; emailTone: string; picksPerDay: number; picksHour: number; timezone: string; picksPaused: boolean; emailUpdates: boolean; telegramUpdates: boolean };
-type Plan = { pro: boolean; paid: boolean; trialEndsAt: string | null; trialUsed: boolean; price: string };
+type Plan = { pro: boolean; paid: boolean; trialEndsAt: string | null; trialUsed: boolean; price: string; payments: boolean };
 type Conn = { gmail: boolean; telegram: boolean; gmailAvailable: boolean; telegramAvailable: boolean; email: string };
 
 const TONES = [
@@ -160,13 +160,13 @@ function PlanCard({ plan }: { plan: Plan }) {
       </div>
       <p className="mt-3 font-display text-3xl font-bold">{plan.paid ? plan.price.replace("/month", "") : "Free"}<span className="text-base font-normal text-mist">{plan.paid ? " a month" : ""}</span></p>
       <p className="mt-1 text-sm text-mist">
-        {plan.paid ? "Renews monthly. Cancel any time." : plan.trialEndsAt ? `Until ${new Date(plan.trialEndsAt).toLocaleDateString("en-GB", { day: "numeric", month: "long" })}, then ${plan.price}.` : `Pro is ${plan.price}: up to ${PICKS_MAX} picks a day, hiring-manager contacts and drafted emails.`}
+        {plan.paid ? "Renews monthly. Cancel any time." : plan.trialEndsAt ? `Until ${new Date(plan.trialEndsAt).toLocaleDateString("en-GB", { day: "numeric", month: "long" })}${plan.payments ? `, then ${plan.price}.` : ". Paid plans open soon; the trial just ends and nothing renews."}` : `Pro (${plan.price}${plan.payments ? "" : ", opening soon"}) gives up to ${PICKS_MAX} picks a day, hiring-manager contacts and drafted emails.`}
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
         {plan.paid ? <button onClick={manage} disabled={busy} className="btn-ghost !px-4 !py-1.5 text-sm">{busy ? "Opening…" : "Manage or cancel"}</button>
           : <>
             {!plan.trialUsed && <TrialButton />}
-            <Link href="/upgrade" className={plan.trialUsed || plan.trialEndsAt ? "btn-light !px-4 !py-1.5 text-sm" : "btn-ghost !px-4 !py-1.5 text-sm"}>{plan.trialEndsAt ? "Keep Pro" : "See Pro"}</Link>
+            <Link href="/upgrade" className={plan.payments && (plan.trialUsed || plan.trialEndsAt) ? "btn-light !px-4 !py-1.5 text-sm" : "btn-ghost !px-4 !py-1.5 text-sm"}>{plan.payments && plan.trialEndsAt ? "Keep Pro" : "See Pro"}</Link>
           </>}
       </div>
       {error && <p className="mt-2 text-sm text-red">{error}</p>}

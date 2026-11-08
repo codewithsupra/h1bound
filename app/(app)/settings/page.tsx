@@ -7,7 +7,7 @@ import { loadShell } from "@/lib/server/pipeline";
 import { hasPaidPlan, referralInfo, trialState } from "@/lib/server/growth";
 import { gmailConfigured } from "@/lib/server/gmail";
 import { telegramConfigured } from "@/lib/server/telegram";
-import { priceForCountry } from "@/lib/billing";
+import { PAYMENTS_LIVE, priceForCountry } from "@/lib/billing";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { SettingsView } from "@/components/app/settings-view";
 
@@ -40,7 +40,7 @@ export default async function SettingsPage() {
         emailUpdates: Boolean(c.email_updates),
         telegramUpdates: Boolean(c.telegram_updates),
       }}
-      plan={{ pro: shell.pro, paid, trialEndsAt: trial.active ? trial.endsAt : null, trialUsed: trial.used, price: priceForCountry(h.get("x-vercel-ip-country")).label }}
+      plan={{ pro: shell.pro, paid, trialEndsAt: trial.active ? trial.endsAt : null, trialUsed: trial.used, price: priceForCountry(h.get("x-vercel-ip-country")).label, payments: PAYMENTS_LIVE }}
       connections={{ gmail: shell.gmail, telegram: shell.telegram, gmailAvailable: gmailConfigured(), telegramAvailable: telegramConfigured(), email: user.email }}
       referral={{ link: `${SITE_URL}/r/${ref.code}`, activated: ref.activated, maxFriends: ref.maxFriends, jobsPerFriend: ref.jobsPerFriend }}
     />

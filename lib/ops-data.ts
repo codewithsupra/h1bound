@@ -22,7 +22,11 @@ export type OpsWindow = { since: string; until: string };
 /** Everything the ops report and the health check need for one window. Read-only. */
 export async function loadOps(db: Db, w: OpsWindow, thresholds: Thresholds = DEFAULT_THRESHOLDS) {
   const now = Date.parse(w.until);
-  const windowMs = now - Date.parse(w.since);
+  // Measure "did the scheduled jobs run?" only from when this database came into being (its register was
+  // first loaded). Otherwise a fresh database reports 0% completion for jobs that could not have run yet.
+  const birth = await db.from("sponsor_licences").select("updated_at").order("updated_at").limit(1).maybeSingle()
+    .then((r: { data: { updated_at: string } | null }) => (r.data ? Date.parse(r.data.updated_at) : 0), () => 0);
+  const windowMs = now - Math.max(Date.parse(w.since), birth);
   const [runs, calls, topFailing] = await Promise.all([
     all<RunRow>((f) => db.from("job_runs").select("job,shard,started_at,finished_at,status,boards,failed,jobs,error").gte("started_at", w.since).lt("started_at", w.until).order("started_at").range(f, f + 999)),
     all<AiRow>((f) => db.from("ai_calls").select("at,kind,model,ms,input_tokens,output_tokens,cost_usd,ok,error").gte("at", w.since).lt("at", w.until).order("at").range(f, f + 999)),

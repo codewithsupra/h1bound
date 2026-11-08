@@ -43,7 +43,9 @@ export function Fit({ score }: { score: number }) {
   );
 }
 
-const COLS = "md:grid md:grid-cols-[minmax(0,2.4fr)_minmax(0,1.1fr)_8.5rem_minmax(0,1.3fr)_6.5rem_8.5rem_5rem] md:items-center md:gap-4";
+// Container-query breakpoint (@4xl), not a screen one: the rail and Maya's panel eat the page width, so the table
+// switches to stacked cards whenever ITS OWN space is under 56rem, whatever the window size.
+const COLS = "@4xl:grid @4xl:grid-cols-[minmax(0,2.4fr)_minmax(0,1.1fr)_8.5rem_minmax(0,1.3fr)_6.5rem_8.5rem_5rem] @4xl:items-center @4xl:gap-4";
 
 /** The board as a table, grouped by what each job needs next. Closed jobs only appear on their own tab. */
 export function PipelineTable({ groups, order, labels, now, urgent, onOpen }: {
@@ -79,14 +81,14 @@ export function PipelineTable({ groups, order, labels, now, urgent, onOpen }: {
                         {longShot && <span className="block text-xs text-mist">Can&apos;t sponsor after your visa ends</span>}
                         {r.hasNote && <span className="ml-2 text-xs text-runway" title="Has a note">•</span>}
                       </span>
-                      <span className="mt-1 block truncate text-sm text-mist md:mt-0">{where(r)}</span>
-                      <span className="mt-2 flex items-center gap-3 md:contents">
+                      <span className="mt-1 block truncate text-sm text-mist @4xl:mt-0">{where(r)}</span>
+                      <span className="mt-2 flex items-center gap-3 @4xl:contents">
                         <span className="block"><VisaProof row={r} /></span>
                         <span className="block min-w-0 truncate text-sm">
                           {r.contact?.name ? <>{r.contact.name}{r.contact.role && <span className="text-mist"> · {r.contact.role}</span>}</> : <span className="text-mist">{r.draft ? "Find on LinkedIn" : "—"}</span>}
                         </span>
                       </span>
-                      <span className="mt-2 flex items-center justify-between gap-3 md:contents">
+                      <span className="mt-2 flex items-center justify-between gap-3 @4xl:contents">
                         <span className="block"><Fit score={r.score} /></span>
                         <span className="block"><MiniFlap text={NEXT_LABEL[next]} tone={NEXT_TONE[next]} /></span>
                         <span className="block text-right text-xs text-mist">{ago(r.statusAt, now)}</span>

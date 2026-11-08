@@ -49,7 +49,7 @@ export function Pipeline({ rows: serverRows, now, visaEndsOn, gmail, pro, firstN
   const current = rows.find((r) => r.jobId === selected) ?? null;
 
   return (
-    <div className="mx-auto max-w-[78rem] px-4 py-6 sm:px-8 sm:py-8">
+    <div className="@container mx-auto max-w-[78rem] px-4 py-6 sm:px-8 sm:py-8">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl font-bold tracking-tight">Pipeline</h1>

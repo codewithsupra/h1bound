@@ -5,6 +5,13 @@
 
 export type Currency = "usd" | "eur" | "inr";
 
+/**
+ * Paid checkout is not built yet (it needs a direct Stripe integration), so it is off unless this is
+ * explicitly "true". While off, the UI says paid plans are opening soon instead of offering a button
+ * that fails. The 7-day trial does not depend on it.
+ */
+export const PAYMENTS_LIVE = process.env.NEXT_PUBLIC_PAYMENTS_LIVE === "true";
+
 export const PAYMENTS_ENV: "test" | "live" = process.env.NEXT_PUBLIC_PAYMENTS_ENV === "live" ? "live" : "test";
 
 export const PRICES: Record<Currency, { id: string | undefined; label: string }> = {

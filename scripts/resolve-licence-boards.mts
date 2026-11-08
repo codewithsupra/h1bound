@@ -3,6 +3,7 @@
  * entries by probing slug guesses. A board is kept only if (a) its company name matches the register
  * name where the ATS reports one, and (b) it lists jobs in the employer's own country.
  * Usage: npx tsx --env-file=.env.local scripts/resolve-licence-boards.mts [GB|NL|IE ...] [--limit N] [--match <name>]
+ * RESOLVE_CONCURRENCY=30 raises the parallel probes (default 10); the work is network-bound.
  */
 import { scriptDb } from "../lib/supabase/script";
 import { boardSlugs, BOARD_URL, fetchBoard, type AtsKind } from "../lib/ingest/ats";
@@ -96,7 +97,7 @@ async function resolve(l: Lic) {
 }
 
 let done = 0, found = 0;
-await Promise.all(Array.from({ length: 10 }, async () => {
+await Promise.all(Array.from({ length: Number(process.env.RESOLVE_CONCURRENCY) || 10 }, async () => {
   for (let l = queue.shift(); l; l = queue.shift()) {
     const r = await resolve(l).catch(() => null);
     const now = new Date().toISOString();
