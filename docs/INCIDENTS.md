@@ -6,6 +6,16 @@ How to read the **Detected by** line: *monitoring* means the system told us; *ma
 
 ---
 
+## 2026-11-15: "Delete my account" always failed after the move to Supabase (found in end-to-end testing)
+
+- **Impact:** every attempt to delete an account showed "Couldn't delete your account" and kept all data. Real users affected: none (no sign-ups yet), but the deploy a week earlier shipped it, and it breaks the promise on the settings page.
+- **Detected by:** manual, in the end-to-end test: signed in as the throwaway test user and deleted it.
+- **Root cause:** the `delete_user_account` function also cleared `auth.email_otps`, a table from the previous backend that Supabase does not have. The unit tests mocked the database and the migration check never deleted a real user, so nothing exercised that line.
+- **Fix:** migration `20261115090000_fix-account-deletion.sql` removes the line; deleting the auth user already cascades to every personal table. Re-tested on the real database: the user, profile, matches, outreach and chats were all gone and the browser was signed out.
+- **Same session, related:** the daily-picks and nudges jobs ran every hour but never recorded a run, so the ops report showed a false BREACH for them. Both now record runs like the other jobs.
+- **Prevention:** not yet done: a check that deletes a real user in `scripts/check-migrations.sh`.
+- **Status:** fixed.
+
 ## 2026-11-08: Culture summaries empty and chat replies cut off mid-sentence (found in end-to-end testing)
 
 - **Impact:** asking Maya about a well-known company (Monzo) returned "couldn't find enough public information", and a long reply stopped mid-sentence. Real users affected: none.

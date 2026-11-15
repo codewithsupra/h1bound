@@ -8,6 +8,7 @@ import { pickMessage } from "@/lib/telegram";
 import { chatIdOf, sendText, telegramConfigured } from "@/lib/server/telegram";
 import { sendEmail } from "@/lib/server/email";
 import { SITE_NAME } from "@/lib/site";
+import { trackRun } from "@/lib/server/ops";
 
 export const maxDuration = 300;
 
@@ -23,10 +24,20 @@ type Candidate = {
  */
 export async function POST(req: NextRequest) {
   if (req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  try {
+    // Recorded like the other jobs, so the ops report can tell "ran with nobody to send to" from "never ran".
+    const out = await trackRun("daily-picks", {}, () => run(req), (r) => ({ jobs: r.picks, failed: r.failed, boards: r.candidates, stats: r }));
+    return NextResponse.json(out);
+  } catch (e) {
+    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+  }
+}
+
+async function run(req: NextRequest) {
   const db = adminDb();
   const app = process.env.NEXT_PUBLIC_APP_URL ?? req.nextUrl.origin;
   const { data, error } = await db.rpc("daily_pick_candidates");
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) throw new Error(error.message);
   const now = Date.now();
   const ignoreHour = req.nextUrl.searchParams.get("all") === "1";
   const candidates = ((data ?? []) as Candidate[]).filter((c) => ignoreHour || c.picks_hour === undefined || localHour(now, c.timezone ?? "Europe/London") === c.picks_hour);
@@ -70,5 +81,5 @@ export async function POST(req: NextRequest) {
       failed++;
     }
   }
-  return NextResponse.json({ candidates: candidates.length, users, picks, failed });
+  return { candidates: candidates.length, users, picks, failed };
 }

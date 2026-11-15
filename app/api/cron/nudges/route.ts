@@ -3,6 +3,7 @@ import { adminDb } from "@/lib/supabase/admin";
 import { chooseNudge, nudgeCopy, type NudgeKind } from "@/lib/nudge";
 import { FREE_LIMITS } from "@/lib/quota";
 import { sendEmail } from "@/lib/server/email";
+import { trackRun } from "@/lib/server/ops";
 
 export const maxDuration = 300;
 
@@ -11,11 +12,20 @@ type Candidate = { user_id: string; email: string; first_name: string | null; un
 /** Daily, via the scheduled workflow with `Authorization: Bearer ${CRON_SECRET}`. Opted-in users only. */
 export async function POST(req: NextRequest) {
   if (req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  try {
+    const out = await trackRun("nudges", {}, () => run(req), (r) => ({ jobs: r.sent, boards: r.candidates, stats: r }));
+    return NextResponse.json(out);
+  } catch (e) {
+    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+  }
+}
+
+async function run(req: NextRequest) {
   const db = adminDb();
   const app = process.env.NEXT_PUBLIC_APP_URL ?? req.nextUrl.origin;
   await db.rpc("expire_guest_sessions"); // housekeeping: guest previews live 7 days
   const { data, error } = await db.rpc("nudge_candidates");
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) throw new Error(error.message);
 
   let sent = 0;
   for (const c of (data ?? []) as Candidate[]) {
@@ -36,5 +46,5 @@ export async function POST(req: NextRequest) {
       sent++;
     }
   }
-  return NextResponse.json({ candidates: (data ?? []).length, sent });
+  return { candidates: (data ?? []).length, sent };
 }

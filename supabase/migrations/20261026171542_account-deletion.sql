@@ -7,16 +7,9 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = ''
 AS $$
-DECLARE
-  v_email text;
 BEGIN
-  SELECT email INTO v_email FROM auth.users WHERE id = p_user;
-  IF NOT FOUND THEN
-    RETURN false;
-  END IF;
-  DELETE FROM auth.email_otps WHERE lower(email) = lower(v_email);
   DELETE FROM auth.users WHERE id = p_user;
-  RETURN true;
+  RETURN FOUND;
 END;
 $$;
 REVOKE ALL ON FUNCTION public.delete_user_account(uuid) FROM PUBLIC, anon, authenticated;
