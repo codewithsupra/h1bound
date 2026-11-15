@@ -6,6 +6,7 @@
 import { isUsLocation, jdSponsorship, type JdSponsorship } from "../jd-signals";
 import { countriesIn, remoteScope, type RemoteScope } from "../geo";
 import { seniority, type Seniority } from "../titles";
+import { fromAshbyCompensation, fromGreenhousePay, fromLeverSalary, fromRecruiteeSalary, parseSalaryText, type Salary } from "../salary";
 
 export type AtsKind = "greenhouse" | "lever" | "ashby" | "recruitee";
 /** Aggregated remote-job feeds; every job from them is shown with a credit link to the source. */
@@ -30,6 +31,8 @@ export type NormalizedJob = {
   /** Where a remote job can be done from; null for on-site jobs. */
   remoteScope: RemoteScope | null;
   seniority: Seniority;
+  /** Posted pay: the board's own salary field when it has one, else read from the description. */
+  salary: Salary | null;
 };
 
 const MAX_DESC = 12_000;
@@ -49,7 +52,7 @@ export function htmlToText(html: string): string {
     .join("\n");
 }
 
-type Raw = Omit<NormalizedJob, "jdSponsorship" | "isUs" | "country" | "remoteScope" | "seniority"> & { country?: string | null };
+type Raw = Omit<NormalizedJob, "jdSponsorship" | "isUs" | "country" | "remoteScope" | "seniority" | "salary"> & { country?: string | null; salary?: Salary | null };
 
 export function finish(j: Raw): NormalizedJob {
   const description = j.description.slice(0, MAX_DESC);
@@ -59,6 +62,7 @@ export function finish(j: Raw): NormalizedJob {
   return {
     ...j, title: j.title.trim(), description, jdSponsorship: jdSponsorship(description), isUs,
     country, remoteScope: j.remote ? remoteScope(j.location) : null, seniority: seniority(j.title),
+    salary: j.salary ?? parseSalaryText(description),
   };
 }
 
@@ -70,16 +74,17 @@ export function keepJob(j: NormalizedJob): boolean {
   return j.remote && (j.remoteScope === "anywhere" || j.remoteScope === "europe");
 }
 
-type GhJob = { id: number | string; title: string; absolute_url: string; location?: { name?: string }; content?: string; first_published?: string; updated_at?: string; company_name?: string };
+type GhJob = { id: number | string; title: string; absolute_url: string; location?: { name?: string }; content?: string; first_published?: string; updated_at?: string; company_name?: string; pay_input_ranges?: { min_cents?: number; max_cents?: number; currency_type?: string }[] };
 export function fromGreenhouse(board: string, company: string, j: GhJob): NormalizedJob {
   const location = j.location?.name ?? "";
   return finish({
     source: "greenhouse", sourceId: `${board}:${j.id}`, board, company: j.company_name || company, title: j.title, location,
     remote: /remote/i.test(location), url: j.absolute_url, description: htmlToText(j.content ?? ""), postedAt: j.first_published ?? j.updated_at ?? null,
+    salary: fromGreenhousePay(j.pay_input_ranges),
   });
 }
 
-type LeverJob = { id: string; text: string; hostedUrl: string; categories?: { location?: string; commitment?: string }; workplaceType?: string; createdAt?: number; descriptionPlain?: string; additionalPlain?: string; lists?: { text: string; content: string }[] };
+type LeverJob = { id: string; text: string; hostedUrl: string; categories?: { location?: string; commitment?: string }; workplaceType?: string; createdAt?: number; descriptionPlain?: string; additionalPlain?: string; lists?: { text: string; content: string }[]; salaryRange?: { min?: number; max?: number; currency?: string; interval?: string } };
 export function fromLever(board: string, company: string, j: LeverJob): NormalizedJob {
   const location = j.categories?.location ?? "";
   const lists = (j.lists ?? []).map((l) => `${l.text}\n${htmlToText(l.content)}`).join("\n");
@@ -87,21 +92,23 @@ export function fromLever(board: string, company: string, j: LeverJob): Normaliz
     source: "lever", sourceId: `${board}:${j.id}`, board, company, title: j.text, location,
     remote: j.workplaceType === "remote" || /remote/i.test(location), url: j.hostedUrl,
     description: [j.descriptionPlain, lists, j.additionalPlain].filter(Boolean).join("\n"), postedAt: j.createdAt ? new Date(j.createdAt).toISOString() : null,
+    salary: fromLeverSalary(j.salaryRange),
   });
 }
 
-type AshbyJob = { id: string; title: string; jobUrl: string; location?: string; isRemote?: boolean; workplaceType?: string; publishedAt?: string; descriptionPlain?: string; isListed?: boolean };
+type AshbyJob = { id: string; title: string; jobUrl: string; location?: string; isRemote?: boolean; workplaceType?: string; publishedAt?: string; descriptionPlain?: string; isListed?: boolean; compensation?: Parameters<typeof fromAshbyCompensation>[0] };
 export function fromAshby(board: string, company: string, j: AshbyJob): NormalizedJob {
   const location = j.location ?? "";
   return finish({
     source: "ashby", sourceId: `${board}:${j.id}`, board, company, title: j.title, location,
     remote: Boolean(j.isRemote) || j.workplaceType === "Remote", url: j.jobUrl, description: j.descriptionPlain ?? "", postedAt: j.publishedAt ?? null,
+    salary: fromAshbyCompensation(j.compensation),
   });
 }
 
 type RecruiteeOffer = {
   id: number; title: string; careers_url: string; location?: string; city?: string; country_code?: string; remote?: boolean;
-  description?: string; requirements?: string; published_at?: string; company_name?: string; status?: string;
+  description?: string; requirements?: string; published_at?: string; company_name?: string; status?: string; salary?: Parameters<typeof fromRecruiteeSalary>[0];
 };
 export function fromRecruitee(board: string, company: string, j: RecruiteeOffer): NormalizedJob {
   const location = j.location || [j.city, j.country_code].filter(Boolean).join(", ");
@@ -112,13 +119,14 @@ export function fromRecruitee(board: string, company: string, j: RecruiteeOffer)
     description: [htmlToText(j.description ?? ""), htmlToText(j.requirements ?? "")].filter(Boolean).join("\n"),
     postedAt: j.published_at ? new Date(j.published_at.replace(" UTC", "Z").replace(" ", "T")).toISOString() : null,
     country: code === "UK" ? "GB" : code,
+    salary: fromRecruiteeSalary(j.salary),
   });
 }
 
 export const BOARD_URL: Record<AtsKind, (board: string) => string> = {
-  greenhouse: (b) => `https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(b)}/jobs?content=true`,
+  greenhouse: (b) => `https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(b)}/jobs?content=true&pay_transparency=true`,
   lever: (b) => `https://api.lever.co/v0/postings/${encodeURIComponent(b)}?mode=json`,
-  ashby: (b) => `https://api.ashbyhq.com/posting-api/job-board/${encodeURIComponent(b)}`,
+  ashby: (b) => `https://api.ashbyhq.com/posting-api/job-board/${encodeURIComponent(b)}?includeCompensation=true`,
   recruitee: (b) => `https://${encodeURIComponent(b)}.recruitee.com/api/offers/`,
 };
 

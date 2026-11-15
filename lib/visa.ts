@@ -95,12 +95,14 @@ export function licenceLine(l: LicenceProof): string {
 }
 
 /**
- * Salary floors that change most years. Kept here with their source so Maya can mention them as
- * guidance; not used to hide jobs, because few postings state a salary.
+ * Salary floors that change most years, with their source. Checked 2026-11-15 against each page.
+ * Used by lib/salary.ts to check posted pay; a job with no posted pay is never hidden for it.
+ * NL amounts change every 1 January; IE rose on 1 March 2026; UK last changed July 2025.
  */
 export const SALARY_FLOORS = {
-  GB: { year: 2025, general: 41_700, newEntrant: 33_400, unit: "GBP/year", source: "https://www.gov.uk/skilled-worker-visa/your-job" },
-  NL: { year: 2025, over30: 5_688, under30: 4_171, recentGraduate: 2_989, unit: "EUR/month gross", source: "https://ind.nl/en/required-amounts-income-requirements" },
+  GB: { year: 2026, general: 41_700, newEntrant: 33_400, unit: "GBP/year", source: "https://www.gov.uk/skilled-worker-visa/when-you-can-be-paid-less" },
+  NL: { year: 2026, over30: 5_942, under30: 4_357, recentGraduate: 3_122, unit: "EUR/month gross", source: "https://ind.nl/en/required-amounts-income-requirements" },
+  IE: { year: 2026, general: 36_605, criticalSkills: 40_904, criticalSkillsRecentGraduate: 36_848, unit: "EUR/year", source: "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/permit-types/general-employment-permit/" },
 } as const;
 
 /**

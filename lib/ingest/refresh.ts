@@ -28,6 +28,7 @@ export function toRow(j: NormalizedJob, link: JobLink, now: string) {
     source: j.source, source_id: j.sourceId, company_id: link.companyId, licence_id: link.licenceId, licence_match: link.licenceId ? link.licenceMatch ?? null : null, company: prettyCompany(j.company), title: j.title,
     family: titleFamily(j.title), location: j.location, remote: j.remote, is_us: j.isUs, country: j.country, remote_scope: j.remoteScope,
     seniority: j.seniority, url: j.url, description: j.description.slice(0, j.isUs ? DESCRIPTION_CAP.us : DESCRIPTION_CAP.market), posted_at: j.postedAt, jd_sponsorship: j.jdSponsorship, active: true, last_seen: now,
+    salary_min: j.salary?.min ?? null, salary_max: j.salary?.max ?? null, salary_currency: j.salary?.currency ?? null, salary_period: j.salary?.period ?? null,
   };
 }
 
