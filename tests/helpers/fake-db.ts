@@ -50,6 +50,7 @@ export function createFakeDb(seed: Record<string, Row[]> = {}) {
     not(col: string, _op: string, v: unknown) { return this.where(`${col} not is ${String(v)}`, (r) => (v === null ? r[col] != null : r[col] !== v)); }
     in(col: string, vs: unknown[]) { return this.where(`${col} in`, (r) => vs.includes(r[col])); }
     gte(col: string, v: unknown) { return this.where(`${col}>=`, (r) => String(r[col]) >= String(v)); }
+    gt(col: string, v: unknown) { return this.where(`${col}>`, (r) => String(r[col]) > String(v)); }
     lt(col: string, v: unknown) { return this.where(`${col}<`, (r) => String(r[col]) < String(v)); }
     ilike() { return this; }
     or() { return this; }

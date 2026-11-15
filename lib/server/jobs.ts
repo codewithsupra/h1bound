@@ -13,6 +13,7 @@ import { isMarketProfile, jobVisaFit, MARKET_NAME, MARKETS, remoteRight, visaBad
 import { SOURCE_CREDIT } from "@/lib/ingest/feeds";
 import { FAMILY_LABEL } from "@/lib/titles";
 import { rerank } from "./rerank";
+import { salaryCheck, type SalaryCheck } from "@/lib/salary";
 
 export type JobCard = {
   id: string;
@@ -30,6 +31,10 @@ export type JobCard = {
   gap?: string | null;
   /** Credit for aggregated feeds, required by their terms. */
   via?: { name: string; url: string } | null;
+  /** On a sponsor register with a confirmed link, for someone who needs a sponsor there. */
+  sponsored?: boolean;
+  /** Posted pay against the visa salary floor; only computed when asked (paid digests). */
+  salary?: SalaryCheck | null;
 };
 
 type JobRow = { id: string; title: string; company: string; company_id: string | null; location: string; remote: boolean; url: string; description: string; posted_at: string | null; jd_sponsorship: JdSponsorship; family: string };
@@ -67,7 +72,17 @@ export type FindResult = { cards: JobCard[]; blocked: number; poolSize: number }
  * Ranks fresh, unseen US jobs for this user or guest and records the ones shown (which is what
  * counts against the free quota). Nobody gets more than their remaining allowance.
  */
-export type FindOpts = { count: number; remoteOnly?: boolean; keyword?: string; country?: string; resume?: string };
+export type FindOpts = {
+  count: number; remoteOnly?: boolean; keyword?: string; country?: string; resume?: string;
+  /** Digest: only jobs first seen after this time. */
+  since?: string | null;
+  /** Digest: for someone who needs sponsorship, only employers with a confirmed register link. */
+  sponsorOnly?: boolean;
+  /** Paid digest: attach the salary check, and leave out jobs whose posted pay is under the floor. */
+  salary?: boolean;
+  /** Count what would match without showing, recording or re-ranking anything (free plan out of jobs). */
+  peek?: boolean;
+};
 
 export async function findJobs(store: Store, row: ProfileRow, pro: boolean, usage: Usage, opts: FindOpts): Promise<FindResult> {
   if (isMarketProfile(row) || opts.country || !row.visa_status) return findMarketJobs(store, row, pro, usage, opts);
@@ -123,7 +138,10 @@ function diversify<S extends Scored>(ranked: S[], byJob: Map<string, { company: 
   });
 }
 
-type MarketJobRow = JobRow & { country: string | null; remote_scope: string | null; licence_id: string | null; licence_match: LinkMatch | null; source: string; seniority: string | null };
+type MarketJobRow = JobRow & {
+  country: string | null; remote_scope: string | null; licence_id: string | null; licence_match: LinkMatch | null; source: string; seniority: string | null;
+  salary_min: number | null; salary_max: number | null; salary_currency: string | null; salary_period: "year" | "month" | "day" | "hour" | null;
+};
 type LicenceRow = { id: string; country: Market; rating: string | null; routes: string[]; permits: Record<string, number> };
 
 export async function licencesById(ids: string[]): Promise<Map<string, LicenceProof>> {
@@ -153,11 +171,12 @@ async function findMarketJobs(store: Store, row: ProfileRow, pro: boolean, usage
   const wanted = opts.country && (MARKETS as string[]).includes(opts.country) ? [opts.country] : (row.target_countries ?? []).filter((c) => (MARKETS as string[]).includes(c));
   const targets = wanted.length ? wanted : row.visa_country && (MARKETS as string[]).includes(row.visa_country) ? [row.visa_country] : MARKETS;
 
-  let q = db().from("jobs").select("id,title,company,company_id,location,remote,url,description,posted_at,jd_sponsorship,family,country,remote_scope,licence_id,licence_match,source,seniority").eq("active", true);
+  let q = db().from("jobs").select("id,title,company,company_id,location,remote,url,description,posted_at,jd_sponsorship,family,country,remote_scope,licence_id,licence_match,source,seniority,salary_min,salary_max,salary_currency,salary_period").eq("active", true);
   q = opts.country ? q.eq("country", opts.country) : q.or(`country.in.(${targets.join(",")}),remote_scope.in.(anywhere,europe)`);
   if (row.target_families.length) q = q.in("family", row.target_families);
   if (opts.remoteOnly || row.wants_remote === "remote") q = q.eq("remote", true);
   if (row.years_experience < 3) q = q.neq("seniority", "senior");
+  if (opts.since) q = q.gt("first_seen", opts.since);
   for (const word of keywordTerms(opts.keyword)) q = q.ilike("title", `%${word}%`);
   const { data, error } = await q.order("posted_at", { ascending: false, nullsFirst: false }).limit(800);
   if (error) throw new Error(error.message);
@@ -167,7 +186,7 @@ async function findMarketJobs(store: Store, row: ProfileRow, pro: boolean, usage
   const licences = await licencesById(pool.map((j) => j.licence_id ?? ""));
   const byJob = new Map(pool.map((j) => [j.id, j]));
 
-  const visaOf = new Map<string, { badge: SponsorBadge }>();
+  const visaOf = new Map<string, { badge: SponsorBadge; sponsored: boolean; salary: SalaryCheck | null }>();
   const scored: Scored[] = [];
   for (const j of pool) {
     const market = (MARKETS as string[]).includes(j.country ?? "") ? (j.country as Market) : null;
@@ -176,13 +195,21 @@ async function findMarketJobs(store: Store, row: ProfileRow, pro: boolean, usage
     const licence = proof ? { ...proof, match: j.licence_match } : null;
     const fit = jobVisaFit(market ?? "NL", right, licence, j.jd_sponsorship);
     if (fit === "blocked") continue;
+    const sponsored = right !== "free" && fit === "ok_licensed";
+    if (opts.sponsorOnly && right !== "free" && !sponsored) continue;
+    // The floor matters to anyone who'll need sponsoring there, now or after a post-study visa.
+    const pay = opts.salary && right !== "free" && market
+      ? salaryCheck(j.salary_min != null && j.salary_currency && j.salary_period ? { min: Number(j.salary_min), max: j.salary_max != null ? Number(j.salary_max) : null, currency: j.salary_currency, period: j.salary_period } : null, market, profile.work?.visaSituation ?? null)
+      : null;
+    if (pay?.status === "below") continue;
     const reason = right !== "free" && licence && fit === "ok_licensed" ? licenceReason(licence) : null;
     const lite: JobLite = { id: j.id, title: j.title, company: j.company, location: j.location, remote: j.remote, description: j.description, postedAt: j.posted_at, jdSponsorship: j.jd_sponsorship };
     scored.push(scoreJob(lite, profile, null, Date.now(), { fit, right, reason }));
-    visaOf.set(j.id, { badge: visaBadge(fit, right, market, licence, j.remote) });
+    visaOf.set(j.id, { badge: visaBadge(fit, right, market, licence, j.remote), sponsored, salary: pay });
   }
   scored.sort((a, b) => b.score - a.score || a.job.id.localeCompare(b.job.id));
   const diverse = diversify(scored, byJob);
+  if (opts.peek) return { cards: [], blocked: 0, poolSize: diverse.length };
 
   // The model only judges the top of the list: enough to choose `count` well, cheap enough per call.
   const head = diverse.slice(0, Math.max(opts.count * 4, 16));
@@ -203,7 +230,7 @@ async function findMarketJobs(store: Store, row: ProfileRow, pro: boolean, usage
     return {
       id: j.id, title: j.title, company: j.company, location: j.location, remote: j.remote, url: j.url, postedAt: j.posted_at,
       score: s.score, reasons: s.reasons, badge: visaOf.get(j.id)!.badge, why: s.why ?? null, gap: s.gap ?? null,
-      via: SOURCE_CREDIT[j.source] ?? null,
+      via: SOURCE_CREDIT[j.source] ?? null, sponsored: visaOf.get(j.id)!.sponsored, salary: visaOf.get(j.id)!.salary,
     };
   });
   return { cards, blocked, poolSize: ordered.length };

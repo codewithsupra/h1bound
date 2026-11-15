@@ -1,8 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { adminDb } from "@/lib/supabase/admin";
 import { storeForUser } from "@/lib/server/store";
-import { findJobs } from "@/lib/server/jobs";
-import { localHour, picksEmail, picksToday } from "@/lib/picks";
+import { findJobs, type JobCard } from "@/lib/server/jobs";
+import { localHour, picksToday } from "@/lib/picks";
+import { digestDue, digestEmail, visaCountdown, FREE_DIGEST_JOBS } from "@/lib/digest";
 import { hasPaidPlan } from "@/lib/server/growth";
 import { pickMessage } from "@/lib/telegram";
 import { chatIdOf, sendText, telegramConfigured } from "@/lib/server/telegram";
@@ -18,9 +19,15 @@ type Candidate = {
 };
 
 /**
- * Daily picks (scheduled workflow, hourly, Bearer CRON_SECRET): the best new matches for each opted-in
- * user whose chosen delivery hour it is in their timezone, by Telegram and/or email. Each pick is
- * recorded as shown, so it counts like any match. `?all=1` ignores the hour (manual runs).
+ * The visa-clock digest (scheduled workflow, hourly, Bearer CRON_SECRET), at each opted-in user's
+ * chosen hour in their timezone, by Telegram and/or email:
+ * - Pro and trial: daily, the number of picks they chose, each with a check of its posted pay
+ *   against the visa salary floor (jobs known to pay under it are left out).
+ * - Free: weekly, up to 3 picks while the free allowance lasts; after that the digest still comes,
+ *   with the countdown and how many sponsor jobs matched, so the deadline stays in view.
+ * Only jobs first seen since the last digest, and for anyone who needs sponsoring, only employers
+ * with a confirmed register link. Picks are recorded as shown, so they count like any match.
+ * `?all=1` ignores the hour (manual runs).
  */
 export async function POST(req: NextRequest) {
   if (req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
@@ -33,6 +40,8 @@ export async function POST(req: NextRequest) {
   }
 }
 
+const WEEK = 7 * 86_400_000;
+
 async function run(req: NextRequest) {
   const db = adminDb();
   const app = process.env.NEXT_PUBLIC_APP_URL ?? req.nextUrl.origin;
@@ -42,10 +51,10 @@ async function run(req: NextRequest) {
   const ignoreHour = req.nextUrl.searchParams.get("all") === "1";
   const candidates = ((data ?? []) as Candidate[]).filter((c) => ignoreHour || c.picks_hour === undefined || localHour(now, c.timezone ?? "Europe/London") === c.picks_hour);
   const started = Date.now();
-  let users = 0, picks = 0, failed = 0;
+  let users = 0, picks = 0, countOnly = 0, failed = 0;
 
   for (const c of candidates) {
-    if (Date.now() - started > 250_000) break; // leave headroom; the rest get picks tomorrow
+    if (Date.now() - started > 250_000) break; // leave headroom; the rest get theirs next time
     try {
       // Only pick jobs we can actually deliver: picks count as shown the moment they're chosen.
       const chatId = telegramConfigured() && c.telegram_updates ? chatIdOf(c.telegram_chat_enc) : null;
@@ -54,32 +63,49 @@ async function run(req: NextRequest) {
       const store = await storeForUser(c.user_id, c.name);
       const [profile, pro, usage, paid] = await Promise.all([store.loadProfile(), store.isPro(), store.usage(), hasPaidPlan(c.user_id)]);
       if (!profile?.details?.resumeText) continue;
-      const count = picksToday({ pro, trial: pro && !paid, perDay: c.picks_per_day, jobsShown: usage.jobsShown, jobLimit: store.jobLimit, lastPickAt: c.last_pick ? Date.parse(c.last_pick) : null, now });
-      if (!count) continue;
-      const { cards } = await findJobs(store, profile.row, pro, usage, { count, resume: profile.details.resumeText });
-      if (!cards.length) continue;
+      const lastAt = c.last_pick ? Date.parse(c.last_pick) : null;
+      if (!digestDue({ paidOrTrial: pro, lastAt, now })) continue;
+
+      const base = { resume: profile.details.resumeText, since: new Date(lastAt ?? now - WEEK).toISOString(), sponsorOnly: true };
+      let cards: JobCard[] = [];
+      let hiddenCount = 0;
+      if (pro) {
+        const count = picksToday({ pro: true, trial: !paid, perDay: c.picks_per_day, jobsShown: usage.jobsShown, jobLimit: store.jobLimit, lastPickAt: null, now });
+        ({ cards } = await findJobs(store, profile.row, true, usage, { ...base, count, salary: true }));
+      } else {
+        const left = Math.max(0, store.jobLimit - usage.jobsShown);
+        if (left) ({ cards } = await findJobs(store, profile.row, false, usage, { ...base, count: Math.min(FREE_DIGEST_JOBS, left) }));
+        else hiddenCount = (await findJobs(store, profile.row, false, usage, { ...base, count: 0, peek: true })).poolSize;
+      }
+      const countdown = visaCountdown(profile.row, now);
+      // As the visa runs out, employers that can sponsor go first: only they can keep the student in the country.
+      if (countdown?.level === "urgent") cards = [...cards].sort((a, b) => Number(b.sponsored ?? false) - Number(a.sponsored ?? false));
+
+      const unsub = `${app}/u/${c.unsubscribe_token}`;
+      const mail = digestEmail({ firstName: store.firstName, paid: pro, countdown, jobs: cards, hiddenCount, appUrl: app, siteName: SITE_NAME, unsubscribeUrl: unsub });
+      if (!mail) continue;
 
       let delivered = false;
       if (chatId) {
-        await sendText(chatId, `Morning${store.firstName ? ` ${store.firstName}` : ""}! ${cards.length === 1 ? "Today's pick" : `Your ${cards.length} picks`}:`);
+        const hello = `${store.firstName ? `Hi ${store.firstName}! ` : ""}${countdown?.line ?? ""}`.trim();
+        if (hello) await sendText(chatId, hello);
         for (const card of cards) {
           const m = pickMessage(card, app);
           delivered = (await sendText(chatId, m.text, { reply_markup: m.reply_markup })) || delivered;
         }
+        if (hiddenCount) delivered = (await sendText(chatId, `${hiddenCount} new job${hiddenCount === 1 ? "" : "s"} at licensed sponsors matched you this week. Pro shows them all: ${app}/upgrade`)) || delivered;
         if (delivered) await db.from("nudge_log").insert({ user_id: c.user_id, kind: "daily_picks", channel: "telegram" });
       }
       if (canEmail && !delivered) {
-        const unsub = `${app}/u/${c.unsubscribe_token}`;
-        const mail = picksEmail(store.firstName, cards, app, SITE_NAME, unsub);
         if (await sendEmail(c.email, mail.subject, mail.text, unsub, `${app}/api/unsubscribe/${c.unsubscribe_token}`)) {
           delivered = true;
           await db.from("nudge_log").insert({ user_id: c.user_id, kind: "daily_picks", channel: "email" });
         }
       }
-      if (delivered) { users++; picks += cards.length; }
+      if (delivered) { users++; picks += cards.length; if (!cards.length) countOnly++; }
     } catch {
       failed++;
     }
   }
-  return { candidates: candidates.length, users, picks, failed };
+  return { candidates: candidates.length, users, picks, countOnly, failed };
 }

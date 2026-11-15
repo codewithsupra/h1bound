@@ -41,6 +41,7 @@ export const escapeHtml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, 
 export type Pick = {
   id: string; title: string; company: string; location: string; remote: boolean; url: string;
   badge: { label: string; detail: string }; why?: string | null;
+  salary?: { text: string } | null;
 };
 
 /** One pick as a Telegram HTML message with its buttons. Callback data stays under Telegram's 64-byte limit. */
@@ -49,6 +50,7 @@ export function pickMessage(p: Pick, appUrl: string) {
     `<b>${escapeHtml(p.title)}</b>`,
     `${escapeHtml(p.company)} · ${escapeHtml(p.remote ? "Remote" : p.location)}`,
     `${escapeHtml(p.badge.label)}: ${escapeHtml(p.badge.detail)}`,
+    ...(p.salary ? [`Pay check: ${escapeHtml(p.salary.text)}`] : []),
     ...(p.why ? [`Why it fits: ${escapeHtml(p.why)}`] : []),
   ];
   const ask = (q: string) => `${appUrl}/chat?ask=${encodeURIComponent(q)}`;
