@@ -8,23 +8,32 @@ import { licencesById } from "@/lib/server/jobs";
 import type { LinkMatch } from "@/lib/ingest/boards";
 import type { Contact } from "@/lib/server/hunter";
 import type { MatchStatus, PipelineRow } from "@/lib/pipeline";
+import { salaryCheck, type Period } from "@/lib/salary";
+import { MARKETS, workRight, type Market } from "@/lib/visa";
 
 const db = () => adminDb();
 
 type MatchRow = {
   job_id: string; score: number; why: string | null; status: MatchStatus; shown_at: string; status_at: string;
   notes_enc?: string | null; asked_reply_at?: string | null;
-  jobs: { title: string; company: string; location: string | null; country: string | null; remote: boolean; url: string; licence_id: string | null; licence_match?: LinkMatch | null } | null;
+  jobs: { title: string; company: string; location: string | null; country: string | null; remote: boolean; url: string; licence_id: string | null; licence_match?: LinkMatch | null;
+    salary_min?: number | null; salary_max?: number | null; salary_currency?: string | null; salary_period?: Period | null } | null;
 };
 type OutreachRow = { id: string; job_id: string; kind: "cold_email" | "follow_up"; sent_at: string | null; created_at: string; body_enc: string };
 type OutreachBody = { contact: Contact | null; email: string; senderName?: string | null };
 
-/** Everything on the student's board, newest first. Contacts and drafts are decrypted for the owner only. */
+/**
+ * Everything on the student's board, newest first. Contacts and drafts are decrypted for the owner
+ * only. Each job's pay check is worked out here, and sent to the browser only on a paid plan.
+ */
 export async function loadPipeline(userId: string): Promise<PipelineRow[]> {
-  const [m, o] = await Promise.all([
-    db().from("matches").select("*,jobs(title,company,location,country,remote,url,licence_id,licence_match)").eq("user_id", userId).order("status_at", { ascending: false }).limit(500),
+  const [m, o, profile, pro] = await Promise.all([
+    db().from("matches").select("*,jobs(title,company,location,country,remote,url,licence_id,licence_match,salary_min,salary_max,salary_currency,salary_period)").eq("user_id", userId).order("status_at", { ascending: false }).limit(500),
     db().from("outreach").select("id,job_id,kind,sent_at,created_at,body_enc").eq("user_id", userId).in("kind", ["cold_email", "follow_up"]).order("created_at", { ascending: false }).limit(1000),
+    loadProfile(userId),
+    isPro(userId),
   ]);
+  const work = { citizenship: profile?.row.citizenship ?? null, visaCountry: profile?.row.visa_country ?? null, visaSituation: profile?.row.visa_situation ?? null };
   const matches = ((m.data ?? []) as MatchRow[]).filter((r) => r.jobs);
   const outreach = (o.data ?? []) as OutreachRow[];
 
@@ -56,8 +65,20 @@ export async function loadPipeline(userId: string): Promise<PipelineRow[]> {
       draft: email ? { outreachId: email.id, followUpId: fu?.id ?? null, sentAt: email.sent_at, followUpSentAt: fu?.sent_at ?? null } : null,
       askedReplyAt: r.asked_reply_at ?? null,
       hasNote: Boolean(r.notes_enc),
+      pay: payFor(j, work, pro),
     };
   });
+}
+
+/** The salary check for one job: null when no visa floor applies to this person there. */
+function payFor(j: NonNullable<MatchRow["jobs"]>, work: Parameters<typeof workRight>[1], pro: boolean): PipelineRow["pay"] {
+  const market = (MARKETS as string[]).includes(j.country ?? "") ? (j.country as Market) : null;
+  if (!market || workRight(market, work) === "free") return null;
+  if (!pro) return "locked";
+  const posted = j.salary_min != null && j.salary_currency && j.salary_period
+    ? { min: Number(j.salary_min), max: j.salary_max != null ? Number(j.salary_max) : null, currency: j.salary_currency, period: j.salary_period }
+    : null;
+  return salaryCheck(posted, market, work.visaSituation);
 }
 
 export type JobDetail = {

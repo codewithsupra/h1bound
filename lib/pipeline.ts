@@ -3,6 +3,7 @@
  * board's sections, and the student's own reply numbers. Pure and client-safe.
  */
 import type { LicenceProof } from "@/lib/visa";
+import type { SalaryCheck } from "@/lib/salary";
 
 export type MatchStatus = "shown" | "saved" | "applied" | "emailed" | "replied" | "interview" | "offer" | "rejected" | "dismissed";
 
@@ -42,6 +43,8 @@ export type PipelineRow = {
   draft: { outreachId: string; followUpId: string | null; sentAt: string | null; followUpSentAt: string | null } | null;
   askedReplyAt: string | null;
   hasNote: boolean;
+  /** Posted pay against the visa floor; "locked" on the free plan; null when no floor applies. */
+  pay?: SalaryCheck | "locked" | null;
 };
 
 export type NextAction = "draft_ready" | "follow_up" | "ask_reply" | "respond" | "prep" | "write" | "waiting" | "none";

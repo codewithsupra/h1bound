@@ -8,6 +8,7 @@ import { signOut } from "@/app/actions/auth";
 import { InviteCard } from "@/components/growth/invite-card";
 import { TrialButton } from "@/components/growth/trial-button";
 import { PICKS_MAX, PICKS_MIN, TRIAL_PICKS } from "@/lib/picks";
+import { FREE_DIGEST_JOBS } from "@/lib/digest";
 import { Card, Row } from "./ui";
 
 type S = { signOff: string; emailTone: string; picksPerDay: number; picksHour: number; timezone: string; picksPaused: boolean; emailUpdates: boolean; telegramUpdates: boolean };
@@ -70,10 +71,10 @@ export function SettingsView({ s: initial, plan, connections, referral }: { s: S
             </Row>
           </Card>
 
-          <Card title="Daily picks" sub="Fresh jobs that fit you, each with register proof, delivered when you want them.">
+          <Card title="Visa clock digest" sub="Your visa countdown and new jobs at licensed sponsors, at the hour you choose.">
             <Row label="Send me picks">
               <div className="flex items-center justify-between gap-3">
-                <span>{s.picksPaused ? "Paused" : "Every day"}{noChannel && <span className="block text-xs text-sodium">Turn on email or Telegram below to receive them.</span>}</span>
+                <span>{s.picksPaused ? "Paused" : plan.paid || trial ? "Every day" : "Every week"}{noChannel && <span className="block text-xs text-sodium">Turn on email or Telegram below to receive them.</span>}</span>
                 <Toggle on={!s.picksPaused} onChange={(v) => apply({ picksPaused: !v }, v ? "Picks back on" : "Picks paused")} label="Daily picks" />
               </div>
             </Row>
@@ -87,7 +88,7 @@ export function SettingsView({ s: initial, plan, connections, referral }: { s: S
                 <span className="flex gap-1" aria-hidden>
                   {Array.from({ length: PICKS_MAX }, (_, i) => <span key={i} className={`h-2 w-2 rounded-full ${i < Math.min(s.picksPerDay, maxPicks) ? "bg-sodium" : i < s.picksPerDay ? "bg-sodium/30" : "bg-haze"}`} />)}
                 </span>
-                {!plan.paid && <span className="w-full text-xs text-mist">{trial ? `Your trial sends up to ${TRIAL_PICKS} a day.` : "Free accounts get 1 a day while matches last."} <Link href="/upgrade" className="text-sodium">Pro sends up to {PICKS_MAX}.</Link></span>}
+                {!plan.paid && <span className="w-full text-xs text-mist">{trial ? `Your trial sends up to ${TRIAL_PICKS} a day.` : `Free accounts get one a week, with up to ${FREE_DIGEST_JOBS} jobs while matches last.`} <Link href="/upgrade" className="text-sodium">Pro sends up to {PICKS_MAX} a day and checks each job&apos;s pay against the visa floor.</Link></span>}
               </div>
             </Row>
             <Row label="Arrives at">
@@ -160,7 +161,7 @@ function PlanCard({ plan }: { plan: Plan }) {
       </div>
       <p className="mt-3 font-display text-3xl font-bold">{plan.paid ? plan.price.replace("/month", "") : "Free"}<span className="text-base font-normal text-mist">{plan.paid ? " a month" : ""}</span></p>
       <p className="mt-1 text-sm text-mist">
-        {plan.paid ? "Renews monthly. Cancel any time." : plan.trialEndsAt ? `Until ${new Date(plan.trialEndsAt).toLocaleDateString("en-GB", { day: "numeric", month: "long" })}${plan.payments ? `, then ${plan.price}.` : ". Paid plans open soon; the trial just ends and nothing renews."}` : `Pro (${plan.price}${plan.payments ? "" : ", opening soon"}) gives up to ${PICKS_MAX} picks a day, hiring-manager contacts and drafted emails.`}
+        {plan.paid ? "Renews monthly. Cancel any time." : plan.trialEndsAt ? `Until ${new Date(plan.trialEndsAt).toLocaleDateString("en-GB", { day: "numeric", month: "long" })}${plan.payments ? `, then ${plan.price}.` : ". Paid plans open soon; the trial just ends and nothing renews."}` : `Pro (${plan.price}${plan.payments ? "" : ", opening soon"}) gives a daily digest of up to ${PICKS_MAX} jobs with each one's pay checked against the visa floor, hiring-manager contacts and drafted emails.`}
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
         {plan.paid ? <button onClick={manage} disabled={busy} className="btn-ghost !px-4 !py-1.5 text-sm">{busy ? "Opening…" : "Manage or cancel"}</button>

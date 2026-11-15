@@ -12,7 +12,8 @@ import { SITE_NAME } from "@/lib/site";
 export const metadata = { title: `Pro · ${SITE_NAME}` };
 
 const FEATURES: [string, string][] = [
-  ["Unlimited matches", "New sponsor jobs every morning, ranked for you."],
+  ["A daily visa-clock digest", "Your countdown and the new jobs at licensed sponsors every morning, each with its posted pay checked against the visa salary floor. Jobs paid under it are left out."],
+  ["Unlimited matches", "Every sponsor job that fits you, ranked, not just the first 10."],
   ["Cold emails that reach a person", "Maya finds the likely hiring manager or CTO and drafts a short email plus a follow-up. You send it from your own inbox."],
   ["Interview plans", "A 7-day prep plan for each job, including how to answer the sponsorship question."],
   ["Resume tailoring", "What to move, cut and rewrite for each posting, using only your real experience."],

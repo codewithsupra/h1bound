@@ -13,7 +13,7 @@ export function Pricing({ inviteJobs }: { inviteJobs: number }) {
           <p className="mt-4 font-display text-6xl font-semibold tracking-tight">$0</p>
           <p className="mt-1 text-mist">No card, no time limit.</p>
           <ul className="mt-8 space-y-3">
-            {["10 matched jobs, each checked against the sponsor registers", `${inviteJobs} more jobs for every friend you bring (up to 3)`, "CV reviews on 5 jobs", "Company culture summaries", "Chat with Maya, or try it without an account"].map((t) => (
+            {["10 matched jobs, each checked against the sponsor registers", `${inviteJobs} more jobs for every friend you bring (up to 3)`, "CV reviews on 5 jobs", "A weekly visa-clock digest: your countdown and new sponsor jobs", "Company culture summaries", "Chat with Maya, or try it without an account"].map((t) => (
               <li key={t} className="flex gap-3 text-moon/90"><Check />{t}</li>
             ))}
           </ul>
@@ -29,7 +29,7 @@ export function Pricing({ inviteJobs }: { inviteJobs: number }) {
             <p className="mt-4 font-display text-6xl font-semibold tracking-tight">€10<span className="text-xl font-normal text-mist">/month</span></p>
             <p className="mt-1 text-mist">$12 outside Europe, ₹399 in India. Cancel anytime.</p>
             <ul className="mt-8 space-y-3">
-              {["Unlimited matches and 3 picks every morning", "Hiring manager or founder found, email drafted", "Send from your own Gmail in one tap, with follow-ups", "Interview plan and CV tailoring for every job", "Unlimited CV reviews"].map((t) => (
+              {["A daily digest, with each job's pay checked against the visa salary floor", "Unlimited matches", "Hiring manager or founder found, email drafted", "Send from your own Gmail in one tap, with follow-ups", "Interview plan and CV tailoring for every job", "Unlimited CV reviews"].map((t) => (
                 <li key={t} className="flex gap-3 text-moon/90"><Check />{t}</li>
               ))}
             </ul>

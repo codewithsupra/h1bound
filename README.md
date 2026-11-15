@@ -19,7 +19,8 @@ How well each of these works is measured on frozen, hand-labeled sets, with a he
 - **Maya (chat):** an agent with tools for onboarding, job search, company sponsor checks, company culture summaries from public sources (cited, no Glassdoor scraping), CV review, cold-email drafting and interview prep.
 - **Workspace** (signed in): a pipeline as table or board, a job drawer with the register proof, the draft email, follow-ups and private notes, a profile ("Your case") with work rights per country, and a visa clock that puts sponsors first as a post-study visa nears its end.
 - **Gmail, on approval only:** the `gmail.send` scope only, so it cannot read your inbox. Each draft is reviewed, claimed atomically before sending so a double click cannot send twice, and follow-ups unlock 4 days after the first email.
-- **Daily picks** by email or Telegram, at the hour the user chooses.
+- **Visa-clock digest** by email or Telegram, at the hour the user chooses: a countdown to the end of their student or post-study visa, then the new jobs since last time at employers with a confirmed register link. Free: weekly. Pro: daily, with each job's posted pay checked against the visa salary floor (`lib/salary.ts`, `lib/digest.ts`).
+- **Salary check:** posted pay comes from the boards' own salary fields or a strict parser over the description, and is compared with the 2026 floors (UK Skilled Worker, Dutch highly skilled migrant, Irish employment permits), citing the official page. It says "meets", "below", "depends" (on age, or a range straddling the floor) or "not stated"; about 1 in 10 postings state pay at all.
 - **Matching:** deterministic scoring (skills, seniority, freshness, work rights) with an LLM re-rank that falls back to the deterministic order if it fails or times out.
 
 ## Data sources

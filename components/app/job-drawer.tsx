@@ -63,10 +63,12 @@ export function JobDrawer({ row, now, gmail, pro, urgent, onClose, onMove }: {
           </div>
 
           {row.licence ? (
-            <p className="rounded-xl border border-haze bg-night/50 p-3 text-sm">{licenceLine(row.licence)}.{urgent && canSponsor(row.licence) ? " Can sponsor you once your current visa ends." : ""}</p>
+            <p className="rounded-xl border border-haze bg-night/50 p-3 text-sm">{licenceLine(row.licence)}.{urgent && canSponsor(row.licence) ? " Licensed, so it could sponsor you when your current visa ends." : ""}</p>
           ) : (
             <p className="rounded-xl border border-haze bg-night/50 p-3 text-sm text-mist">{row.remote ? "Remote role: check they can hire in your country before applying." : "This employer isn't on the official sponsor register. Fine if you can work without a sponsor; otherwise ask before applying."}</p>
           )}
+
+          {row.pay && <PayCheck pay={row.pay} />}
 
           {row.why && (
             <section>
@@ -184,6 +186,28 @@ function SentEmail({ email, gmail, now }: { email: NonNullable<JobDetail["email"
           {state === "error" && <p className="mt-2 text-red">Gmail didn&apos;t accept it. Try again.</p>}
         </div>
       )}
+    </div>
+  );
+}
+
+const PAY_LABEL = { meets: "Pay meets the visa floor", below: "Pay is under the visa floor", depends: "Pay: it depends", unknown: "Pay not checked" } as const;
+const PAY_TONE = { meets: "text-green", below: "text-red", depends: "text-amber", unknown: "text-mist" } as const;
+
+/** Posted pay against the visa salary floor (Pro), or what Pro would check (free). */
+function PayCheck({ pay }: { pay: NonNullable<PipelineRow["pay"]> }) {
+  if (pay === "locked") {
+    return (
+      <p className="rounded-xl border border-haze bg-night/50 p-3 text-sm text-mist">
+        Sponsored jobs must pay a minimum salary. Pro checks this job&apos;s posted pay against it.{" "}
+        <a href="/upgrade" className="text-moon underline underline-offset-2">See Pro</a>
+      </p>
+    );
+  }
+  return (
+    <div className="rounded-xl border border-haze bg-night/50 p-3 text-sm">
+      <p className={`font-semibold ${PAY_TONE[pay.status]}`}>{PAY_LABEL[pay.status]}</p>
+      <p className="mt-1 text-moon/90">{pay.text}</p>
+      {pay.source && <a href={pay.source} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs text-mist underline underline-offset-2">Official salary rules</a>}
     </div>
   );
 }
