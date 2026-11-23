@@ -12,7 +12,7 @@ export const revalidate = 3600;
  * the static pages); 100+, 200+ and 300+ are the UK, Dutch and Irish register pages.
  */
 const PER_SITEMAP = 50_000;
-const STATIC = ["/", "/sponsors", "/opt-clock"];
+const STATIC = ["/", "/sponsors", "/sponsors/hiring", "/opt-clock"];
 const BASE = { GB: 100, NL: 200, IE: 300 } as const;
 
 /** Ids to use if the database can't be counted at build time: generous, and each one is simply empty if unused. */
