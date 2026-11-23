@@ -55,7 +55,9 @@ Scheduled in production (`.github/workflows/cron.yml` calls the cron routes with
 
 ## Plans
 
-Free: 10 matched jobs, CV reviews on 5 of them. Pro (the plan and its limits are in the code; **paid checkout is not live**: it ran on a managed Stripe integration that went away with the move to Supabase, and a direct Stripe integration is still to be built; the 7-day trial works) ($12 / €10 / ₹399 a month by country, 7-day trial): unlimited matches, up to 15 daily picks, hiring-manager contacts, drafted emails, interview plans and tailoring.
+Free: 10 matched jobs, CV reviews on 5 of them. Pro ($12 / €10 / ₹399 a month by country, 7-day no-card trial): a daily visa-clock digest with pay checks, unlimited matches, hiring-manager contacts, drafted emails, interview plans and tailoring.
+
+Payments are direct Stripe subscriptions (`lib/server/stripe.ts`): Checkout to subscribe, the customer portal to cancel or change card, and a signed webhook (`app/api/billing/webhook`) as the only thing that grants Pro. Each event re-reads the subscription from Stripe and is applied once. **Not live yet:** it needs Stripe keys, prices and the webhook configured, and stays hidden behind `NEXT_PUBLIC_PAYMENTS_LIVE` until tested end to end. Setup: [`docs/OPERATIONS.md`](docs/OPERATIONS.md#payments).
 
 ## Layout
 

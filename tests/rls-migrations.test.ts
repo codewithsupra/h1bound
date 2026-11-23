@@ -74,7 +74,7 @@ describe("migrations: database access rules", () => {
   });
 
   it("server-only data has no policy at all for browsers except a deny-all", () => {
-    for (const t of ["gmail_accounts", "sponsor_licences", "company_insights", "telegram_links", "job_runs", "board_failures", "ai_calls", "jobs", "companies", "guest_sessions", "waitlist"]) {
+    for (const t of ["gmail_accounts", "sponsor_licences", "company_insights", "telegram_links", "job_runs", "board_failures", "ai_calls", "jobs", "companies", "guest_sessions", "waitlist", "billing_customers", "billing_events"]) {
       const mine = policies.filter((p) => p.table === t);
       expect(mine.length, t).toBeGreaterThan(0);
       expect(mine.every((p) => p.using === "false"), t).toBe(true);
