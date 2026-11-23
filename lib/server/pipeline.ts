@@ -19,7 +19,7 @@ type MatchRow = {
   jobs: { title: string; company: string; location: string | null; country: string | null; remote: boolean; url: string; licence_id: string | null; licence_match?: LinkMatch | null;
     salary_min?: number | null; salary_max?: number | null; salary_currency?: string | null; salary_period?: Period | null } | null;
 };
-type OutreachRow = { id: string; job_id: string; kind: "cold_email" | "follow_up"; sent_at: string | null; created_at: string; body_enc: string };
+type OutreachRow = { id: string; job_id: string; kind: "cold_email" | "follow_up"; sent_at: string | null; created_at: string; body_enc: string; auto_send_at?: string | null };
 type OutreachBody = { contact: Contact | null; email: string; senderName?: string | null };
 
 /**
@@ -29,7 +29,7 @@ type OutreachBody = { contact: Contact | null; email: string; senderName?: strin
 export async function loadPipeline(userId: string): Promise<PipelineRow[]> {
   const [m, o, profile, pro] = await Promise.all([
     db().from("matches").select("*,jobs(title,company,location,country,remote,url,licence_id,licence_match,salary_min,salary_max,salary_currency,salary_period)").eq("user_id", userId).order("status_at", { ascending: false }).limit(500),
-    db().from("outreach").select("id,job_id,kind,sent_at,created_at,body_enc").eq("user_id", userId).in("kind", ["cold_email", "follow_up"]).order("created_at", { ascending: false }).limit(1000),
+    db().from("outreach").select("id,job_id,kind,sent_at,created_at,body_enc,auto_send_at").eq("user_id", userId).in("kind", ["cold_email", "follow_up"]).order("created_at", { ascending: false }).limit(1000),
     loadProfile(userId),
     isPro(userId),
   ]);
@@ -62,7 +62,7 @@ export async function loadPipeline(userId: string): Promise<PipelineRow[]> {
       score: r.score, why: r.why, status: r.status, statusAt: r.status_at, shownAt: r.shown_at,
       licence: j.licence_id && licences.get(j.licence_id) ? { ...licences.get(j.licence_id)!, match: j.licence_match ?? null } : null,
       contact,
-      draft: email ? { outreachId: email.id, followUpId: fu?.id ?? null, sentAt: email.sent_at, followUpSentAt: fu?.sent_at ?? null } : null,
+      draft: email ? { outreachId: email.id, followUpId: fu?.id ?? null, sentAt: email.sent_at, followUpSentAt: fu?.sent_at ?? null, followUpAutoAt: fu?.sent_at ? null : fu?.auto_send_at ?? null } : null,
       askedReplyAt: r.asked_reply_at ?? null,
       hasNote: Boolean(r.notes_enc),
       pay: payFor(j, work, pro),
@@ -85,7 +85,7 @@ export type JobDetail = {
   description: string;
   postedAt: string | null;
   note: string;
-  email: { outreachId: string; followUpId: string | null; text: string; followUp: string | null; to: string | null; sentAt: string | null; followUpSentAt: string | null } | null;
+  email: { outreachId: string; followUpId: string | null; text: string; followUp: string | null; to: string | null; sentAt: string | null; followUpSentAt: string | null; followUpAutoAt: string | null } | null;
 };
 
 /** The drawer's extra detail for one job: description, the owner's note and the full draft. */
@@ -93,11 +93,11 @@ export async function loadJobDetail(userId: string, jobId: string): Promise<JobD
   const [m, j, o] = await Promise.all([
     db().from("matches").select("*").eq("user_id", userId).eq("job_id", jobId).maybeSingle(),
     db().from("jobs").select("description,posted_at").eq("id", jobId).maybeSingle(),
-    db().from("outreach").select("id,kind,sent_at,body_enc").eq("user_id", userId).eq("job_id", jobId).in("kind", ["cold_email", "follow_up"]).order("created_at", { ascending: false }).limit(10),
+    db().from("outreach").select("id,kind,sent_at,body_enc,auto_send_at,auto_body_enc").eq("user_id", userId).eq("job_id", jobId).in("kind", ["cold_email", "follow_up"]).order("created_at", { ascending: false }).limit(10),
   ]);
   if (!m.data) return null;
   const match = m.data as { notes_enc?: string | null };
-  const rows = (o.data ?? []) as { id: string; kind: string; sent_at: string | null; body_enc: string }[];
+  const rows = (o.data ?? []) as { id: string; kind: string; sent_at: string | null; body_enc: string; auto_send_at?: string | null; auto_body_enc?: string | null }[];
   const first = rows.find((r) => r.kind === "cold_email");
   const fu = rows.find((r) => r.kind === "follow_up");
   const read = (r: typeof first) => { try { return r ? (JSON.parse(decrypt(r.body_enc)) as OutreachBody) : null; } catch { return null; } };
@@ -107,7 +107,7 @@ export async function loadJobDetail(userId: string, jobId: string): Promise<JobD
     description: (job?.description ?? "").slice(0, 6000),
     postedAt: job?.posted_at ?? null,
     note: match.notes_enc ? decrypt(match.notes_enc) : "",
-    email: first && body ? { outreachId: first.id, followUpId: fu?.id ?? null, text: body.email, followUp: read(fu)?.email ?? null, to: body.contact?.email ?? null, sentAt: first.sent_at, followUpSentAt: fu?.sent_at ?? null } : null,
+    email: first && body ? { outreachId: first.id, followUpId: fu?.id ?? null, text: body.email, followUp: fu?.auto_body_enc ? decrypt(fu.auto_body_enc) : read(fu)?.email ?? null, to: body.contact?.email ?? null, sentAt: first.sent_at, followUpSentAt: fu?.sent_at ?? null, followUpAutoAt: fu?.sent_at ? null : fu?.auto_send_at ?? null } : null,
   };
 }
 

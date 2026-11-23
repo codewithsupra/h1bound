@@ -4,6 +4,8 @@ import { storeForUser } from "@/lib/server/store";
 import { findJobs, type JobCard } from "@/lib/server/jobs";
 import { localHour, picksToday } from "@/lib/picks";
 import { digestDue, digestEmail, visaCountdown, FREE_DIGEST_JOBS } from "@/lib/digest";
+import { newSponsorsFor } from "@/lib/server/new-sponsors";
+import { newSponsorLine } from "@/lib/new-sponsors";
 import { hasPaidPlan } from "@/lib/server/growth";
 import { pickMessage } from "@/lib/telegram";
 import { chatIdOf, sendText, telegramConfigured } from "@/lib/server/telegram";
@@ -51,7 +53,7 @@ async function run(req: NextRequest) {
   const ignoreHour = req.nextUrl.searchParams.get("all") === "1";
   const candidates = ((data ?? []) as Candidate[]).filter((c) => ignoreHour || c.picks_hour === undefined || localHour(now, c.timezone ?? "Europe/London") === c.picks_hour);
   const started = Date.now();
-  let users = 0, picks = 0, countOnly = 0, failed = 0;
+  let users = 0, picks = 0, countOnly = 0, sponsorsShown = 0, failed = 0;
 
   for (const c of candidates) {
     if (Date.now() - started > 250_000) break; // leave headroom; the rest get theirs next time
@@ -77,12 +79,18 @@ async function run(req: NextRequest) {
         if (left) ({ cards } = await findJobs(store, profile.row, false, usage, { ...base, count: Math.min(FREE_DIGEST_JOBS, left) }));
         else hiddenCount = (await findJobs(store, profile.row, false, usage, { ...base, count: 0, peek: true })).poolSize;
       }
+      // Employers new on the register since the last digest (the registers update weekly, so mostly Mondays).
+      const r = profile.row;
+      const newSponsors = await newSponsorsFor({
+        work: { citizenship: r.citizenship ?? null, visaCountry: r.visa_country ?? null, visaSituation: r.visa_situation ?? null },
+        targetCountries: r.target_countries ?? [], families: r.target_families ?? [], cities: r.locations ?? [],
+      }, base.since, pro ? 5 : 3).catch(() => []);
       const countdown = visaCountdown(profile.row, now);
       // As the visa runs out, employers that can sponsor go first: only they can keep the student in the country.
       if (countdown?.level === "urgent") cards = [...cards].sort((a, b) => Number(b.sponsored ?? false) - Number(a.sponsored ?? false));
 
       const unsub = `${app}/u/${c.unsubscribe_token}`;
-      const mail = digestEmail({ firstName: store.firstName, paid: pro, countdown, jobs: cards, hiddenCount, appUrl: app, siteName: SITE_NAME, unsubscribeUrl: unsub });
+      const mail = digestEmail({ firstName: store.firstName, paid: pro, countdown, jobs: cards, hiddenCount, newSponsors, appUrl: app, siteName: SITE_NAME, unsubscribeUrl: unsub });
       if (!mail) continue;
 
       let delivered = false;
@@ -93,6 +101,7 @@ async function run(req: NextRequest) {
           const m = pickMessage(card, app);
           delivered = (await sendText(chatId, m.text, { reply_markup: m.reply_markup })) || delivered;
         }
+        if (newSponsors.length) delivered = (await sendText(chatId, `New on the sponsor register:\n${newSponsors.map(newSponsorLine).join("\n")}`)) || delivered;
         if (hiddenCount) delivered = (await sendText(chatId, `${hiddenCount} new job${hiddenCount === 1 ? "" : "s"} at licensed sponsors matched you this week. Pro shows them all: ${app}/upgrade`)) || delivered;
         if (delivered) await db.from("nudge_log").insert({ user_id: c.user_id, kind: "daily_picks", channel: "telegram" });
       }
@@ -102,10 +111,10 @@ async function run(req: NextRequest) {
           await db.from("nudge_log").insert({ user_id: c.user_id, kind: "daily_picks", channel: "email" });
         }
       }
-      if (delivered) { users++; picks += cards.length; if (!cards.length) countOnly++; }
+      if (delivered) { users++; picks += cards.length; sponsorsShown += newSponsors.length; if (!cards.length) countOnly++; }
     } catch {
       failed++;
     }
   }
-  return { candidates: candidates.length, users, picks, countOnly, failed };
+  return { candidates: candidates.length, users, picks, countOnly, sponsorsShown, failed };
 }

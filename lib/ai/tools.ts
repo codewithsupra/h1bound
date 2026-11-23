@@ -9,8 +9,7 @@ import { sponsorBadge } from "@/lib/sponsor";
 import { TITLE_FAMILIES, titleFamily } from "@/lib/titles";
 import { findJobs, loadJob, statsOf, companiesById } from "@/lib/server/jobs";
 import type { ProfilePatch, Store } from "@/lib/server/store";
-import { coldEmail, interviewPlan, reviewResume, tailorResume } from "@/lib/server/coach";
-import { findContact, linkedInSearch } from "@/lib/server/hunter";
+import { interviewPlan, reviewResume, tailorResume } from "@/lib/server/coach";
 import { referralInfo } from "@/lib/server/growth";
 import { emptyDetails } from "@/lib/server/profile";
 import { optStatus, optSummary } from "@/lib/opt";
@@ -19,8 +18,8 @@ import { licenceKey } from "@/lib/ingest/registers";
 import { licenceLine, MARKET_NAME, workRights, type Market } from "@/lib/visa";
 import { companyInsight } from "@/lib/server/insight";
 import { glassdoorLink } from "@/lib/insight";
-import { parseDraft } from "@/lib/email-draft";
-import { gmailAccount, gmailConfigured } from "@/lib/server/gmail";
+import { draftEmailForJob } from "@/lib/server/draft-email";
+import { LINKEDIN_PDF_STEPS, normalizeLinkedIn } from "@/lib/linkedin";
 
 const VISA = ["f1_opt", "f1_stem_opt", "f1_student", "h1b", "h4_ead", "outside_us", "citizen_or_gc", "other"] as const;
 const NO_SPONSOR_NEEDED = new Set(["citizen_or_gc", "h4_ead"]);
@@ -62,6 +61,7 @@ export function buildTools(store: Store) {
         wantsRemote: z.enum(["remote", "hybrid", "onsite", "any"]).optional(),
         locations: z.array(z.string().max(40)).max(6).optional().describe("Cities they prefer; empty = anywhere in their target countries"),
         onboardingComplete: z.boolean().optional().describe("true once citizenship, visa situation, target countries and target roles are known"),
+        linkedinUrl: z.string().max(300).optional().describe("Their LinkedIn profile link (linkedin.com/in/...), when they share it. It is saved, never opened."),
       }),
       execute: async (i) => {
         const p = await store.loadProfile();
@@ -77,13 +77,22 @@ export function buildTools(store: Store) {
         if (i.onboardingComplete) patch.onboarded = true;
         // Signed-in only: guest sessions have no visa clock (they set it on Your case after signing up).
         if (i.visaEndsOn && !guest) patch.visa_ends_on = i.visaEndsOn;
-        if (i.optEndDate || i.graduation) patch.details = { ...(p?.details ?? emptyDetails()), ...(i.optEndDate ? { optEndDate: i.optEndDate } : {}), ...(i.graduation ? { graduation: i.graduation } : {}) };
+        const linkedin = normalizeLinkedIn(i.linkedinUrl);
+        if (i.optEndDate || i.graduation || linkedin) {
+          const d = p?.details ?? emptyDetails();
+          patch.details = { ...d, ...(i.optEndDate ? { optEndDate: i.optEndDate } : {}), ...(i.graduation ? { graduation: i.graduation } : {}), ...(linkedin ? { links: { ...d.links, linkedin } } : {}) };
+        }
         await store.saveProfile(patch);
         const row = { ...p?.row, ...patch };
         const known = row.citizenship || row.visa_situation;
         // Echo where they can work freely vs need a sponsor, so Maya explains it correctly.
         const rights = known ? workRights({ citizenship: row.citizenship ?? null, visaCountry: row.visa_country ?? null, visaSituation: row.visa_situation ?? null }) : null;
-        return { saved: Object.keys(i), workRights: rights && Object.fromEntries(Object.entries(rights).map(([m, r]) => [MARKET_NAME[m as Market], r])) };
+        return {
+          saved: Object.keys(i).filter((k) => k !== "linkedinUrl" || linkedin),
+          workRights: rights && Object.fromEntries(Object.entries(rights).map(([m, r]) => [MARKET_NAME[m as Market], r])),
+          // LinkedIn pages aren't read (their terms forbid it); the profile comes in as LinkedIn's own PDF.
+          ...(i.linkedinUrl ? (linkedin ? { linkedinSaved: linkedin, ...(p?.details?.resumeText ? {} : { nextStep: LINKEDIN_PDF_STEPS }) } : { linkedinError: "That isn't a LinkedIn profile link (linkedin.com/in/...)." }) : {}),
+        };
       },
     }),
 
@@ -198,32 +207,12 @@ export function buildTools(store: Store) {
       inputSchema: z.object({ jobId: z.string().uuid() }),
       execute: async ({ jobId }) => {
         if (guest) return signUpFirst;
-        if (!canUse("cold_email", await store.isPro()).ok) return { proOnly: true, upsell: upsellLine("pro_only") };
-        const p = await needProfile();
-        if ("error" in p) return p;
-        const job = await shownJob(jobId);
-        if (!job) return { error: "unknown_job" };
-        const lookups = await store.contactLookupAllowed();
-        const contact = lookups ? await findContact(job.company, titleFamily(job.title)).catch(() => null) : null;
-        const email = await coldEmail(p.details, job, contact, { tone: p.row.email_tone, signOff: p.details.signOff });
-        const draft = parseDraft(email);
-        const senderName = p.details.name ?? store.firstName;
-        const save = async (kind: "cold_email" | "follow_up", body: unknown) => {
-          const { data } = await db().from("outreach").insert({ user_id: userId, job_id: jobId, kind, body_enc: encrypt(JSON.stringify(body)) }).select("id").single();
-          return (data as { id: string } | null)?.id ?? null;
-        };
-        const outreachId = await save("cold_email", { contact, email, senderName });
-        const followUpId = draft.followUp ? await save("follow_up", { contact, email: draft.followUp, senderName }) : null;
+        const r = await draftEmailForJob(store, userId, jobId);
+        if (!("draft" in r)) return r;
+        const { lookupsLeft, ...out } = r;
         return {
-          job: { title: job.title, company: job.company },
-          contact,
-          findContactYourself: contact ? null : linkedInSearch(job.company, "hiring manager"),
-          email,
-          draft,
-          outreachId,
-          followUpId,
-          gmail: (await gmailAccount(userId).catch(() => null)) ? "connected" : gmailConfigured() ? "not_connected" : "unavailable",
-          tip: lookups
+          ...out,
+          tip: lookupsLeft
             ? "Check the draft, then send it from your own Gmail with one tap, or copy it. Personal addresses are guesses with a confidence score, so double-check first."
             : "Your trial includes 3 contact lookups and they're used up, so use the LinkedIn search to find the right person. Pro finds them for you.",
         };

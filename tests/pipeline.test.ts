@@ -22,6 +22,9 @@ describe("nextAction", () => {
     expect(nextAction(row({ status: "emailed", draft: draft({ sentAt: daysAgo(2) }) }), now)).toBe("waiting");
     expect(nextAction(row({ status: "emailed", draft: draft({ sentAt: daysAgo(4) }) }), now)).toBe("follow_up");
   });
+  it("a follow-up scheduled to send itself needs nothing from the student", () => {
+    expect(nextAction(row({ status: "emailed", draft: draft({ sentAt: daysAgo(4), followUpAutoAt: daysAgo(-1) }) }), now)).toBe("waiting");
+  });
   it("asks 'any reply?' a week after the last email, at most weekly", () => {
     const sent = draft({ sentAt: daysAgo(8), followUpSentAt: daysAgo(4) });
     expect(nextAction(row({ status: "emailed", draft: sent }), now)).toBe("ask_reply");

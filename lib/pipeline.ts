@@ -40,7 +40,7 @@ export type PipelineRow = {
   licence: LicenceProof | null;
   contact: { name: string | null; role: string | null; email: string | null } | null;
   /** The latest cold email Maya drafted for this job, and its follow-up. */
-  draft: { outreachId: string; followUpId: string | null; sentAt: string | null; followUpSentAt: string | null } | null;
+  draft: { outreachId: string; followUpId: string | null; sentAt: string | null; followUpSentAt: string | null; followUpAutoAt?: string | null } | null;
   askedReplyAt: string | null;
   hasNote: boolean;
   /** Posted pay against the visa floor; "locked" on the free plan; null when no floor applies. */
@@ -74,7 +74,8 @@ export function nextAction(r: Pick<PipelineRow, "status" | "statusAt" | "draft" 
   const sentAt = r.draft?.sentAt ?? null;
   if (sentAt) {
     const since = daysSince(sentAt, now);
-    if (r.draft?.followUpId && !r.draft.followUpSentAt && since >= FOLLOW_UP_DAYS) return "follow_up";
+    // A follow-up that sends itself needs nothing from the student.
+    if (r.draft?.followUpId && !r.draft.followUpSentAt && !r.draft.followUpAutoAt && since >= FOLLOW_UP_DAYS) return "follow_up";
     return since >= ASK_REPLY_DAYS && daysSince(r.askedReplyAt, now) >= ASK_REPLY_DAYS ? "ask_reply" : "waiting";
   }
   // Marked as emailed by hand: no tracked send, so check in a week after it was marked.

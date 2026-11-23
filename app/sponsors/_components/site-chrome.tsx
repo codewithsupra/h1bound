@@ -6,6 +6,7 @@ export function SiteHeader() {
   return (
     <SharedHeader>
       <Link href="/#board" className="hidden rounded-full px-3 py-2 text-mist transition-colors hover:text-moon sm:inline">Sponsor lookup</Link>
+      <Link href="/sponsors/hiring" className="hidden rounded-full px-3 py-2 text-mist transition-colors hover:text-moon sm:inline">Hiring now</Link>
       <Link href="/login" className="rounded-full px-3 py-2 text-mist transition-colors hover:text-moon">Sign in</Link>
       <Link href="/chat" className="btn-light !px-4 !py-2 text-sm">Try Maya</Link>
     </SharedHeader>

@@ -94,19 +94,30 @@ export async function disconnectGmail(userId: string) {
   await db().from("gmail_accounts").delete().eq("user_id", userId);
 }
 
-/** Sends one message from the user's own Gmail. Returns Gmail's message id. */
-export async function sendGmail(userId: string, m: Omit<Mime, "from">): Promise<{ id: string; from: string }> {
+/** A Message-ID for an email we send, so a later follow-up can reply to it (In-Reply-To). */
+export function newMessageId(fromEmail: string): string {
+  const domain = fromEmail.split("@")[1] ?? "mail.invalid";
+  return `<${randomBytes(12).toString("hex")}.${Date.now()}@${domain}>`;
+}
+
+/**
+ * Sends one message from the user's own Gmail. With `threadId` (and `inReplyTo`) it goes as a reply
+ * in that thread. Returns Gmail's message and thread ids and the Message-ID we set.
+ */
+export async function sendGmail(userId: string, m: Omit<Mime, "from" | "messageId"> & { threadId?: string | null }): Promise<{ id: string; threadId: string | null; messageId: string; from: string }> {
   const acct = await gmailAccount(userId);
   if (!acct) throw new Error("not_connected");
-  const raw = buildMime({ ...m, from: acct.email });
+  const messageId = newMessageId(acct.email);
+  const { threadId, ...mime } = m;
+  const raw = buildMime({ ...mime, from: acct.email, messageId });
   const { access_token } = await token({ refresh_token: acct.refreshToken, grant_type: "refresh_token" });
   const res = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
     method: "POST",
     headers: { authorization: `Bearer ${access_token}`, "content-type": "application/json" },
-    body: JSON.stringify({ raw }),
+    body: JSON.stringify(threadId ? { raw, threadId } : { raw }),
     signal: AbortSignal.timeout(15_000),
   });
-  const body = (await res.json()) as { id?: string; error?: { message?: string } };
+  const body = (await res.json()) as { id?: string; threadId?: string; error?: { message?: string } };
   if (!res.ok || !body.id) throw new Error(`gmail send: ${body.error?.message ?? res.status}`);
-  return { id: body.id, from: acct.email };
+  return { id: body.id, threadId: body.threadId ?? null, messageId, from: acct.email };
 }

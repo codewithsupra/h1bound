@@ -13,7 +13,10 @@ type Props = {
   onAsk: (text: string) => void;
 };
 
-type State = { kind: "idle" } | { kind: "sending" } | { kind: "sent"; from: string } | { kind: "error"; message: string };
+type State = { kind: "idle" } | { kind: "sending" } | { kind: "sent"; from: string; autoFollowUpAt?: string | null } | { kind: "error"; message: string };
+
+const FOLLOW_UP_DAYS = 4;
+const day = (iso: string) => new Date(iso).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
 
 const ERRORS: Record<string, string> = {
   not_connected: "Connect Gmail first.",
@@ -23,10 +26,10 @@ const ERRORS: Record<string, string> = {
   bad_request: "Check the address, subject and message.",
 };
 
-async function send(outreachId: string, to: string, subject: string, body: string): Promise<State> {
-  const res = await fetch("/api/outreach/send", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ outreachId, to, subject, body }) });
-  const out = (await res.json().catch(() => ({}))) as { ok?: boolean; from?: string; error?: string };
-  return out.ok ? { kind: "sent", from: out.from ?? "your Gmail" } : { kind: "error", message: ERRORS[out.error ?? ""] ?? "Something went wrong. Try again." };
+async function send(outreachId: string, to: string, subject: string, body: string, autoFollowUp?: string): Promise<State> {
+  const res = await fetch("/api/outreach/send", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ outreachId, to, subject, body, ...(autoFollowUp ? { autoFollowUp: { body: autoFollowUp } } : {}) }) });
+  const out = (await res.json().catch(() => ({}))) as { ok?: boolean; from?: string; error?: string; autoFollowUpAt?: string | null };
+  return out.ok ? { kind: "sent", from: out.from ?? "your Gmail", autoFollowUpAt: out.autoFollowUpAt ?? null } : { kind: "error", message: ERRORS[out.error ?? ""] ?? "Something went wrong. Try again." };
 }
 
 const field = "w-full rounded-xl border border-haze bg-night/60 px-3 py-2 text-sm outline-none focus:border-moon/40";
@@ -44,6 +47,11 @@ export function SendEmail({ outreachId, followUpId, draft, to: initialTo, gmail:
   const [body, setBody] = useState(draft.body);
   const [state, setState] = useState<State>({ kind: "idle" });
   const [fu, setFu] = useState<State>({ kind: "idle" });
+  // The follow-up is approved here, with the first email, or not at all; nothing sends that wasn't shown.
+  const canAuto = Boolean(followUpId && draft.followUp);
+  const [auto, setAuto] = useState(canAuto);
+  const [fuText, setFuText] = useState(draft.followUp ?? "");
+  const [fuDate] = useState(() => new Date(Date.now() + FOLLOW_UP_DAYS * 86_400_000).toISOString());
   const [copied, setCopied] = useState(false);
   const sent = state.kind === "sent";
 
@@ -65,7 +73,10 @@ export function SendEmail({ outreachId, followUpId, draft, to: initialTo, gmail:
 
       {sent ? (
         <div className="space-y-2">
-          <p className="text-sm">Sent from {state.from}. I&apos;ll help you follow up.</p>
+          <p className="text-sm">
+            Sent from {state.from}.{" "}
+            {state.autoFollowUpAt ? `Your follow-up goes out ${day(state.autoFollowUpAt)} in the same thread, unless you tell me they replied.` : "I'll help you follow up."}
+          </p>
           <div className="flex flex-wrap gap-2">
             <span className="text-sm text-mist">Did they reply?</span>
             <button onClick={() => onAsk(`They replied to my email about the ${job.title} role at ${job.company}!`)} className="rounded-full border border-haze px-3 py-1 text-sm hover:border-moon/30">Yes, they replied</button>
@@ -76,8 +87,8 @@ export function SendEmail({ outreachId, followUpId, draft, to: initialTo, gmail:
         <div className="flex flex-wrap items-center gap-2">
           {gmail === "connected" && (
             <button
-              onClick={async () => { setState({ kind: "sending" }); setState(await send(outreachId, to, subject, body)); }}
-              disabled={state.kind === "sending" || !to || !subject || !body}
+              onClick={async () => { setState({ kind: "sending" }); setState(await send(outreachId, to, subject, body, auto && fuText.trim() ? fuText.trim() : undefined)); }}
+              disabled={state.kind === "sending" || !to || !subject || !body || (auto && !fuText.trim())}
               className="btn-light !px-4 !py-1.5 text-sm disabled:opacity-60"
             >
               {state.kind === "sending" ? "Sending…" : "Send from my Gmail"}
@@ -97,7 +108,17 @@ export function SendEmail({ outreachId, followUpId, draft, to: initialTo, gmail:
         </div>
       )}
 
-      {draft.followUp && followUpId && (
+      {canAuto && !sent && gmail === "connected" && (
+        <div className="space-y-2 border-t border-haze pt-3">
+          <label className="flex items-start gap-2 text-sm">
+            <input type="checkbox" checked={auto} onChange={(e) => setAuto(e.target.checked)} className="mt-1 accent-[var(--sodium)]" />
+            <span>Also send this follow-up on {day(fuDate)}, in the same thread, if they haven&apos;t replied. <span className="text-mist">You can cancel it any time before then.</span></span>
+          </label>
+          {auto && <textarea value={fuText} onChange={(e) => setFuText(e.target.value)} rows={4} aria-label="Follow-up message" className={`${field} resize-y leading-relaxed`} />}
+        </div>
+      )}
+
+      {draft.followUp && followUpId && !(state.kind === "sent" && state.autoFollowUpAt) && !(canAuto && !sent && gmail === "connected") && (
         <details className="border-t border-haze pt-3">
           <summary className="cursor-pointer text-sm text-mist">Follow-up for 4–5 days later</summary>
           <p className="mt-2 whitespace-pre-wrap text-sm">{draft.followUp}</p>

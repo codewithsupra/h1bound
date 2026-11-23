@@ -29,6 +29,8 @@ vi.mock("@/lib/server/store", () => ({
 vi.mock("@/lib/server/growth", () => ({ hasPaidPlan: async () => paid }));
 vi.mock("@/lib/server/jobs", () => ({ findJobs: (...a: unknown[]) => findJobs(...a) }));
 vi.mock("@/lib/server/email", () => ({ sendEmail: (...a: unknown[]) => sendEmail(...a) }));
+const newSponsorsFor = vi.fn();
+vi.mock("@/lib/server/new-sponsors", () => ({ newSponsorsFor: (...a: unknown[]) => newSponsorsFor(...a) }));
 vi.mock("@/lib/server/telegram", () => ({ telegramConfigured: () => false, chatIdOf: () => null, sendText: vi.fn() }));
 
 process.env.CRON_SECRET = "s3cret";
@@ -50,6 +52,7 @@ beforeEach(() => {
   logged.length = 0;
   findJobs.mockReset().mockResolvedValue({ cards: [card("a", true)], blocked: 0, poolSize: 1 });
   sendEmail.mockReset().mockResolvedValue(true);
+  newSponsorsFor.mockReset().mockResolvedValue([]);
   pro = false; paid = false; jobsShown = 0;
   profileRow = { visa_ends_on: new Date(Date.now() + 60 * DAY).toISOString().slice(0, 10), visa_situation: "graduate", visa_country: "GB" };
 });
@@ -132,5 +135,22 @@ describe("visa-clock digest cron", () => {
     candidates[0].email_updates = false;
     await call();
     expect(findJobs).not.toHaveBeenCalled();
+  });
+
+  it("adds employers new on the register since the last digest, and sends for them alone", async () => {
+    findJobs.mockResolvedValue({ cards: [], blocked: 0, poolSize: 0 });
+    newSponsorsFor.mockResolvedValue([{ id: "s1", name: "Acme Robotics", country: "GB", city: "London", slug: "acme", firstListed: "2026-11-30", rating: "A", routes: ["Skilled Worker"], openRoles: 2 }]);
+    candidates[0].last_pick = new Date(Date.now() - 7 * DAY).toISOString();
+    const out = await (await call()).json();
+    expect(newSponsorsFor.mock.calls[0][1]).toBe(candidates[0].last_pick);
+    expect(newSponsorsFor.mock.calls[0][2]).toBe(3); // free plan
+    expect(sendEmail.mock.calls[0][2]).toContain("Acme Robotics: new on the UK sponsor register");
+    expect(out.sponsorsShown).toBe(1);
+  });
+
+  it("a failure finding new sponsors never blocks the digest", async () => {
+    newSponsorsFor.mockRejectedValue(new Error("db down"));
+    await call();
+    expect(sendEmail).toHaveBeenCalledTimes(1);
   });
 });

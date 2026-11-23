@@ -18,7 +18,10 @@ How well each of these works is measured on frozen, hand-labeled sets, with a he
 
 - **Maya (chat):** an agent with tools for onboarding, job search, company sponsor checks, company culture summaries from public sources (cited, no Glassdoor scraping), CV review, cold-email drafting and interview prep.
 - **Workspace** (signed in): a pipeline as table or board, a job drawer with the register proof, the draft email, follow-ups and private notes, a profile ("Your case") with work rights per country, and a visa clock that puts sponsors first as a post-study visa nears its end.
-- **Gmail, on approval only:** the `gmail.send` scope only, so it cannot read your inbox. Each draft is reviewed, claimed atomically before sending so a double click cannot send twice, and follow-ups unlock 4 days after the first email.
+- **Gmail, on approval only:** the `gmail.send` scope only, so it cannot read your inbox. Each draft is reviewed, claimed atomically before sending so a double click cannot send twice. The follow-up can be approved with the first email; it then sends itself 4 days later as a reply in the same Gmail thread, unless the student marks a reply or cancels (`lib/server/followups.ts`). We can't see replies, so the student's "they replied" is what stops it.
+- **Telegram:** daily picks, and draft, approve and send an email from the chat, through the same send path as the web app.
+- **New on the sponsor register:** the registers record when an employer first appears; the digest lists new sponsors where the student needs one, open roles in their field first (`lib/new-sponsors.ts`).
+- **Free public pages:** [Visa sponsors hiring now](https://h1bound.vercel.app/sponsors/hiring) with a CSV, and sourced, dated comparisons with other tools (`lib/compare.ts`).
 - **Visa-clock digest** by email or Telegram, at the hour the user chooses: a countdown to the end of their student or post-study visa, then the new jobs since last time at employers with a confirmed register link. Free: weekly. Pro: daily, with each job's posted pay checked against the visa salary floor (`lib/salary.ts`, `lib/digest.ts`).
 - **Salary check:** posted pay comes from the boards' own salary fields or a strict parser over the description, and is compared with the 2026 floors (UK Skilled Worker, Dutch highly skilled migrant, Irish employment permits), citing the official page. It says "meets", "below", "depends" (on age, or a range straddling the floor) or "not stated"; about 1 in 10 postings state pay at all.
 - **Matching:** deterministic scoring (skills, seniority, freshness, work rights) with an LLM re-rank that falls back to the deterministic order if it fails or times out.
@@ -51,7 +54,7 @@ npx tsx --env-file=.env.local scripts/refresh-jobs.mts [--feeds]           # pul
 npx tsx --env-file=.env.local scripts/ops-report.mts --since 2026-11-02 --until 2026-11-09   # runs, failures, staleness, AI cost
 ```
 
-Scheduled in production (`.github/workflows/cron.yml` calls the cron routes with `Authorization: Bearer $CRON_SECRET`; a failing run emails the repo owner): job refresh in 4 shards, remote feeds, weekly UK and NL registers, hourly daily-picks, nudges. Details and what to do when something breaks: [`docs/OPERATIONS.md`](docs/OPERATIONS.md). The US sponsor pages and OPT clock from the earlier H-1B version are kept for search traffic; their data comes from the DOL LCA importer (`scripts/import-lca.mts`).
+Scheduled in production (`.github/workflows/cron.yml` calls the cron routes with `Authorization: Bearer $CRON_SECRET`; a failing run emails the repo owner): job refresh in 4 shards, remote feeds, weekly UK and NL registers, job boards for new register entries (weekly), hourly digest, hourly follow-ups, nudges. Details and what to do when something breaks: [`docs/OPERATIONS.md`](docs/OPERATIONS.md). The US sponsor pages and OPT clock from the earlier H-1B version are kept for search traffic; their data comes from the DOL LCA importer (`scripts/import-lca.mts`).
 
 ## Plans
 
