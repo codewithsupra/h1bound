@@ -9,8 +9,7 @@ import { sponsorBadge } from "@/lib/sponsor";
 import { TITLE_FAMILIES, titleFamily } from "@/lib/titles";
 import { findJobs, loadJob, statsOf, companiesById } from "@/lib/server/jobs";
 import type { ProfilePatch, Store } from "@/lib/server/store";
-import { coldEmail, interviewPlan, reviewResume, tailorResume } from "@/lib/server/coach";
-import { findContact, linkedInSearch } from "@/lib/server/hunter";
+import { interviewPlan, reviewResume, tailorResume } from "@/lib/server/coach";
 import { referralInfo } from "@/lib/server/growth";
 import { emptyDetails } from "@/lib/server/profile";
 import { optStatus, optSummary } from "@/lib/opt";
@@ -19,8 +18,7 @@ import { licenceKey } from "@/lib/ingest/registers";
 import { licenceLine, MARKET_NAME, workRights, type Market } from "@/lib/visa";
 import { companyInsight } from "@/lib/server/insight";
 import { glassdoorLink } from "@/lib/insight";
-import { parseDraft } from "@/lib/email-draft";
-import { gmailAccount, gmailConfigured } from "@/lib/server/gmail";
+import { draftEmailForJob } from "@/lib/server/draft-email";
 
 const VISA = ["f1_opt", "f1_stem_opt", "f1_student", "h1b", "h4_ead", "outside_us", "citizen_or_gc", "other"] as const;
 const NO_SPONSOR_NEEDED = new Set(["citizen_or_gc", "h4_ead"]);
@@ -198,32 +196,12 @@ export function buildTools(store: Store) {
       inputSchema: z.object({ jobId: z.string().uuid() }),
       execute: async ({ jobId }) => {
         if (guest) return signUpFirst;
-        if (!canUse("cold_email", await store.isPro()).ok) return { proOnly: true, upsell: upsellLine("pro_only") };
-        const p = await needProfile();
-        if ("error" in p) return p;
-        const job = await shownJob(jobId);
-        if (!job) return { error: "unknown_job" };
-        const lookups = await store.contactLookupAllowed();
-        const contact = lookups ? await findContact(job.company, titleFamily(job.title)).catch(() => null) : null;
-        const email = await coldEmail(p.details, job, contact, { tone: p.row.email_tone, signOff: p.details.signOff });
-        const draft = parseDraft(email);
-        const senderName = p.details.name ?? store.firstName;
-        const save = async (kind: "cold_email" | "follow_up", body: unknown) => {
-          const { data } = await db().from("outreach").insert({ user_id: userId, job_id: jobId, kind, body_enc: encrypt(JSON.stringify(body)) }).select("id").single();
-          return (data as { id: string } | null)?.id ?? null;
-        };
-        const outreachId = await save("cold_email", { contact, email, senderName });
-        const followUpId = draft.followUp ? await save("follow_up", { contact, email: draft.followUp, senderName }) : null;
+        const r = await draftEmailForJob(store, userId, jobId);
+        if (!("draft" in r)) return r;
+        const { lookupsLeft, ...out } = r;
         return {
-          job: { title: job.title, company: job.company },
-          contact,
-          findContactYourself: contact ? null : linkedInSearch(job.company, "hiring manager"),
-          email,
-          draft,
-          outreachId,
-          followUpId,
-          gmail: (await gmailAccount(userId).catch(() => null)) ? "connected" : gmailConfigured() ? "not_connected" : "unavailable",
-          tip: lookups
+          ...out,
+          tip: lookupsLeft
             ? "Check the draft, then send it from your own Gmail with one tap, or copy it. Personal addresses are guesses with a confidence score, so double-check first."
             : "Your trial includes 3 contact lookups and they're used up, so use the LinkedIn search to find the right person. Pro finds them for you.",
         };
