@@ -99,3 +99,20 @@ describe("digestEmail", () => {
     }
   });
 });
+
+describe("digestEmail: new on the sponsor register", () => {
+  const fresh = [{ id: "s1", name: "Acme Robotics", country: "GB" as const, city: "London", slug: "acme-robotics", firstListed: "2026-11-30", rating: "A", routes: ["Skilled Worker"], openRoles: 0 }];
+  it("lists them with the register entry and a Maya question, and sends even with no new jobs", () => {
+    const e = digestEmail({ ...base, jobs: [], newSponsors: fresh })!;
+    expect(e.subject).toBe("144 days left: 1 employer new on the sponsor register");
+    expect(e.text).toContain("Acme Robotics: new on the UK sponsor register, London (added 30 Nov).");
+    expect(e.text).toContain("https://app/sponsors/uk/acme-robotics");
+    expect(e.text).toContain("/chat?ask=");
+    expect(e.text).not.toMatch(/will sponsor|guarantee/i);
+  });
+  it("sits under the jobs when there are both", () => {
+    const e = digestEmail({ ...base, newSponsors: fresh })!;
+    expect(e.subject).toBe("144 days left: 1 new job at licensed sponsors");
+    expect(e.text.indexOf("Graduate Data Analyst")).toBeLessThan(e.text.indexOf("Acme Robotics"));
+  });
+});

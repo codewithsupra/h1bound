@@ -9,6 +9,7 @@
 import { visaUrgency, type VisaUrgency } from "@/lib/pipeline";
 import { MARKET_NAME, MARKETS, type Market, type VisaSituation } from "@/lib/visa";
 import type { SalaryCheck } from "@/lib/salary";
+import { newSponsorLine, type NewSponsor } from "@/lib/new-sponsors";
 
 const DAY = 86_400_000;
 /** Free plan: one digest a week. A little under 7 days, so it lands at the same chosen hour each week. */
@@ -64,6 +65,8 @@ export type DigestInput = {
   jobs: DigestJob[];
   /** Free plan with its allowance used up: matching sponsor jobs this week that weren't shown. */
   hiddenCount: number;
+  /** Employers new on the sponsor register since the last digest. */
+  newSponsors?: NewSponsor[];
   appUrl: string;
   siteName: string;
   unsubscribeUrl: string;
@@ -73,7 +76,8 @@ const SALARY_MARK: Record<SalaryCheck["status"], string> = { meets: "Pay meets t
 
 /** Plain-text email. Returns null when there's nothing worth sending. */
 export function digestEmail(d: DigestInput): { subject: string; text: string } | null {
-  if (!d.jobs.length && !d.hiddenCount) return null;
+  const fresh = d.newSponsors ?? [];
+  if (!d.jobs.length && !d.hiddenCount && !fresh.length) return null;
   const ask = (q: string) => `${d.appUrl}/chat?ask=${encodeURIComponent(q)}`;
   const n = d.jobs.length;
   const period = d.paid ? "today" : "this week";
@@ -91,10 +95,22 @@ export function digestEmail(d: DigestInput): { subject: string; text: string } |
   const hidden = d.hiddenCount
     ? `${d.hiddenCount} more new job${d.hiddenCount === 1 ? "" : "s"} at licensed sponsors matched you ${period}. You've used the free plan's jobs; Pro shows them all, daily, with a check of each job's pay against the visa salary floor: ${d.appUrl}/upgrade`
     : "";
+  const sponsorPage = (s: NewSponsor) => (s.slug ? `${d.appUrl}/sponsors/${s.country === "GB" ? "uk" : "nl"}/${s.slug}` : null);
+  const newBlock = fresh.length
+    ? [
+        `New on the sponsor register. A new licence usually means they're about to hire someone who needs a visa, often before a role is posted:`,
+        ...fresh.map((s) => [
+          newSponsorLine(s),
+          ...(sponsorPage(s) ? [`Register entry: ${sponsorPage(s)}`] : []),
+          `Ask Maya who to contact: ${ask(`${s.name} is new on the ${s.country === "GB" ? "UK" : "Dutch"} sponsor register. What do they do, and who should I contact about roles?`)}`,
+        ].join("\n")),
+      ].join("\n\n")
+    : "";
   const upsell = !d.paid && !d.hiddenCount ? `Pro sends these daily and checks each job's posted pay against the visa salary floor: ${d.appUrl}/upgrade` : "";
-  const subject = d.countdown && d.countdown.level !== "expired"
-    ? `${d.countdown.days} days left: ${n ? `${n} new job${n === 1 ? "" : "s"} at licensed sponsors` : `${d.hiddenCount} new sponsor job${d.hiddenCount === 1 ? "" : "s"} matched you`}`
-    : n ? `${n} new job${n === 1 ? "" : "s"} at licensed sponsors ${period}` : `${d.hiddenCount} new sponsor job${d.hiddenCount === 1 ? "" : "s"} matched you ${period}`;
+  const what = n ? `${n} new job${n === 1 ? "" : "s"} at licensed sponsors`
+    : d.hiddenCount ? `${d.hiddenCount} new sponsor job${d.hiddenCount === 1 ? "" : "s"} matched you`
+    : `${fresh.length} employer${fresh.length === 1 ? "" : "s"} new on the sponsor register`;
+  const subject = d.countdown && d.countdown.level !== "expired" ? `${d.countdown.days} days left: ${what}` : n || d.hiddenCount ? `${what} ${period}` : what;
 
   const text = [
     d.firstName ? `Hi ${d.firstName},` : "Hi,",
@@ -102,6 +118,7 @@ export function digestEmail(d: DigestInput): { subject: string; text: string } |
     n ? `New ${period} at employers on the official sponsor registers. Apply in the first few days and email the hiring manager the same day: that's when replies are most likely.` : "",
     blocks.join("\n\n"),
     hidden,
+    newBlock,
     upsell,
     `A licence means an employer can sponsor, not that it will for every role. Salary floors also depend on the role and your age; check the source linked in Your case.`,
     `Maya (your AI job buddy at ${d.siteName})`,

@@ -16,6 +16,7 @@ on:
     - cron: "40 10 * * *"   # remote-job feeds
     - cron: "0 3 * * 1"     # UK register (weekly)
     - cron: "20 3 * * 1"    # Dutch register (weekly)
+    - cron: "0 4 * * 1"     # job boards for employers new on the registers (weekly)
     - cron: "0 * * * *"     # daily picks: each user's chosen local hour
     - cron: "25 * * * *"    # follow-ups students approved, once due
     - cron: "0 15 * * *"    # nudges
@@ -53,6 +54,7 @@ jobs:
               "40 10 * * *") route="/api/cron/refresh-jobs?feeds=1" ;;
               "0 3 * * 1")   route="/api/cron/registers?country=GB" ;;
               "20 3 * * 1")  route="/api/cron/registers?country=NL" ;;
+              "0 4 * * 1")   route="/api/cron/new-sponsors" ;;
               "0 * * * *")   route="/api/cron/daily-picks" ;;
               "25 * * * *")  route="/api/cron/follow-ups" ;;
               "0 15 * * *")  route="/api/cron/nudges" ;;

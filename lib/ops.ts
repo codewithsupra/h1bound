@@ -34,6 +34,7 @@ export const EXPECTED_PER_DAY: Record<string, number> = {
   "refresh-feeds": 1,
   "registers-gb": 1 / 7,
   "registers-nl": 1 / 7,
+  "new-sponsors": 1 / 7,
   "daily-picks": 24,
   "follow-ups": 24,
   nudges: 1,
