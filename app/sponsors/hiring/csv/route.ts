@@ -1,7 +1,9 @@
 import { hiringCsv, sponsorsHiringNow } from "@/lib/server/hiring-now";
 import { SITE_URL } from "@/lib/site";
 
-export const revalidate = 3600;
+// Built on request and cached at the edge for an hour, not prerendered: at build time it competes
+// with every other database-backed page and could push the build past its time limit.
+export const dynamic = "force-dynamic";
 
 /** The "Sponsors hiring now" list as a CSV: free, no sign-up. */
 export async function GET() {
@@ -11,6 +13,7 @@ export async function GET() {
       headers: {
         "content-type": "text/csv; charset=utf-8",
         "content-disposition": `attachment; filename="sponsors-hiring-now-${new Date().toISOString().slice(0, 10)}.csv"`,
+        "cache-control": "public, s-maxage=3600, stale-while-revalidate=86400",
       },
     });
   } catch (e) {
