@@ -10,7 +10,9 @@ What runs, how to tell it is healthy, and what to do when it is not. Numbers her
 | Remote feeds | 10:40 | `/api/cron/refresh-jobs?feeds=1` | 1 |
 | UK register | Mon 03:00 | `/api/cron/registers?country=GB` | 1/7 |
 | NL register | Mon 03:20 | `/api/cron/registers?country=NL` | 1/7 |
-| Daily picks | hourly | `/api/cron/daily-picks` | 24 |
+| Daily picks (the visa-clock digest) | hourly | `/api/cron/daily-picks` | 24 |
+| Follow-ups students approved | hourly at :25 | `/api/cron/follow-ups` | 24 |
+| Job boards for employers new on the registers | Mon 04:00 | `/api/cron/new-sponsors` | 1/7 |
 | Nudges | 15:00 | `/api/cron/nudges` | 1 |
 | Health check | daily (to be scheduled) | `/api/cron/ops-check` | 1 |
 
