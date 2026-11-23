@@ -320,7 +320,7 @@ export function Chat({
           <div className="rise">
             <p className="font-display text-2xl font-semibold tracking-tight">Hey{firstName ? ` ${firstName}` : ""}, I&apos;m Maya.</p>
             <p className="mt-2 max-w-[34rem] leading-relaxed text-mist">
-              I&apos;m an AI that finds jobs in the UK, Netherlands and Ireland at employers on the official visa sponsor registers, plus remote roles open to you. Drop in your CV and I&apos;ll show you who&apos;s hiring people like you.
+              I&apos;m an AI that finds jobs in the UK, Netherlands and Ireland at employers on the official visa sponsor registers, plus remote roles open to you. Drop in your CV (or your LinkedIn profile saved as a PDF) and I&apos;ll show you who&apos;s hiring people like you.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               <button onClick={() => fileRef.current?.click()} className="btn-light !py-2.5 text-sm">Upload my resume</button>
