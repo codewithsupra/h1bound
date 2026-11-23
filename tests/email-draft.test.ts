@@ -23,6 +23,12 @@ describe("buildMime", () => {
     const body = raw.split("\r\n\r\n")[1];
     expect(Buffer.from(body, "base64").toString("utf8")).toBe("Hi Sam,\r\nThanks.");
   });
+  it("sets our Message-ID and reply headers, without letting them inject headers", () => {
+    const raw = decode(buildMime({ ...base, messageId: "<a1@gmail.com>", inReplyTo: "<first@gmail.com>\r\nBcc: x@y.com" }));
+    expect(raw).toContain("Message-ID: <a1@gmail.com>\r\n");
+    expect(raw).toContain("In-Reply-To: <first@gmail.com> Bcc: x@y.com\r\n");
+    expect(raw).not.toMatch(/\r\nBcc:/);
+  });
   it("blocks header injection through the subject", () => {
     const raw = decode(buildMime({ ...base, subject: "Hi\r\nBcc: everyone@x.com" }));
     expect(raw).not.toMatch(/\r\nBcc:/);

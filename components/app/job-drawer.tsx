@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { jobDetail, markReply, saveNote } from "@/app/(app)/actions";
+import { cancelFollowUp, jobDetail, markReply, saveNote } from "@/app/(app)/actions";
 import { SendEmail } from "@/components/chat/send-email";
 import { parseDraft } from "@/lib/email-draft";
 import { licenceLine } from "@/lib/visa";
@@ -97,13 +97,13 @@ export function JobDrawer({ row, now, gmail, pro, urgent, onClose, onMove }: {
             {detail === undefined ? (
               <p className="mt-2 text-sm text-mist">Loading…</p>
             ) : email?.sentAt ? (
-              <SentEmail email={email} gmail={gmail} now={now} />
+              <SentEmail email={email} gmail={gmail} now={now} jobId={row.jobId} />
             ) : email ? (
               <div className="mt-2">
                 <SendEmail
                   outreachId={email.outreachId}
-                  followUpId={null}
-                  draft={parseDraft(email.text)}
+                  followUpId={email.followUpId}
+                  draft={{ ...parseDraft(email.text), followUp: email.followUp ?? parseDraft(email.text).followUp }}
                   to={email.to}
                   gmail={gmail ? "connected" : "not_connected"}
                   job={{ title: row.title, company: row.company }}
@@ -155,9 +155,10 @@ export function JobDrawer({ row, now, gmail, pro, urgent, onClose, onMove }: {
 }
 
 /** A sent email: read-only, with the follow-up once it unlocks (4 days after the first send). */
-function SentEmail({ email, gmail, now }: { email: NonNullable<JobDetail["email"]>; gmail: boolean; now: number }) {
+function SentEmail({ email, gmail, now, jobId }: { email: NonNullable<JobDetail["email"]>; gmail: boolean; now: number; jobId: string }) {
   const draft = parseDraft(email.text);
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">(email.followUpSentAt ? "sent" : "idle");
+  const [autoAt, setAutoAt] = useState(email.followUpAutoAt);
   const unlocked = now - Date.parse(email.sentAt!) >= 4 * 86_400_000;
   async function sendFollowUp() {
     if (!email.followUpId || !email.to || !email.followUp) return;
@@ -180,6 +181,12 @@ function SentEmail({ email, gmail, now }: { email: NonNullable<JobDetail["email"
           <p className="font-medium">Follow-up</p>
           <p className="mt-1 whitespace-pre-wrap text-mist">{email.followUp}</p>
           {state === "sent" ? <p className="mt-2 text-green">Follow-up sent{email.followUpSentAt ? ` ${fmt(email.followUpSentAt)}` : ""}.</p>
+            : autoAt ? (
+              <p className="mt-2 text-xs text-mist">
+                Goes out on its own {fmt(autoAt)} in the same thread, unless you mark a reply.{" "}
+                <button onClick={async () => { if ((await cancelFollowUp(jobId)).ok) setAutoAt(null); }} className="text-moon underline underline-offset-2">Cancel it</button>
+              </p>
+            )
             : !unlocked ? <p className="mt-2 text-xs text-mist">Unlocks {fmt(new Date(Date.parse(email.sentAt!) + 4 * 86_400_000).toISOString())}. Give them a few days.</p>
             : gmail && email.to ? <button onClick={sendFollowUp} disabled={state === "sending"} className="btn-light mt-2 !px-4 !py-1.5 text-sm">{state === "sending" ? "Sending…" : "Send follow-up"}</button>
             : <p className="mt-2 text-xs text-mist">Copy it into your email thread.</p>}

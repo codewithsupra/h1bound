@@ -7,6 +7,7 @@ import { getSessionUser } from "@/lib/supabase/server";
 import { encrypt } from "@/lib/crypto";
 import { decrypt } from "@/lib/crypto";
 import { loadJobDetail, type JobDetail } from "@/lib/server/pipeline";
+import { cancelAutoFollowUp } from "@/lib/server/followups";
 import { emptyDetails, loadProfile, saveProfile, type ProfileLinks } from "@/lib/server/profile";
 import { loadChat } from "@/lib/server/chat-store";
 import { STAGE_STATUS, STAGES, type Stage } from "@/lib/pipeline";
@@ -42,8 +43,19 @@ export async function markReply(jobId: string, answer: "yes" | "no" | "not_yet")
     : answer === "no" ? { status: "rejected", status_at: now, asked_reply_at: now }
     : { asked_reply_at: now };
   const { error } = await db().from("matches").update(patch).eq("user_id", user.id).eq("job_id", jobId);
+  // A reply (or a no) ends the conversation: a scheduled follow-up must not go out.
+  if (!error && answer !== "not_yet") await cancelAutoFollowUp(user.id, jobId);
   revalidatePath("/pipeline");
   return { ok: !error };
+}
+
+/** The student stops a follow-up that was going to send itself. */
+export async function cancelFollowUp(jobId: string): Promise<{ ok: boolean }> {
+  const user = await me();
+  if (!isUuid(jobId)) return { ok: false };
+  await cancelAutoFollowUp(user.id, jobId);
+  revalidatePath("/pipeline");
+  return { ok: true };
 }
 
 /** Private notes on a job, encrypted like everything else personal. Empty clears it. */

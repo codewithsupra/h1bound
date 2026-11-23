@@ -27,7 +27,7 @@ function encodeHeader(s: string): string {
   return /^[\x20-\x7e]*$/.test(s) ? s : `=?UTF-8?B?${Buffer.from(s, "utf8").toString("base64")}?=`;
 }
 
-export type Mime = { from: string; fromName?: string | null; to: string; subject: string; body: string; inReplyTo?: string | null };
+export type Mime = { from: string; fromName?: string | null; to: string; subject: string; body: string; inReplyTo?: string | null; messageId?: string | null };
 
 /** Builds the message and returns it base64url-encoded, as Gmail's send API wants it. Throws on bad addresses. */
 export function buildMime(m: Mime): string {
@@ -39,6 +39,7 @@ export function buildMime(m: Mime): string {
     `From: ${from}`,
     `To: ${m.to.trim()}`,
     `Subject: ${encodeHeader(subject)}`,
+    ...(m.messageId ? [`Message-ID: ${oneLine(m.messageId)}`] : []),
     ...(m.inReplyTo ? [`In-Reply-To: ${oneLine(m.inReplyTo)}`, `References: ${oneLine(m.inReplyTo)}`] : []),
     "MIME-Version: 1.0",
     "Content-Type: text/plain; charset=UTF-8",

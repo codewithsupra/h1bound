@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { encryptJson } from "@/lib/crypto";
+import { decrypt, decryptJson, encryptJson } from "@/lib/crypto";
 import { createFakeDb, type FakeDb } from "./helpers/fake-db";
 
 let db: FakeDb;
@@ -79,9 +79,9 @@ describe("POST /api/outreach/send: sending exactly once", () => {
   it("sends once from the user's own account and records it", async () => {
     const res = await send(valid);
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ ok: true, from: "alice@gmail.com" });
+    expect(await res.json()).toEqual({ ok: true, from: "alice@gmail.com", autoFollowUpAt: null });
     expect(sendGmail).toHaveBeenCalledTimes(1);
-    expect(sendGmail).toHaveBeenCalledWith(ALICE.id, { to: valid.to, subject: valid.subject, body: valid.body, fromName: "Alice" });
+    expect(sendGmail).toHaveBeenCalledWith(ALICE.id, { to: valid.to, subject: valid.subject, body: valid.body, fromName: "Alice", threadId: null, inReplyTo: null });
     expect(draft().sent_at).toBeTruthy();
     expect(draft().gmail_message_id).toBe("gmail-msg-1");
     expect(status(ALICE.id)).toBe("emailed");
@@ -197,5 +197,54 @@ describe("POST /api/outreach/send: follow-ups", () => {
     const res = await send({ ...valid, outreachId: FU });
     expect(await res.json()).toMatchObject({ error: "too_soon" });
     expect(sendGmail).not.toHaveBeenCalled();
+  });
+});
+
+describe("POST /api/outreach/send: follow-ups that send themselves", () => {
+  const FU = "33333333-3333-4333-8333-333333333333";
+  const followUp = { id: FU, user_id: ALICE.id, job_id: "job-1", kind: "follow_up", sent_at: null, body_enc: encryptJson({ senderName: "Alice" }) };
+  beforeEach(() => sendGmail.mockResolvedValue({ id: "gmail-msg-1", threadId: "thread-9", messageId: "<abc@gmail.com>", from: "alice@gmail.com" }));
+
+  it("records the thread and what was sent, so the follow-up can reply in it", async () => {
+    seed({ outreach: [followUp] });
+    await send(valid);
+    expect(draft()).toMatchObject({ gmail_thread_id: "thread-9", rfc_message_id: "<abc@gmail.com>" });
+    expect(decryptJson(draft().sent_meta_enc as string)).toEqual({ to: valid.to, subject: valid.subject });
+  });
+
+  it("schedules the approved follow-up 4 days out, with the exact text approved", async () => {
+    seed({ outreach: [followUp] });
+    const res = await (await send({ ...valid, autoFollowUp: { body: "Just bumping this, Alice" } })).json();
+    const at = Date.parse(draft(FU).auto_send_at as string);
+    expect(at - Date.now()).toBeGreaterThan(3.9 * DAY);
+    expect(at - Date.now()).toBeLessThan(4.1 * DAY);
+    expect(decrypt(draft(FU).auto_body_enc as string)).toBe("Just bumping this, Alice");
+    expect(res.autoFollowUpAt).toBe(draft(FU).auto_send_at);
+    expect(draft(FU).sent_at).toBeNull();
+  });
+
+  it("schedules nothing unless the student approved it", async () => {
+    seed({ outreach: [followUp] });
+    await send(valid);
+    expect(draft(FU).auto_send_at ?? null).toBeNull();
+  });
+
+  it("says nothing was scheduled when there is no follow-up draft", async () => {
+    seed();
+    const res = await (await send({ ...valid, autoFollowUp: { body: "bump" } })).json();
+    expect(res.autoFollowUpAt).toBeNull();
+  });
+
+  it("never schedules another user's follow-up", async () => {
+    seed({ outreach: [{ ...followUp, user_id: BOB.id }] });
+    await send({ ...valid, autoFollowUp: { body: "bump" } });
+    expect(draft(FU).auto_send_at ?? null).toBeNull();
+  });
+
+  it("a follow-up sent by hand goes into the first email's thread as a reply", async () => {
+    seed({ outreach: [followUp] });
+    Object.assign(draft(), { sent_at: ago(5), gmail_thread_id: "thread-1", rfc_message_id: "<first@gmail.com>", sent_meta_enc: encryptJson({ to: "cto@monzo.com", subject: "Graduate data role" }) });
+    await send({ ...valid, outreachId: FU, subject: "anything" });
+    expect(sendGmail).toHaveBeenCalledWith(ALICE.id, expect.objectContaining({ subject: "Re: Graduate data role", threadId: "thread-1", inReplyTo: "<first@gmail.com>" }));
   });
 });
