@@ -35,8 +35,8 @@ export const EXPECTED_PER_DAY: Record<string, number> = {
   "registers-gb": 1 / 7,
   "registers-nl": 1 / 7,
   "new-sponsors": 1 / 7,
-  "daily-picks": 24,
-  "follow-ups": 24,
+  "daily-picks": 8,  // every 3 hours (cron.yml)
+  "follow-ups": 8,
   nudges: 1,
 };
 

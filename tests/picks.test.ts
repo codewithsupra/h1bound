@@ -15,7 +15,27 @@ describe("picksToday", () => {
   });
 });
 
-import { clampPicks, localHour } from "@/lib/picks";
+import { clampPicks, inDeliveryWindow, localHour } from "@/lib/picks";
+
+describe("inDeliveryWindow", () => {
+  const at = (iso: string) => Date.parse(iso);
+  it("hourly runs: only the exact hour", () => {
+    expect(inDeliveryWindow(at("2026-11-25T08:10:00Z"), "Europe/London", 8)).toBe(true);
+    expect(inDeliveryWindow(at("2026-11-25T09:10:00Z"), "Europe/London", 8)).toBe(false);
+  });
+  it("runs every 3 hours: the hour or the two after it, across midnight too", () => {
+    expect(inDeliveryWindow(at("2026-11-25T10:00:00Z"), "Europe/London", 8, 3)).toBe(true);
+    expect(inDeliveryWindow(at("2026-11-25T11:00:00Z"), "Europe/London", 8, 3)).toBe(false);
+    expect(inDeliveryWindow(at("2026-11-25T07:00:00Z"), "Europe/London", 8, 3)).toBe(false);
+    expect(inDeliveryWindow(at("2026-11-26T00:30:00Z"), "Europe/London", 23, 3)).toBe(true);
+  });
+  it("every user's hour falls in exactly one of the eight 3-hourly runs", () => {
+    for (let hour = 0; hour < 24; hour++) {
+      const hits = [0, 3, 6, 9, 12, 15, 18, 21].filter((h) => inDeliveryWindow(Date.UTC(2026, 10, 25, h), "UTC", hour, 3)).length;
+      expect(hits, `hour ${hour}`).toBe(1);
+    }
+  });
+});
 describe("per-user pick counts", () => {
   const now = Date.parse("2026-11-01T08:30:00Z");
   it("uses the chosen count for paid Pro, capped at 3 on the trial", () => {

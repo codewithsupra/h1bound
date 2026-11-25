@@ -6,6 +6,15 @@ How to read the **Detected by** line: *monitoring* means the system told us; *ma
 
 ---
 
+## 2026-11-25: Vercel paused the whole account for exceeding the free plan
+
+- **Impact:** every project on the Vercel account (Sponsorbound, the portfolio and four others) returned 402 DEPLOYMENT_DISABLED, and stays paused until the monthly reset (about 30 days). Scheduled jobs failed hourly and emailed the owner. Real users affected: none signed up yet, but every resume link was down.
+- **Detected by:** the owner's inbox (GitHub "run failed" emails), then `x-vercel-error: DEPLOYMENT_DISABLED` on every URL.
+- **Root cause (probable; the usage page wasn't visible to us):** the sitemaps advertised about 200,000 on-demand pages (147,000 register pages plus 52,000 old US pages), each rendered on first request and again daily, so crawlers drove function runs and cache writes far past the free allowance.
+- **Fix:** moved off Vercel: Sponsorbound to Render (its own free web service), the lighter projects to Netlify. Sitemap now lists only the static pages and the register pages; register pages refresh weekly; AI training crawlers are disallowed in robots.txt. While there are few users, the digest and follow-ups run every 3 hours (DIGEST_EVERY_HOURS=3) so the free host sleeps between runs.
+- **Prevention:** heavy, crawlable apps never share a free account with the portfolio again (on Netlify and Vercel one project over its limit pauses every project). A custom domain on the resume, so a host change never breaks links. Not done yet: a usage alert before a host's limit is reached.
+- **Status:** mitigated (moved hosts); the Vercel account resets on its own.
+
 ## 2026-11-15: "Delete my account" always failed after the move to Supabase (found in end-to-end testing)
 
 - **Impact:** every attempt to delete an account showed "Couldn't delete your account" and kept all data. Real users affected: none (no sign-ups yet), but the deploy a week earlier shipped it, and it breaks the promise on the settings page.

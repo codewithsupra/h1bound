@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next";
-import { sitemapSponsorCount, sitemapSponsors } from "@/lib/server/sponsors";
 import { listedCount, sitemapLicences } from "@/lib/server/licences";
 import { SITE_URL } from "@/lib/site";
 import { COUNTRY_PATH, MARKETS } from "@/lib/visa";
@@ -28,8 +27,9 @@ export async function generateSitemaps() {
 }
 
 async function countSitemaps() {
-  const us = Math.max(1, Math.ceil((STATIC.length + (await sitemapSponsorCount())) / PER_SITEMAP));
-  const ids = Array.from({ length: us }, (_, id) => ({ id }));
+  // The old US H-1B pages stay reachable but aren't advertised: crawling ~52,000 of them cost more
+  // hosting than the search traffic they bring (docs/INCIDENTS.md, 2026-11-25).
+  const ids = [{ id: 0 }];
   for (const c of MARKETS) {
     const n = Math.ceil((await listedCount(c)) / PER_SITEMAP);
     for (let p = 0; p < n; p++) ids.push({ id: BASE[c] + p });
@@ -54,11 +54,5 @@ async function entries(i: number): Promise<MetadataRoute.Sitemap> {
     const rows = await sitemapLicences(market, (i - BASE[market]) * PER_SITEMAP, PER_SITEMAP);
     return rows.map((r) => ({ url: `${SITE_URL}/sponsors/${COUNTRY_PATH[market]}/${r.slug}`, lastModified: r.updated_at, changeFrequency: "weekly" as const, priority: 0.5 }));
   }
-  const statics = i === 0 ? STATIC.map((p) => ({ url: `${SITE_URL}${p === "/" ? "" : p}`, changeFrequency: "daily" as const, priority: p === "/" ? 1 : 0.8 })) : [];
-  const offset = Math.max(0, i * PER_SITEMAP - STATIC.length);
-  const sponsors = await sitemapSponsors(offset, PER_SITEMAP - statics.length);
-  return [
-    ...statics,
-    ...sponsors.map((s) => ({ url: `${SITE_URL}/sponsors/${s.slug}`, lastModified: s.updated_at, changeFrequency: "weekly" as const, priority: 0.6 })),
-  ];
+  return i === 0 ? STATIC.map((p) => ({ url: `${SITE_URL}${p === "/" ? "" : p}`, changeFrequency: "daily" as const, priority: p === "/" ? 1 : 0.8 })) : [];
 }

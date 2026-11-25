@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { adminDb } from "@/lib/supabase/admin";
 import { storeForUser } from "@/lib/server/store";
 import { findJobs, type JobCard } from "@/lib/server/jobs";
-import { localHour, picksToday } from "@/lib/picks";
+import { inDeliveryWindow, picksToday } from "@/lib/picks";
 import { digestDue, digestEmail, visaCountdown, FREE_DIGEST_JOBS } from "@/lib/digest";
 import { newSponsorsFor } from "@/lib/server/new-sponsors";
 import { newSponsorLine } from "@/lib/new-sponsors";
@@ -51,7 +51,10 @@ async function run(req: NextRequest) {
   if (error) throw new Error(error.message);
   const now = Date.now();
   const ignoreHour = req.nextUrl.searchParams.get("all") === "1";
-  const candidates = ((data ?? []) as Candidate[]).filter((c) => ignoreHour || c.picks_hour === undefined || localHour(now, c.timezone ?? "Europe/London") === c.picks_hour);
+  // How often the scheduled workflow calls this (every 3 hours while there are few users, to keep the
+  // free host asleep most of the time); each user is caught in the run that falls in their window.
+  const every = Number(process.env.DIGEST_EVERY_HOURS ?? 1) || 1;
+  const candidates = ((data ?? []) as Candidate[]).filter((c) => ignoreHour || c.picks_hour === undefined || inDeliveryWindow(now, c.timezone ?? "Europe/London", c.picks_hour, every));
   const started = Date.now();
   let users = 0, picks = 0, countOnly = 0, sponsorsShown = 0, failed = 0;
 

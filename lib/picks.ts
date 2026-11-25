@@ -18,6 +18,16 @@ export function picksToday(s: { pro: boolean; trial?: boolean; perDay?: number; 
   return s.jobsShown < s.jobLimit ? 1 : 0;
 }
 
+/**
+ * Is it the user's delivery hour, given the digest job runs every `everyHours` hours? With hourly runs
+ * that's the exact hour; with runs every 3 hours, the hour or the 2 after it, so nobody is skipped.
+ * The once-a-day (or week) gap in lib/digest.ts stops a second send inside the window.
+ */
+export function inDeliveryWindow(now: number, timeZone: string, hour: number, everyHours = 1): boolean {
+  const h = localHour(now, timeZone);
+  return (h - hour + 24) % 24 < Math.max(1, Math.min(24, Math.round(everyHours)));
+}
+
 /** The hour (0–23) it is now in a timezone; falls back to London for unknown zones. */
 export function localHour(now: number, timeZone: string): number {
   const fmt = (tz: string) => Number(new Intl.DateTimeFormat("en-GB", { hour: "numeric", hourCycle: "h23", timeZone: tz }).format(now));

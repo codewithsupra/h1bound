@@ -17,8 +17,10 @@ on:
     - cron: "0 3 * * 1"     # UK register (weekly)
     - cron: "20 3 * * 1"    # Dutch register (weekly)
     - cron: "0 4 * * 1"     # job boards for employers new on the registers (weekly)
-    - cron: "0 * * * *"     # daily picks: each user's chosen local hour
-    - cron: "25 * * * *"    # follow-ups students approved, once due
+    # Every 3 hours while there are few users: the free host sleeps between runs, and the app sends
+    # each digest in the run that falls in the user's chosen hour or the 2 after (DIGEST_EVERY_HOURS=3).
+    - cron: "0 */3 * * *"   # digest
+    - cron: "5 */3 * * *"   # follow-ups students approved, once due
     - cron: "0 15 * * *"    # nudges
     - cron: "30 8 * * *"    # health check (emails the owner only on a problem)
   workflow_dispatch:
@@ -55,8 +57,8 @@ jobs:
               "0 3 * * 1")   route="/api/cron/registers?country=GB" ;;
               "20 3 * * 1")  route="/api/cron/registers?country=NL" ;;
               "0 4 * * 1")   route="/api/cron/new-sponsors" ;;
-              "0 * * * *")   route="/api/cron/daily-picks" ;;
-              "25 * * * *")  route="/api/cron/follow-ups" ;;
+              "0 */3 * * *") route="/api/cron/daily-picks" ;;
+              "5 */3 * * *") route="/api/cron/follow-ups" ;;
               "0 15 * * *")  route="/api/cron/nudges" ;;
               "30 8 * * *")  route="/api/cron/ops-check" ;;
               *) echo "::error::unknown schedule '$SCHEDULE'"; exit 1 ;;

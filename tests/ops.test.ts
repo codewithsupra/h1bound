@@ -18,7 +18,7 @@ describe("summarizeRuns", () => {
     expect(summarizeRuns([stuck, fresh], 86_400_000, now).find((x) => x.job === "refresh-jobs")).toMatchObject({ killed: 1, failed: 1 });
   });
   it("lists scheduled jobs that never ran", () => {
-    expect(summarizeRuns([], 86_400_000, now).find((x) => x.job === "daily-picks")).toMatchObject({ expected: 24, started: 0, completion: 0 });
+    expect(summarizeRuns([], 86_400_000, now).find((x) => x.job === "daily-picks")).toMatchObject({ expected: 8, started: 0, completion: 0 });
   });
 });
 

@@ -12,7 +12,7 @@ import { FAMILY_LABEL } from "@/lib/titles";
 
 // Daily ISR: the top sponsors are prerendered at build, the long tail renders on first visit.
 
-export const revalidate = 86400;
+export const revalidate = 604800; // weekly: the registers change weekly
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
